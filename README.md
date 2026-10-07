@@ -12,7 +12,16 @@ En construcción. Por ahora la portada (`index.html`) es una página temporal; e
 - `en-construccion.html` — fuente de la página temporal.
 - `assets/img/` — imágenes optimizadas (el retrato recortado y su mapa de profundidad).
 - `tools/preparar_avatar.py` — genera los recursos del avatar a partir de las fotos originales (que no se suben al repositorio).
-- `CNAME` — dominio propio para GitHub Pages.
+- `tools/build.mjs` — copia a `dist/` solo los archivos públicos; es lo que publica Hostinger.
+
+## Publicación
+
+Hostinger despliega desde GitHub cada vez que cambia `main` (app de Node.js, preset **Other**):
+
+- Comando de build: `npm run build`
+- Carpeta de salida: `dist`
+
+No hay dependencias: el build solo copia archivos. Para probarlo en local: `npm run build`.
 
 ## Ver en local
 

@@ -1,0 +1,13 @@
+{
+  "name": "mihumanidad",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sitio personal y legado de Alfredo: mihumanidad.com",
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

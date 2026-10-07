@@ -10,3 +10,6 @@ lab/
 __pycache__/
 .DS_Store
 Thumbs.db
+# Salida del build y dependencias
+dist/
+node_modules/
