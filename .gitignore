@@ -1,0 +1,12 @@
+# Fotos originales: no se publican (el recorte optimizado sí, en assets/img/)
+assets/src/
+# Respaldo pesado del recorte; se regenera con tools/preparar_avatar.py
+assets/img/avatar.png
+# Vistas de control y prototipos locales
+tools/control-*.jpg
+lab/
+# Configuración local del editor y temporales
+.claude/
+__pycache__/
+.DS_Store
+Thumbs.db

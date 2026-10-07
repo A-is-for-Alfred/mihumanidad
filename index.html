@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mi humanidad — en construcción</title>
+<meta name="description" content="Aquí vivirá la historia de cómo Alfredo aprendió a ser humano, escrita para quien llegue después: persona o inteligencia artificial. Sitio en construcción.">
+<link rel="canonical" href="https://mihumanidad.com/">
+<meta name="theme-color" content="#05070a">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mihumanidad.com/">
+<meta property="og:title" content="mi humanidad — en construcción">
+<meta property="og:description" content="Este sitio, como yo, sigue en construcción.">
+<meta property="og:image" content="https://mihumanidad.com/assets/img/avatar.webp">
+<meta property="og:locale" content="es_MX">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2305070a'/%3E%3Cpath d='M16 6a10 10 0 0 0 0 20z' fill='%23ece8e1'/%3E%3Cpath d='M16 6a10 10 0 0 1 0 20' fill='none' stroke='%236ff3ff' stroke-width='1.6' stroke-dasharray='2 2'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+@property --p { syntax: "<percentage>"; inherits: true; initial-value: 60%; }
+
+:root {
+  --bg: #05070a;
+  --ink: #ece8e1;
+  --ink-dim: #9aa3ad;
+  --warm: #f0b38a;
+  --holo: #6ff3ff;
+  --holo-2: #3aa8ff;
+  --line: rgba(111, 243, 255, .16);
+  --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --avatar: url("assets/img/avatar.webp");
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--mono);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  overflow-x: hidden;
+}
+/* Retícula tenue de fondo */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at 50% 45%, #000 0%, transparent 70%);
+  opacity: .35;
+}
+
+.hud {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px clamp(16px, 4vw, 40px);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.hud b { color: var(--ink); font-weight: 500; }
+
+main {
+  position: relative;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  gap: clamp(24px, 5vw, 72px);
+  padding: 8px clamp(16px, 4vw, 40px) 24px;
+}
+@media (min-width: 900px) {
+  main { grid-template-columns: minmax(0, 1fr) auto; justify-items: start; max-width: 1180px; margin: 0 auto; width: 100%; }
+}
+
+/* ---------- Avatar: humano + holograma en CSS ---------- */
+.marco {
+  --w: min(78vw, 46svh, 440px);
+  position: relative;
+  width: var(--w);
+  aspect-ratio: 3 / 4;
+}
+@media (min-width: 900px) { .marco { --w: min(36vw, 66svh, 480px); order: 2; } }
+.avatar {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  animation: frontera 14s ease-in-out infinite alternate;
+  -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent 98%);
+          mask-image: linear-gradient(180deg, #000 72%, transparent 98%);
+}
+
+.avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+
+.capa { position: absolute; inset: 0; }
+.silueta {
+  -webkit-mask: var(--avatar) center / contain no-repeat;
+          mask: var(--avatar) center / contain no-repeat;
+}
+
+/* Lado humano: la foto real, desvanecida hacia el holograma */
+.humano {
+  -webkit-mask-image: linear-gradient(102deg, #000 0 calc(var(--p) - 7%), transparent calc(var(--p) + 5%));
+          mask-image: linear-gradient(102deg, #000 0 calc(var(--p) - 7%), transparent calc(var(--p) + 5%));
+}
+
+/* Lado holograma */
+.holo {
+  isolation: isolate;
+  -webkit-mask-image: linear-gradient(102deg, transparent 0 calc(var(--p) - 7%), #000 calc(var(--p) + 5%));
+          mask-image: linear-gradient(102deg, transparent 0 calc(var(--p) - 7%), #000 calc(var(--p) + 5%));
+}
+.holo { opacity: .9; }
+.holo img { filter: grayscale(1) contrast(1.55) brightness(.92); opacity: .85; }
+.holo .tinte { background: linear-gradient(180deg, var(--holo) 20%, rgba(58, 168, 255, .9)); mix-blend-mode: multiply; }
+.holo .barrido {
+  background: repeating-linear-gradient(180deg, rgba(5, 7, 10, .72) 0 1px, transparent 1px 3px);
+}
+.holo .puntos {
+  background: radial-gradient(circle, rgba(111, 243, 255, .55) 0 1px, transparent 1.4px) 0 0 / 7px 7px;
+  mix-blend-mode: screen;
+  opacity: .55;
+}
+.holo .linea {
+  background: linear-gradient(180deg, transparent, rgba(111, 243, 255, .9) 50%, transparent);
+  height: 14%;
+  inset: auto 0 auto 0;
+  top: -14%;
+  mix-blend-mode: screen;
+  animation: escaneo 4.8s linear infinite;
+}
+
+/* Frontera de construcción: el borde luminoso entre ambos lados */
+.borde {
+  background: linear-gradient(102deg,
+    transparent calc(var(--p) - 2.4%),
+    rgba(111, 243, 255, .95) calc(var(--p) - .4%),
+    rgba(240, 179, 138, .55) calc(var(--p) + .6%),
+    transparent calc(var(--p) + 2.6%));
+  mix-blend-mode: screen;
+  filter: blur(.4px);
+  animation: parpadeo 3.2s steps(1) infinite;
+}
+
+/* Marcas de esquina */
+.marcas::before, .marcas::after {
+  content: "";
+  position: absolute;
+  width: 22px; height: 22px;
+  border: 1px solid var(--holo);
+  opacity: .6;
+}
+.marcas::before { top: -10px; left: -10px; border-right: 0; border-bottom: 0; }
+.marcas::after { bottom: 6%; right: -10px; border-left: 0; border-top: 0; }
+
+@keyframes frontera { 0% { --p: 48%; } 55% { --p: 66%; } 100% { --p: 58%; } }
+@keyframes escaneo { to { top: 100%; } }
+@keyframes parpadeo { 0%, 100% { opacity: 1; } 47% { opacity: .55; } 49% { opacity: 1; } 83% { opacity: .8; } }
+
+/* ---------- Texto ---------- */
+.texto { max-width: 34rem; text-align: center; }
+@media (min-width: 900px) { .texto { text-align: left; order: 1; } }
+
+.etiqueta {
+  margin: 0 0 18px;
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--holo);
+}
+h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 6.2vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -.01em;
+  text-wrap: balance;
+}
+h1 em { color: var(--warm); }
+.lede {
+  margin: 22px 0 0;
+  font-family: var(--serif);
+  font-size: clamp(1.12rem, 2.2vw, 1.4rem);
+  line-height: 1.45;
+  color: var(--ink-dim);
+  text-wrap: pretty;
+}
+
+.lectura { margin-top: 30px; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-dim); }
+.lectura .fila { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 8px; }
+.lectura .fila b { color: var(--ink); font-weight: 500; }
+.barra { position: relative; height: 2px; background: rgba(236, 232, 225, .12); overflow: hidden; }
+.barra::before {
+  content: "";
+  position: absolute; inset: 0 auto 0 0;
+  width: 61%;
+  background: linear-gradient(90deg, var(--warm), var(--holo));
+}
+.barra::after {
+  content: "";
+  position: absolute; top: 0; bottom: 0; width: 18%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .7), transparent);
+  animation: carga 2.6s ease-in-out infinite;
+}
+@keyframes carga { from { left: -18%; } to { left: 61%; } }
+
+footer {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 18px clamp(16px, 4vw, 40px) 22px;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  border-top: 1px solid var(--line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar, .holo .linea, .borde, .barra::after { animation: none; }
+  .avatar { --p: 58%; }
+  .barra::after { display: none; }
+}
+</style>
+</head>
+<body>
+  <header class="hud">
+    <span><b>mihumanidad</b>.com</span>
+    <span>Registro 000 · 2026</span>
+  </header>
+
+  <main>
+    <div class="marco marcas">
+    <figure class="avatar" role="img" aria-label="Retrato de Alfredo: una parte es fotografía humana y otra parte es un holograma en construcción">
+      <img class="capa humano" src="assets/img/avatar.webp" width="1200" height="1600" alt="" fetchpriority="high">
+      <div class="capa holo">
+        <img src="assets/img/avatar.webp" width="1200" height="1600" alt="">
+        <div class="capa tinte silueta"></div>
+        <div class="capa puntos silueta"></div>
+        <div class="capa barrido"></div>
+        <div class="capa linea silueta"></div>
+      </div>
+      <div class="capa borde silueta"></div>
+    </figure>
+    </div>
+
+    <section class="texto">
+      <p class="etiqueta">En construcción</p>
+      <h1>Este sitio, como yo, <em>sigue en construcción.</em></h1>
+      <p class="lede">Muchas veces me preguntaron si era un robot. Aquí contaré cómo aprendí a ser humano, para quien llegue después: persona o inteligencia artificial.</p>
+      <div class="lectura" aria-hidden="true">
+        <div class="fila"><span>Humanidad</span><b>Cargando</b></div>
+        <div class="barra"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>mihumanidad.com</span>
+    <span>Vuelve pronto</span>
+  </footer>
+</body>
+</html>
