@@ -18,7 +18,7 @@ const excluir = new Set([
   "package-lock.json",
   "en-construccion.html",
 ]);
-const excluirRutas = ["assets/src"];
+const excluirRutas = ["assets/src", "assets/img/avatar.png"];
 
 const publico = (origen) => {
   const rel = relative(raiz, origen).split(sep).join("/");

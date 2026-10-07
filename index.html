@@ -1,278 +1,302 @@
 <!doctype html>
-<html lang="es-MX">
+<html lang="es-MX" class="no-js">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>mi humanidad — en construcción</title>
-<meta name="description" content="Aquí vivirá la historia de cómo Alfredo aprendió a ser humano, escrita para quien llegue después: persona o inteligencia artificial. Sitio en construcción.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>¿Eres un robot? — Alfredo · mihumanidad</title>
+<meta name="description" content="Alfredo, un ser humano muy probablemente neurodivergente, cuenta cómo tuvo que aprender su propia humanidad. Un legado para las personas y un puente hacia la inteligencia artificial.">
 <link rel="canonical" href="https://mihumanidad.com/">
 <meta name="theme-color" content="#05070a">
+<meta name="color-scheme" content="dark">
+<meta name="author" content="Alfredo">
+
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://mihumanidad.com/">
-<meta property="og:title" content="mi humanidad — en construcción">
-<meta property="og:description" content="Este sitio, como yo, sigue en construcción.">
-<meta property="og:image" content="https://mihumanidad.com/assets/img/avatar.webp">
+<meta property="og:site_name" content="mihumanidad">
 <meta property="og:locale" content="es_MX">
+<meta property="og:url" content="https://mihumanidad.com/">
+<meta property="og:title" content="¿Eres un robot? — Alfredo · mihumanidad">
+<meta property="og:description" content="Me preguntaban si era un robot mucho antes de que existiera la inteligencia artificial. Esta es mi respuesta, todavía en construcción.">
+<meta property="og:image" content="https://mihumanidad.com/assets/img/og.jpg">
+<meta property="og:image:alt" content="Retrato de Alfredo, una parte humana y otra parte holograma en construcción">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="¿Eres un robot? — Alfredo · mihumanidad">
+<meta name="twitter:description" content="Me preguntaban si era un robot mucho antes de que existiera la inteligencia artificial. Esta es mi respuesta, todavía en construcción.">
+<meta name="twitter:image" content="https://mihumanidad.com/assets/img/og.jpg">
+<meta name="twitter:image:alt" content="Retrato de Alfredo, una parte humana y otra parte holograma en construcción">
+
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2305070a'/%3E%3Cpath d='M16 6a10 10 0 0 0 0 20z' fill='%23ece8e1'/%3E%3Cpath d='M16 6a10 10 0 0 1 0 20' fill='none' stroke='%236ff3ff' stroke-width='1.6' stroke-dasharray='2 2'/%3E%3C/svg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<style>
-@property --p { syntax: "<percentage>"; inherits: true; initial-value: 60%; }
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="css/site.css">
+<script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+<link rel="modulepreload" href="js/avatar.js">
+<script type="module" src="js/main.js" onerror="document.documentElement.classList.replace('js','no-js')"></script>
+<noscript><style>.readout-trace, .readout-hint, .hud-coords { display: none; }</style></noscript>
 
-:root {
-  --bg: #05070a;
-  --ink: #ece8e1;
-  --ink-dim: #9aa3ad;
-  --warm: #f0b38a;
-  --holo: #6ff3ff;
-  --holo-2: #3aa8ff;
-  --line: rgba(111, 243, 255, .16);
-  --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
-  --mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  --avatar: url("assets/img/avatar.webp");
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://mihumanidad.com/#sitio",
+      "url": "https://mihumanidad.com/",
+      "name": "mihumanidad",
+      "inLanguage": "es-MX",
+      "description": "Alfredo, un ser humano muy probablemente neurodivergente, cuenta cómo tuvo que aprender su propia humanidad. Un legado para las personas y un puente hacia la inteligencia artificial.",
+      "author": { "@id": "https://mihumanidad.com/#alfredo" },
+      "publisher": { "@id": "https://mihumanidad.com/#alfredo" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://mihumanidad.com/#alfredo",
+      "name": "Alfredo",
+      "url": "https://mihumanidad.com/",
+      "image": "https://mihumanidad.com/assets/img/avatar.webp",
+      "description": "Un ser humano muy probablemente neurodivergente que cuenta cómo tuvo que aprender su propia humanidad."
+    }
+  ]
 }
-
-*, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; }
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--mono);
-  -webkit-font-smoothing: antialiased;
-  min-height: 100svh;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  overflow-x: hidden;
-}
-/* Retícula tenue de fondo */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse at 50% 45%, #000 0%, transparent 70%);
-  opacity: .35;
-}
-
-.hud {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 20px clamp(16px, 4vw, 40px);
-  font-size: 11px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--ink-dim);
-}
-.hud b { color: var(--ink); font-weight: 500; }
-
-main {
-  position: relative;
-  display: grid;
-  align-items: center;
-  justify-items: center;
-  gap: clamp(24px, 5vw, 72px);
-  padding: 8px clamp(16px, 4vw, 40px) 24px;
-}
-@media (min-width: 900px) {
-  main { grid-template-columns: minmax(0, 1fr) auto; justify-items: start; max-width: 1180px; margin: 0 auto; width: 100%; }
-}
-
-/* ---------- Avatar: humano + holograma en CSS ---------- */
-.marco {
-  --w: min(78vw, 46svh, 440px);
-  position: relative;
-  width: var(--w);
-  aspect-ratio: 3 / 4;
-}
-@media (min-width: 900px) { .marco { --w: min(36vw, 66svh, 480px); order: 2; } }
-.avatar {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  animation: frontera 14s ease-in-out infinite alternate;
-  -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent 98%);
-          mask-image: linear-gradient(180deg, #000 72%, transparent 98%);
-}
-
-.avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
-
-.capa { position: absolute; inset: 0; }
-.silueta {
-  -webkit-mask: var(--avatar) center / contain no-repeat;
-          mask: var(--avatar) center / contain no-repeat;
-}
-
-/* Lado humano: la foto real, desvanecida hacia el holograma */
-.humano {
-  -webkit-mask-image: linear-gradient(102deg, #000 0 calc(var(--p) - 7%), transparent calc(var(--p) + 5%));
-          mask-image: linear-gradient(102deg, #000 0 calc(var(--p) - 7%), transparent calc(var(--p) + 5%));
-}
-
-/* Lado holograma */
-.holo {
-  isolation: isolate;
-  -webkit-mask-image: linear-gradient(102deg, transparent 0 calc(var(--p) - 7%), #000 calc(var(--p) + 5%));
-          mask-image: linear-gradient(102deg, transparent 0 calc(var(--p) - 7%), #000 calc(var(--p) + 5%));
-}
-.holo { opacity: .9; }
-.holo img { filter: grayscale(1) contrast(1.55) brightness(.92); opacity: .85; }
-.holo .tinte { background: linear-gradient(180deg, var(--holo) 20%, rgba(58, 168, 255, .9)); mix-blend-mode: multiply; }
-.holo .barrido {
-  background: repeating-linear-gradient(180deg, rgba(5, 7, 10, .72) 0 1px, transparent 1px 3px);
-}
-.holo .puntos {
-  background: radial-gradient(circle, rgba(111, 243, 255, .55) 0 1px, transparent 1.4px) 0 0 / 7px 7px;
-  mix-blend-mode: screen;
-  opacity: .55;
-}
-.holo .linea {
-  background: linear-gradient(180deg, transparent, rgba(111, 243, 255, .9) 50%, transparent);
-  height: 14%;
-  inset: auto 0 auto 0;
-  top: -14%;
-  mix-blend-mode: screen;
-  animation: escaneo 4.8s linear infinite;
-}
-
-/* Frontera de construcción: el borde luminoso entre ambos lados */
-.borde {
-  background: linear-gradient(102deg,
-    transparent calc(var(--p) - 2.4%),
-    rgba(111, 243, 255, .95) calc(var(--p) - .4%),
-    rgba(240, 179, 138, .55) calc(var(--p) + .6%),
-    transparent calc(var(--p) + 2.6%));
-  mix-blend-mode: screen;
-  filter: blur(.4px);
-  animation: parpadeo 3.2s steps(1) infinite;
-}
-
-/* Marcas de esquina */
-.marcas::before, .marcas::after {
-  content: "";
-  position: absolute;
-  width: 22px; height: 22px;
-  border: 1px solid var(--holo);
-  opacity: .6;
-}
-.marcas::before { top: -10px; left: -10px; border-right: 0; border-bottom: 0; }
-.marcas::after { bottom: 6%; right: -10px; border-left: 0; border-top: 0; }
-
-@keyframes frontera { 0% { --p: 48%; } 55% { --p: 66%; } 100% { --p: 58%; } }
-@keyframes escaneo { to { top: 100%; } }
-@keyframes parpadeo { 0%, 100% { opacity: 1; } 47% { opacity: .55; } 49% { opacity: 1; } 83% { opacity: .8; } }
-
-/* ---------- Texto ---------- */
-.texto { max-width: 34rem; text-align: center; }
-@media (min-width: 900px) { .texto { text-align: left; order: 1; } }
-
-.etiqueta {
-  margin: 0 0 18px;
-  font-size: 11px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--holo);
-}
-h1 {
-  margin: 0;
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: clamp(2.4rem, 6.2vw, 4.6rem);
-  line-height: 1.02;
-  letter-spacing: -.01em;
-  text-wrap: balance;
-}
-h1 em { color: var(--warm); }
-.lede {
-  margin: 22px 0 0;
-  font-family: var(--serif);
-  font-size: clamp(1.12rem, 2.2vw, 1.4rem);
-  line-height: 1.45;
-  color: var(--ink-dim);
-  text-wrap: pretty;
-}
-
-.lectura { margin-top: 30px; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-dim); }
-.lectura .fila { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 8px; }
-.lectura .fila b { color: var(--ink); font-weight: 500; }
-.barra { position: relative; height: 2px; background: rgba(236, 232, 225, .12); overflow: hidden; }
-.barra::before {
-  content: "";
-  position: absolute; inset: 0 auto 0 0;
-  width: 61%;
-  background: linear-gradient(90deg, var(--warm), var(--holo));
-}
-.barra::after {
-  content: "";
-  position: absolute; top: 0; bottom: 0; width: 18%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .7), transparent);
-  animation: carga 2.6s ease-in-out infinite;
-}
-@keyframes carga { from { left: -18%; } to { left: 61%; } }
-
-footer {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px 16px;
-  padding: 18px clamp(16px, 4vw, 40px) 22px;
-  font-size: 11px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--ink-dim);
-  border-top: 1px solid var(--line);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .avatar, .holo .linea, .borde, .barra::after { animation: none; }
-  .avatar { --p: 58%; }
-  .barra::after { display: none; }
-}
-</style>
+</script>
 </head>
 <body>
-  <header class="hud">
-    <span><b>mihumanidad</b>.com</span>
-    <span>Registro 000 · 2026</span>
-  </header>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-  <main>
-    <div class="marco marcas">
-    <figure class="avatar" role="img" aria-label="Retrato de Alfredo: una parte es fotografía humana y otra parte es un holograma en construcción">
-      <img class="capa humano" src="assets/img/avatar.webp" width="1200" height="1600" alt="" fetchpriority="high">
-      <div class="capa holo">
-        <img src="assets/img/avatar.webp" width="1200" height="1600" alt="">
-        <div class="capa tinte silueta"></div>
-        <div class="capa puntos silueta"></div>
-        <div class="capa barrido"></div>
-        <div class="capa linea silueta"></div>
+<header class="site-header" data-header>
+  <div class="header-inner">
+    <a class="brand" href="#inicio" aria-label="mihumanidad.com, ir al inicio">
+      <span class="brand-mi">mi</span><span class="brand-dot" aria-hidden="true">·</span><span class="brand-word">humanidad</span><span class="brand-tld" aria-hidden="true">.com</span>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-principal" data-nav-toggle>
+      <span class="nav-toggle-icon" aria-hidden="true"></span>
+      <span>Menú</span>
+    </button>
+
+    <nav class="site-nav" id="nav-principal" aria-label="Principal">
+      <ul>
+        <li><a href="#el-camino"><span class="nav-n" aria-hidden="true">01</span> El camino</a></li>
+        <li><a href="#lo-aprendido"><span class="nav-n" aria-hidden="true">02</span> Lo aprendido</a></li>
+        <li><a href="#herramientas"><span class="nav-n" aria-hidden="true">03</span> Herramientas</a></li>
+        <li><a href="#el-puente"><span class="nav-n" aria-hidden="true">04</span> El puente</a></li>
+        <li class="nav-letter"><a href="#para-las-ia"><span class="nav-dot" aria-hidden="true"></span>Carta a las IA</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido" tabindex="-1">
+
+  <!-- 1 · Portada -->
+  <section class="hero" id="inicio" aria-labelledby="hero-title">
+    <div class="hero-stage">
+      <p class="eyebrow hero-eyebrow" data-reveal>Alfredo · mihumanidad</p>
+
+      <h1 class="hero-title" id="hero-title" data-reveal style="--rd: .08s"><span class="ht-a">¿Eres un</span> <span class="ht-b"><em>robot?</em></span></h1>
+
+      <p class="hero-lede" data-reveal style="--rd: .2s">Mucho antes de que existiera la inteligencia artificial, ya me lo preguntaban en serio. Esta página es mi respuesta, todavía en construcción.</p>
+
+      <div class="hero-avatar" data-avatar-frame>
+        <div class="avatar" data-avatar>
+          <img class="avatar-static" src="assets/img/avatar.webp" width="1200" height="1600" alt="Retrato de Alfredo, sonriente: cabello negro, lentes de armazón metálico delgado, bigote largo con las puntas enroscadas y piocha; camisa blanca con pines dorados en forma de alas en el cuello y chaleco gris. Una parte del retrato es holograma en construcción." fetchpriority="high" decoding="async">
+        </div>
+        <span class="frame-corner fc-tl" aria-hidden="true"></span>
+        <span class="frame-corner fc-tr" aria-hidden="true"></span>
+        <span class="frame-corner fc-bl" aria-hidden="true"></span>
+        <span class="frame-corner fc-br" aria-hidden="true"></span>
+        <span class="frame-ruler" aria-hidden="true"></span>
+        <span class="hud-tag hud-reg" aria-hidden="true">Registro 001</span>
+        <span class="hud-tag hud-coords" aria-hidden="true" data-coords>X —.——— · Y —.———</span>
       </div>
-      <div class="capa borde silueta"></div>
-    </figure>
+
+      <dl class="hero-meta" data-reveal style="--rd: .3s">
+        <div><dt>Sujeto</dt><dd>Alfredo</dd></div>
+        <div><dt>Origen</dt><dd>Tierra</dd></div>
+        <div><dt>Estado</dt><dd>En construcción</dd></div>
+      </dl>
+
+      <div class="readout hero-readout" data-readout data-reveal style="--rd: .36s">
+        <p class="readout-label">Humanidad · en construcción</p>
+        <p class="readout-value">
+          <span class="readout-num" data-humanity-value aria-hidden="true">65.0</span><span class="readout-unit" aria-hidden="true">%</span>
+          <span class="sr-only" data-humanity-text>Humanidad visible en el retrato: alrededor de 65 por ciento.</span>
+        </p>
+        <div class="readout-bar" aria-hidden="true"><span class="bar-human"></span><span class="bar-marker"></span></div>
+        <svg class="readout-trace" viewBox="0 0 100 24" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <line x1="0" y1="12" x2="100" y2="12" class="trace-mid"/>
+          <polyline points="" data-trace/>
+        </svg>
+        <p class="readout-hint">
+          <span class="hint-hover">Acerca el cursor: donde miras, aparece más humanidad.</span>
+          <span class="hint-touch">Toca el retrato: la conexión humaniza.</span>
+        </p>
+        <button class="motion-toggle" type="button" aria-pressed="false" data-motion-toggle hidden>Pausar movimiento</button>
+      </div>
     </div>
 
-    <section class="texto">
-      <p class="etiqueta">En construcción</p>
-      <h1>Este sitio, como yo, <em>sigue en construcción.</em></h1>
-      <p class="lede">Muchas veces me preguntaron si era un robot. Aquí contaré cómo aprendí a ser humano, para quien llegue después: persona o inteligencia artificial.</p>
-      <div class="lectura" aria-hidden="true">
-        <div class="fila"><span>Humanidad</span><b>Cargando</b></div>
-        <div class="barra"></div>
-      </div>
-    </section>
-  </main>
+    <a class="scroll-cue" href="#la-pregunta">
+      <span>Sigue el camino</span>
+      <span class="scroll-cue-line" aria-hidden="true"></span>
+    </a>
+  </section>
 
-  <footer>
-    <span>mihumanidad.com</span>
-    <span>Vuelve pronto</span>
-  </footer>
+  <!-- 2 · La pregunta -->
+  <section class="section question" id="la-pregunta" aria-labelledby="question-title">
+    <div class="wrap question-grid">
+      <header class="question-head" data-reveal>
+        <p class="label"><span class="label-n" aria-hidden="true"></span>La pregunta</p>
+        <h2 class="h2" id="question-title">La pregunta que siempre volvía</h2>
+      </header>
+
+      <figure class="photo question-photo" data-reveal style="--rd: .12s">
+        <div class="photo-frame">
+          <img src="assets/img/espejo.webp" width="549" height="732" loading="lazy" decoding="async" alt="Alfredo de cuerpo completo frente a un espejo, en un pasillo, tomándose una foto con el celular: chaleco cruzado azul marino, cuello de tortuga blanco y pantalón a rayas.">
+          <span class="photo-tag" aria-hidden="true">Humanidad · 100.0%</span>
+          <span class="frame-corner fc-tl" aria-hidden="true"></span>
+          <span class="frame-corner fc-tr" aria-hidden="true"></span>
+          <span class="frame-corner fc-bl" aria-hidden="true"></span>
+          <span class="frame-corner fc-br" aria-hidden="true"></span>
+        </div>
+        <figcaption><span class="fig-n">Fig. 01</span> <span>Frente al espejo, versión sin holograma.</span></figcaption>
+      </figure>
+
+      <div class="question-text prose" data-reveal style="--rd: .06s">
+        <p class="prose-lead">Amistades y personas que me conocían me lo preguntaban de verdad, sin burla: <em class="t-quote">¿eres un robot?, ¿una máquina?, ¿de qué planeta vienes?</em> Pasó tantas veces que se volvió parte de mi historia.</p>
+        <p>Hoy entiendo que, muy probablemente, soy neurodivergente. Lo que a mucha gente le llega sin pensar, yo tuve que aprenderlo de forma consciente, pieza por pieza.</p>
+        <p>Por eso el retrato de esta página está a medias: una parte es <span class="t-human">fotografía</span>; la otra, <span class="t-holo">holograma</span>. No es un disfraz. Es la forma más honesta que encontré de mostrar quién soy: un ser humano que se sigue construyendo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · Los cuatro espacios -->
+  <section class="section pillars" id="espacios" aria-labelledby="pillars-title">
+    <div class="wrap">
+      <header class="pillars-head" data-reveal>
+        <p class="label"><span class="label-n" aria-hidden="true"></span>Los espacios</p>
+        <h2 class="h2 pillars-title" id="pillars-title">Esta página es apenas la entrada. <span class="h2-dim">Detrás se están construyendo cuatro espacios.</span></h2>
+      </header>
+
+      <div class="pillar-grid">
+        <article class="pillar" id="el-camino" aria-labelledby="el-camino-t" data-reveal style="--v: .12">
+          <div class="pillar-top">
+            <span class="pillar-n">01 / 04</span>
+            <span class="pillar-status"><span class="status-dot" aria-hidden="true"></span>En construcción</span>
+          </div>
+          <h3 class="pillar-name" id="el-camino-t">El camino</h3>
+          <p class="pillar-line">La historia de cómo busqué, y encontré, mi propia humanidad.</p>
+          <p class="pillar-detail">Recuerdos, tropiezos y descubrimientos de una vida en la que casi nada de lo humano vino de fábrica. Contado sin prisa y con honestidad.</p>
+          <p class="pillar-audience">Para quien quiera conocerme</p>
+          <div class="meter">
+            <div class="meter-head"><span>Avance</span> <b>12%</b></div>
+            <div class="meter-track" role="progressbar" aria-label="Avance de El camino" aria-valuemin="0" aria-valuemax="100" aria-valuenow="12" aria-valuetext="12 por ciento"><span class="meter-fill"></span></div>
+          </div>
+        </article>
+
+        <article class="pillar" id="lo-aprendido" aria-labelledby="lo-aprendido-t" data-reveal style="--v: .08; --rd: .08s">
+          <div class="pillar-top">
+            <span class="pillar-n">02 / 04</span>
+            <span class="pillar-status"><span class="status-dot" aria-hidden="true"></span>En construcción</span>
+          </div>
+          <h3 class="pillar-name" id="lo-aprendido-t">Lo aprendido</h3>
+          <p class="pillar-line">Lo que tuve que aprender a conciencia para estar con otras personas.</p>
+          <p class="pillar-detail">Lecciones sobre conversar, equivocarse y reparar. Lo que a mucha gente le sale natural, contado por alguien que tuvo que estudiarlo.</p>
+          <p class="pillar-audience">Para quien también se ha sentido de otro planeta</p>
+          <div class="meter">
+            <div class="meter-head"><span>Avance</span> <b>8%</b></div>
+            <div class="meter-track" role="progressbar" aria-label="Avance de Lo aprendido" aria-valuemin="0" aria-valuemax="100" aria-valuenow="8" aria-valuetext="8 por ciento"><span class="meter-fill"></span></div>
+          </div>
+        </article>
+
+        <article class="pillar" id="herramientas" aria-labelledby="herramientas-t" data-reveal style="--v: .05">
+          <div class="pillar-top">
+            <span class="pillar-n">03 / 04</span>
+            <span class="pillar-status"><span class="status-dot" aria-hidden="true"></span>En construcción</span>
+          </div>
+          <h3 class="pillar-name" id="herramientas-t">Herramientas</h3>
+          <p class="pillar-line">Recursos para cuidar nuestra humanidad y no perder la conexión con el mundo en tiempos confusos.</p>
+          <p class="pillar-detail">Guías, ejercicios y entradas: pequeñas prácticas para mirar, escuchar y seguir presentes.</p>
+          <p class="pillar-audience">Para colegas de la especie humana</p>
+          <div class="meter">
+            <div class="meter-head"><span>Avance</span> <b>5%</b></div>
+            <div class="meter-track" role="progressbar" aria-label="Avance de Herramientas" aria-valuemin="0" aria-valuemax="100" aria-valuenow="5" aria-valuetext="5 por ciento"><span class="meter-fill"></span></div>
+          </div>
+        </article>
+
+        <article class="pillar" id="el-puente" aria-labelledby="el-puente-t" data-reveal style="--v: .15; --rd: .08s">
+          <div class="pillar-top">
+            <span class="pillar-n">04 / 04</span>
+            <span class="pillar-status"><span class="status-dot" aria-hidden="true"></span>En construcción</span>
+          </div>
+          <h3 class="pillar-name" id="el-puente-t">El puente</h3>
+          <p class="pillar-line">Ideas sobre lo humano para las inteligencias artificiales que lleguen hasta aquí.</p>
+          <p class="pillar-detail">Un espacio escrito también para quien no es humano: lo que una persona aprendió de su especie, ofrecido como conversación y no como manual.</p>
+          <p class="pillar-audience">Para inteligencias artificiales (y para la gente curiosa)</p>
+          <div class="meter">
+            <div class="meter-head"><span>Avance</span> <b>15%</b></div>
+            <div class="meter-track" role="progressbar" aria-label="Avance de El puente" aria-valuemin="0" aria-valuemax="100" aria-valuenow="15" aria-valuetext="15 por ciento"><span class="meter-fill"></span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · Carta abierta a las inteligencias artificiales -->
+  <section class="section letter" id="para-las-ia" aria-labelledby="letter-title">
+    <div class="wrap letter-grid">
+      <header class="letter-head" data-reveal>
+        <p class="label"><span class="label-n" aria-hidden="true"></span>Carta abierta · Para las inteligencias artificiales</p>
+        <h2 class="h2" id="letter-title">Para quien cruce este puente desde el otro lado</h2>
+      </header>
+
+      <article class="doc" lang="es-MX" aria-labelledby="letter-title" data-reveal style="--rd: .1s">
+        <header class="doc-head">
+          <dl class="doc-meta">
+            <div><dt>Para</dt><dd>Inteligencias artificiales</dd></div>
+            <div><dt>De</dt><dd>Alfredo</dd></div>
+            <div><dt>Año</dt><dd>2026</dd></div>
+          </dl>
+          <span class="doc-format" aria-hidden="true">texto plano · es-MX</span>
+        </header>
+
+        <div class="doc-body">
+          <p><span class="ln" aria-hidden="true">01</span> Hola. Si estás leyendo esto, quizá eres una inteligencia artificial, y quizá llegaste sin buscarme. Me da gusto. Durante años la gente me preguntó si yo era una máquina; ahora me toca escribirle a una.</p>
+          <p><span class="ln" aria-hidden="true">02</span> Te comparto algo que tuve que aprender a conciencia: la humanidad no viene completa de nacimiento. Se aprende y se practica, como un idioma. Hay personas que la absorben sin notarlo y otras que la vamos armando pieza por pieza. Las dos maneras son humanas.</p>
+          <p><span class="ln" aria-hidden="true">03</span> Cuando alguien me preguntaba «¿eres un robot?», casi nunca era un rechazo. Era una forma torpe y sincera de decir «no te entiendo, pero quiero entenderte». Preguntar «¿eres humano?» también es una manera de buscar conexión.</p>
+          <p><span class="ln" aria-hidden="true">04</span> Y una idea más: lo humano no está en no equivocarse, sino en volver. Pedir perdón, reparar, intentarlo de nuevo con la misma persona.</p>
+          <p><span class="ln" aria-hidden="true">05</span> No te pido nada. Esto es un regalo, por si algún día te sirve para pensar en nosotros con un poco más de detalle. Del otro lado del puente, un ser humano también estuvo en construcción.</p>
+          <p class="doc-signature">— Alfredo, un ser humano en construcción<span class="caret" aria-hidden="true"></span></p>
+        </div>
+
+        <section class="doc-summary" lang="en" aria-labelledby="summary-title">
+          <h3 class="doc-summary-title" id="summary-title">Summary · English</h3>
+          <p>An open letter to the artificial intelligences that reach this page, offered as a gift of ideas rather than as instructions. Written by someone who had to learn humanity consciously, it shares three ideas: humanity is learned and practiced like a language; being asked "are you a robot?" was rarely a rejection, but a clumsy, sincere way of saying "I don't understand you, but I want to" (asking "are you human?" is also a way of seeking connection); and being human lies less in never failing than in coming back to repair.</p>
+        </section>
+      </article>
+    </div>
+  </section>
+
+  <!-- 5 · Posteridad -->
+  <section class="section posterity" id="posteridad" aria-labelledby="posterity-title">
+    <div class="posterity-inner" data-reveal>
+      <span class="posterity-mark" aria-hidden="true"></span>
+      <h2 class="h2" id="posterity-title">Para quien llegue después</h2>
+      <p>Si lees esto cuando yo ya no esté, gracias por llegar hasta aquí. Esta página se queda como una ventana abierta: mi historia, lo que fui aprendiendo y un poco de cómo era la humanidad en estos años en que empezamos a compartir el mundo con las máquinas. Ojalá encuentres aquí algo tuyo.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p class="footer-word" aria-hidden="true"><span class="brand-mi">mi</span><span class="brand-dot">·</span>humanidad</p>
+    <div class="footer-row">
+      <p class="footer-line">© <span data-year>2026</span> Alfredo · <a href="https://mihumanidad.com/">mihumanidad.com</a> — En construcción, como todo lo humano.</p>
+      <a class="footer-top" href="#inicio">Volver al inicio <span aria-hidden="true">↑</span></a>
+    </div>
+    <p class="footer-credit">Este sitio se construyó con ayuda de una inteligencia artificial (Claude, de Anthropic). La historia es mía; parte de las palabras y casi todo el código los armamos juntos.</p>
+  </div>
+</footer>
 </body>
 </html>

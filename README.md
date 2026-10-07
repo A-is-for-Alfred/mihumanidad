@@ -4,13 +4,15 @@ Sitio personal y legado de Alfredo: el relato de cómo aprendió a ser humano, e
 
 ## Estado
 
-En construcción. Por ahora la portada (`index.html`) es una página temporal; el index definitivo se publica en cuanto esté listo.
+Fase 1: la portada. El resto de las secciones se construye por fases (ver el plan del sitio).
 
 ## Estructura
 
-- `index.html` — página publicada.
-- `en-construccion.html` — fuente de la página temporal.
-- `assets/img/` — imágenes optimizadas (el retrato recortado y su mapa de profundidad).
+- `index.html` — la portada.
+- `css/site.css`, `js/main.js` — estilos e interacción de la portada.
+- `js/avatar.js` — el retrato mitad foto, mitad holograma: elige `avatar-holo.js` (WebGL) o, si no hay WebGL, `avatar-css.js`.
+- `en-construccion.html` — la página temporal que se usó mientras se terminaba la portada (no se publica).
+- `assets/img/` — imágenes optimizadas: el retrato recortado, su mapa de profundidad, la foto del espejo y la imagen para redes (`og.jpg`).
 - `tools/preparar_avatar.py` — genera los recursos del avatar a partir de las fotos originales (que no se suben al repositorio).
 - `tools/build.mjs` — copia a `dist/` solo los archivos públicos; es lo que publica Hostinger.
 
