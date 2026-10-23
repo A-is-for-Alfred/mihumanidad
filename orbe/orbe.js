@@ -1,0 +1,478 @@
+import * as THREE from 'three';
+
+const CONFIG = {
+  audio: 'voz.mp3',
+  subtitulos: 'subtitulos.json',
+  distancia: 2.2,          // unidades de escena entre la cámara y la orbe (≈ metros)
+  elevacion: 0.28,         // la orbe aparece un poco arriba del centro para dejar sitio a los subtítulos
+  radio: 0.22,
+  colorNucleo: new THREE.Color('#ffd27a'),
+  colorBorde: new THREE.Color('#ff8a3d'),
+  retrasoVoz: 1.4,         // segundos entre que aparece la orbe y empieza a hablar
+};
+
+const $ = (id) => document.getElementById(id);
+const menosMovimiento = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- Escena ---------- */
+
+const lienzo = $('escena');
+const renderer = new THREE.WebGLRenderer({ canvas: lienzo, antialias: true, alpha: true });
+renderer.setClearColor(0x000000, 0);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+const escena = new THREE.Scene();
+const camara = new THREE.PerspectiveCamera(60, 1, 0.05, 50);
+const orbe = new THREE.Group();
+orbe.position.set(0, CONFIG.elevacion, -CONFIG.distancia);
+escena.add(orbe);
+
+// Ruido simplex 3D (Ashima Arts / Stefan Gustavson, licencia MIT)
+const RUIDO = /* glsl */`
+vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}
+vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}
+vec4 permute(vec4 x){return mod289(((x*34.0)+1.0)*x);}
+vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}
+float snoise(vec3 v){
+  const vec2 C=vec2(1.0/6.0,1.0/3.0); const vec4 D=vec4(0.0,0.5,1.0,2.0);
+  vec3 i=floor(v+dot(v,C.yyy)); vec3 x0=v-i+dot(i,C.xxx);
+  vec3 g=step(x0.yzx,x0.xyz); vec3 l=1.0-g; vec3 i1=min(g.xyz,l.zxy); vec3 i2=max(g.xyz,l.zxy);
+  vec3 x1=x0-i1+C.xxx; vec3 x2=x0-i2+C.yyy; vec3 x3=x0-D.yyy;
+  i=mod289(i);
+  vec4 p=permute(permute(permute(i.z+vec4(0.0,i1.z,i2.z,1.0))+i.y+vec4(0.0,i1.y,i2.y,1.0))+i.x+vec4(0.0,i1.x,i2.x,1.0));
+  float n_=0.142857142857; vec3 ns=n_*D.wyz-D.xzx;
+  vec4 j=p-49.0*floor(p*ns.z*ns.z); vec4 x_=floor(j*ns.z); vec4 y_=floor(j-7.0*x_);
+  vec4 x=x_*ns.x+ns.yyyy; vec4 y=y_*ns.x+ns.yyyy; vec4 h=1.0-abs(x)-abs(y);
+  vec4 b0=vec4(x.xy,y.xy); vec4 b1=vec4(x.zw,y.zw);
+  vec4 s0=floor(b0)*2.0+1.0; vec4 s1=floor(b1)*2.0+1.0; vec4 sh=-step(h,vec4(0.0));
+  vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy; vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+  vec3 p0=vec3(a0.xy,h.x); vec3 p1=vec3(a0.zw,h.y); vec3 p2=vec3(a1.xy,h.z); vec3 p3=vec3(a1.zw,h.w);
+  vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
+  p0*=norm.x; p1*=norm.y; p2*=norm.z; p3*=norm.w;
+  vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0); m=m*m;
+  return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
+}`;
+
+const uniformes = {
+  uTiempo: { value: 0 },
+  uNivel: { value: 0 },
+  uAparicion: { value: 1 },
+  uNucleo: { value: CONFIG.colorNucleo },
+  uBorde: { value: CONFIG.colorBorde },
+};
+
+// Núcleo: esfera que ondula con el ruido; el centro se pone al rojo blanco cuando habla.
+const nucleo = new THREE.Mesh(
+  new THREE.IcosahedronGeometry(CONFIG.radio, 24),
+  new THREE.ShaderMaterial({
+    uniforms: uniformes,
+    transparent: true,
+    depthWrite: false,
+    vertexShader: /* glsl */`
+      uniform float uTiempo; uniform float uNivel;
+      varying vec3 vNormal; varying vec3 vVista; varying float vRuido;
+      ${RUIDO}
+      void main() {
+        float n = snoise(normal * 1.4 + vec3(uTiempo * 0.35, uTiempo * 0.27, 0.0));
+        vRuido = n;
+        vec3 p = position + normal * n * (0.006 + uNivel * 0.02);
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        vNormal = normalize(normalMatrix * normal);
+        vVista = normalize(-mv.xyz);
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: /* glsl */`
+      uniform vec3 uNucleo; uniform vec3 uBorde; uniform float uNivel; uniform float uAparicion;
+      varying vec3 vNormal; varying vec3 vVista; varying float vRuido;
+      void main() {
+        float f = 1.0 - max(dot(vNormal, vVista), 0.0);
+        float borde = pow(f, 2.2);
+        float centro = pow(1.0 - f, 3.0);
+        vec3 col = mix(uBorde, uNucleo, centro);
+        col += vec3(1.0) * centro * (0.2 + uNivel * 0.6);
+        col += uBorde * borde * (0.5 + uNivel * 1.3);
+        col *= 0.86 + 0.14 * vRuido;
+        float a = clamp(0.5 + centro * 0.5 + borde * 0.45, 0.0, 1.0) * uAparicion;
+        gl_FragColor = vec4(col, a);
+        #include <colorspace_fragment>
+      }`,
+  }),
+);
+orbe.add(nucleo);
+
+function texturaRadial(paradas) {
+  const c = document.createElement('canvas');
+  c.width = c.height = 256;
+  const g = c.getContext('2d');
+  const grad = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+  for (const [pos, alfa] of paradas) grad.addColorStop(pos, `rgba(255,255,255,${alfa})`);
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 256, 256);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+const texHalo = texturaRadial([[0, 1], [0.18, 0.55], [0.45, 0.14], [1, 0]]);
+const texPunto = texturaRadial([[0, 1], [0.35, 0.6], [1, 0]]);
+
+function halo(escala, color) {
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: texHalo, color, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+  }));
+  s.scale.setScalar(escala);
+  s.userData.base = escala;
+  orbe.add(s);
+  return s;
+}
+const haloCerca = halo(CONFIG.radio * 4.2, CONFIG.colorNucleo);
+const haloLejos = halo(CONFIG.radio * 10, CONFIG.colorBorde);
+
+// Chispas que orbitan en una capa delgada alrededor del núcleo.
+function chispas(cantidad, radioMin, radioMax, tamano) {
+  const pos = new Float32Array(cantidad * 3);
+  for (let i = 0; i < cantidad; i++) {
+    const v = new THREE.Vector3().randomDirection().multiplyScalar(THREE.MathUtils.lerp(radioMin, radioMax, Math.random()));
+    v.y *= 0.55;
+    pos.set([v.x, v.y, v.z], i * 3);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const p = new THREE.Points(geo, new THREE.PointsMaterial({
+    size: tamano, map: texPunto, color: CONFIG.colorNucleo, transparent: true, opacity: 0.7,
+    depthWrite: false, blending: THREE.AdditiveBlending,
+  }));
+  orbe.add(p);
+  return p;
+}
+const chispasA = chispas(110, CONFIG.radio * 1.5, CONFIG.radio * 2.4, 0.028);
+const chispasB = chispas(60, CONFIG.radio * 2.2, CONFIG.radio * 3.2, 0.02);
+chispasB.rotation.z = 0.5;
+
+// Ondas: anillos que salen del núcleo en los golpes de voz.
+const ondas = Array.from({ length: 3 }, () => {
+  const m = new THREE.Mesh(
+    new THREE.RingGeometry(CONFIG.radio * 1.02, CONFIG.radio * 1.09, 96),
+    new THREE.MeshBasicMaterial({
+      color: CONFIG.colorNucleo, transparent: true, opacity: 0, depthWrite: false,
+      side: THREE.DoubleSide, blending: THREE.AdditiveBlending,
+    }),
+  );
+  m.userData.vida = 1;
+  orbe.add(m);
+  return m;
+});
+let ultimaOnda = 0;
+let vozAnterior = 0;
+
+function lanzarOnda(t) {
+  const libre = ondas.find((o) => o.userData.vida >= 1);
+  if (!libre) return;
+  libre.userData.vida = 0;
+  ultimaOnda = t;
+}
+
+/* ---------- Orientación del teléfono (3 grados de libertad) ---------- */
+
+const giro = { alpha: 0, beta: 0, gamma: 0, recibido: false };
+let usarGiro = false;
+const objetivo = new THREE.Quaternion();
+const eje = new THREE.Vector3(0, 0, 1);
+const euler = new THREE.Euler();
+const q0 = new THREE.Quaternion();
+const qAtras = new THREE.Quaternion(-Math.sqrt(0.5), 0, 0, Math.sqrt(0.5)); // la cámara mira por la espalda del teléfono
+
+function alGirar(e) {
+  if (e.alpha == null) return;
+  giro.alpha = e.alpha; giro.beta = e.beta; giro.gamma = e.gamma;
+  giro.recibido = true;
+}
+
+function pedirMovimiento() {
+  if (typeof DeviceOrientationEvent === 'undefined') return Promise.resolve(false);
+  const escuchar = () => { addEventListener('deviceorientation', alGirar); return true; };
+  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+    // iOS: debe llamarse dentro del toque del usuario.
+    return DeviceOrientationEvent.requestPermission()
+      .then((r) => (r === 'granted' ? escuchar() : false))
+      .catch(() => false);
+  }
+  return Promise.resolve(escuchar());
+}
+
+function quaternionDelTelefono(salida) {
+  const r = THREE.MathUtils.degToRad;
+  const pantalla = r(screen.orientation?.angle ?? window.orientation ?? 0);
+  euler.set(r(giro.beta), r(giro.alpha), -r(giro.gamma), 'YXZ');
+  salida.setFromEuler(euler).multiply(qAtras).multiply(q0.setFromAxisAngle(eje, -pantalla));
+  return salida;
+}
+
+function esperar(ms) { return new Promise((r) => setTimeout(r, ms)); }
+
+async function esperarGiro(ms) {
+  const fin = performance.now() + ms;
+  while (!giro.recibido && performance.now() < fin) await esperar(50);
+  return giro.recibido;
+}
+
+const base = new THREE.Vector3().copy(orbe.position);
+
+// Coloca la orbe frente a donde apunta el teléfono en este momento; luego se queda fija en ese lugar.
+function colocarOrbe() {
+  if (!usarGiro) { base.set(0, CONFIG.elevacion, -CONFIG.distancia); return; }
+  quaternionDelTelefono(camara.quaternion);
+  const frente = new THREE.Vector3(0, 0, -1).applyQuaternion(camara.quaternion);
+  frente.y = THREE.MathUtils.clamp(frente.y, -0.55, 0.55);
+  frente.normalize();
+  const arriba = new THREE.Vector3(0, 1, 0).applyQuaternion(camara.quaternion);
+  base.copy(frente).multiplyScalar(CONFIG.distancia).addScaledVector(arriba, CONFIG.elevacion);
+}
+
+/* ---------- Voz y subtítulos ---------- */
+
+const promesaAudio = fetch(CONFIG.audio).then((r) => {
+  if (!r.ok) throw new Error(`No se encontró ${CONFIG.audio}`);
+  return r.arrayBuffer();
+});
+const promesaSubs = fetch(CONFIG.subtitulos).then((r) => r.json()).catch(() => []);
+let frases = [];
+promesaSubs.then((f) => {
+  frases = f;
+  if (f.length) $('duracion').textContent = `Voz de ${Math.round(f.at(-1).fin)} s`;
+});
+
+let ctx, analizador, buffer, fuente;
+let inicioVoz = 0;
+let estado = 'espera'; // espera | hablando | pausa | terminado
+const muestras = new Float32Array(1024);
+let nivel = 0;
+
+function crearAudio() {
+  try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch { /* Safari < 16.4 */ }
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+  ctx.resume();
+  analizador = ctx.createAnalyser();
+  analizador.fftSize = 1024;
+  analizador.connect(ctx.destination);
+}
+
+async function prepararVoz() {
+  const bytes = await promesaAudio;
+  buffer = await ctx.decodeAudioData(bytes.slice(0));
+}
+
+function hablar() {
+  if (!buffer) return;
+  if (fuente) { fuente.onended = null; try { fuente.stop(); } catch { /* ya terminó */ } }
+  if (ctx.state === 'suspended') ctx.resume();
+  const esta = ctx.createBufferSource();
+  esta.buffer = buffer;
+  esta.connect(analizador);
+  esta.onended = () => { if (fuente === esta) terminar(); };
+  inicioVoz = ctx.currentTime + 0.05;
+  esta.start(inicioVoz);
+  fuente = esta;
+  estado = 'hablando';
+  $('pausa').disabled = false;
+  $('pausa').textContent = 'Pausa';
+  $('repetir').classList.remove('destacado');
+}
+
+function terminar() {
+  estado = 'terminado';
+  $('subtitulo').textContent = '';
+  $('pausa').disabled = true;
+  $('repetir').classList.add('destacado');
+}
+
+function alternarPausa() {
+  if (estado === 'hablando') {
+    ctx.suspend(); estado = 'pausa'; $('pausa').textContent = 'Seguir';
+  } else if (estado === 'pausa') {
+    ctx.resume(); estado = 'hablando'; $('pausa').textContent = 'Pausa';
+  }
+}
+
+function subtituloEn(t) {
+  let actual = null;
+  for (const f of frases) if (f.inicio <= t + 0.05) actual = f;
+  if (!actual || t > actual.fin + 1.2) return '';
+  return actual.texto;
+}
+
+function medirVoz() {
+  if (estado !== 'hablando') return 0;
+  analizador.getFloatTimeDomainData(muestras);
+  let suma = 0;
+  for (const m of muestras) suma += m * m;
+  const rms = Math.sqrt(suma / muestras.length);
+  return THREE.MathUtils.clamp((rms - 0.015) / 0.16, 0, 1);
+}
+
+/* ---------- Cámara ---------- */
+
+async function encenderCamara() {
+  const video = $('camara');
+  if (!navigator.mediaDevices?.getUserMedia) return false;
+  try {
+    const flujo = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } },
+    });
+    video.srcObject = flujo;
+    await video.play();
+    const ajustes = flujo.getVideoTracks()[0]?.getSettings?.() ?? {};
+    video.classList.toggle('espejo', ajustes.facingMode !== 'environment' && !matchMedia('(pointer: coarse)').matches);
+    video.classList.add('encendida');
+    return true;
+  } catch (e) {
+    console.warn('Cámara no disponible:', e);
+    return false;
+  }
+}
+
+/* ---------- Inicio ---------- */
+
+let aparicion = 1;   // 0 → 1 cuando la orbe se materializa
+let tAparicion = -1;
+
+$('empezar').addEventListener('click', async () => {
+  const boton = $('empezar');
+  boton.disabled = true;
+  boton.textContent = 'Preparando…';
+  crearAudio();                       // dentro del toque: desbloquea el sonido
+  const pMovimiento = pedirMovimiento(); // dentro del toque: iOS lo exige
+  const pCamara = encenderCamara();
+  const pVoz = prepararVoz().catch((e) => { console.error(e); return 'error'; });
+
+  const [movimiento, hayCamara, voz] = await Promise.all([pMovimiento, pCamara, pVoz]);
+  usarGiro = movimiento && await esperarGiro(900);
+
+  $('inicio').hidden = true;
+  $('experiencia').hidden = false;
+  $('recentrar').hidden = !usarGiro;
+  $('pista').textContent = usarGiro
+    ? 'Mueve el teléfono despacio: la orbe se queda en su lugar.'
+    : hayCamara ? 'Sube el volumen. La orbe está frente a ti.' : 'No se pudo abrir la cámara. La orbe habla igual.';
+  setTimeout(() => $('pista').classList.add('oculta'), 6500);
+
+  colocarOrbe();
+  orbe.position.copy(base);
+  materializar();
+  navigator.wakeLock?.request('screen').catch(() => {});
+
+  if (voz === 'error') {
+    $('subtitulo').textContent = 'No se pudo cargar la voz. Revisa la conexión y recarga la página.';
+    $('pausa').disabled = true;
+    $('repetir').disabled = true;
+    return;
+  }
+  setTimeout(hablar, CONFIG.retrasoVoz * 1000);
+});
+
+function materializar() { aparicion = 0; tAparicion = reloj.getElapsedTime(); }
+
+$('pausa').addEventListener('click', alternarPausa);
+$('repetir').addEventListener('click', hablar);
+$('recentrar').addEventListener('click', () => { colocarOrbe(); materializar(); });
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && estado === 'hablando') alternarPausa();
+});
+
+// Navegadores dentro de otras apps (Instagram, Facebook, TikTok…) suelen bloquear la cámara.
+if (/Instagram|FBAN|FBAV|FB_IAB|Line\/|TikTok|musical_ly|Snapchat/i.test(navigator.userAgent)) {
+  $('aviso-app').hidden = false;
+}
+
+// En computadora: código QR de esta misma dirección para abrirla en el celular.
+if (!matchMedia('(pointer: coarse)').matches && typeof qrcode !== 'undefined') {
+  const qr = qrcode(0, 'M');
+  qr.addData(location.href);
+  qr.make();
+  $('qr-imagen').innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+  $('qr').hidden = false;
+}
+
+/* ---------- Animación ---------- */
+
+const reloj = new THREE.Clock();
+const puntero = new THREE.Vector2();
+addEventListener('pointermove', (e) => {
+  puntero.set(e.clientX / innerWidth - 0.5, e.clientY / innerHeight - 0.5);
+});
+
+function ajustarTamano() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  camara.aspect = w / h;
+  camara.updateProjectionMatrix();
+}
+addEventListener('resize', ajustarTamano);
+ajustarTamano();
+
+function cuadro() {
+  const t = reloj.getElapsedTime();
+
+  // Cámara virtual: sigue al teléfono, o se inclina un poco con el puntero en computadora.
+  if (usarGiro) {
+    camara.quaternion.slerp(quaternionDelTelefono(objetivo), 0.35);
+  } else {
+    euler.set(-puntero.y * 0.12, -puntero.x * 0.16, 0, 'YXZ');
+    camara.quaternion.slerp(objetivo.setFromEuler(euler), 0.06);
+  }
+
+  // Nivel de brillo: la voz manda; en silencio la orbe respira despacio.
+  const voz = medirVoz();
+  nivel += (voz - nivel) * (voz > nivel ? 0.5 : 0.09);
+  const respiro = 0.1 + 0.06 * Math.sin(t * 1.7);
+  const brillo = Math.max(nivel, respiro);
+
+  if (tAparicion >= 0) {
+    const k = Math.min((t - tAparicion) / 1.2, 1);
+    aparicion = 1 - Math.pow(1 - k, 3);
+    if (k >= 1) tAparicion = -1;
+  }
+
+  orbe.position.copy(base);
+  orbe.position.y += menosMovimiento ? 0 : Math.sin(t * 0.9) * 0.035;
+  const escala = (0.6 + 0.4 * aparicion) * (1 + brillo * 0.08);
+  nucleo.scale.setScalar(escala);
+
+  uniformes.uTiempo.value = t * (1 + nivel * 1.6);
+  uniformes.uNivel.value = brillo;
+  uniformes.uAparicion.value = aparicion;
+
+  haloCerca.material.opacity = (0.35 + brillo * 0.65) * aparicion;
+  haloCerca.scale.setScalar(haloCerca.userData.base * (0.9 + brillo * 0.45));
+  haloLejos.material.opacity = (0.12 + brillo * 0.38) * aparicion;
+  haloLejos.scale.setScalar(haloLejos.userData.base * (0.85 + brillo * 0.5));
+
+  const vel = menosMovimiento ? 0.05 : 0.18 + nivel * 0.9;
+  chispasA.rotation.y += 0.016 * vel;
+  chispasB.rotation.y -= 0.011 * vel;
+  chispasA.material.opacity = (0.35 + brillo * 0.6) * aparicion;
+  chispasB.material.opacity = (0.25 + brillo * 0.5) * aparicion;
+
+  // Una onda por cada golpe de voz (cuando el volumen sube de golpe), no mientras se mantiene alto.
+  if (!menosMovimiento && voz > 0.6 && vozAnterior < 0.45 && t - ultimaOnda > 0.5) lanzarOnda(t);
+  vozAnterior = voz;
+  for (const o of ondas) {
+    if (o.userData.vida >= 1) { o.material.opacity = 0; continue; }
+    o.userData.vida = Math.min(o.userData.vida + 0.016 / 1.1, 1);
+    const v = o.userData.vida;
+    o.quaternion.copy(camara.quaternion);
+    o.scale.setScalar(1 + v * 2.2);
+    o.material.opacity = 0.4 * (1 - v) * (1 - v);
+  }
+
+  if (estado === 'hablando' || estado === 'pausa') {
+    const texto = subtituloEn(ctx.currentTime - inicioVoz);
+    if ($('subtitulo').textContent !== texto) $('subtitulo').textContent = texto;
+  }
+
+  renderer.render(escena, camara);
+  requestAnimationFrame(cuadro);
+}
+requestAnimationFrame(cuadro);

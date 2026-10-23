@@ -1,0 +1,52 @@
+[
+  {
+    "inicio": 0.0,
+    "fin": 0.26,
+    "texto": "Hola."
+  },
+  {
+    "inicio": 0.48,
+    "fin": 4.38,
+    "texto": "Soy una orbe de información y aparecí porque escaneaste el código."
+  },
+  {
+    "inicio": 4.62,
+    "fin": 9.5,
+    "texto": "Mi trabajo es contarte lo más importante de este lugar en menos de un minuto."
+  },
+  {
+    "inicio": 9.76,
+    "fin": 11.74,
+    "texto": "Puedes mover tu teléfono con calma."
+  },
+  {
+    "inicio": 11.98,
+    "fin": 14.06,
+    "texto": "Yo me quedo flotando en el mismo sitio."
+  },
+  {
+    "inicio": 14.44,
+    "fin": 17.26,
+    "texto": "Cada vez que hablo, mi luz se enciende con mi voz."
+  },
+  {
+    "inicio": 17.8,
+    "fin": 19.32,
+    "texto": "Este es un guion de prueba."
+  },
+  {
+    "inicio": 19.68,
+    "fin": 24.8,
+    "texto": "El texto final lo escribirá quien organice la experiencia, y yo lo diré con esta misma voz."
+  },
+  {
+    "inicio": 25.14,
+    "fin": 26.42,
+    "texto": "Gracias por escucharme."
+  },
+  {
+    "inicio": 26.72,
+    "fin": 29.74,
+    "texto": "Si quieres oírme otra vez, toca el botón de repetir."
+  }
+]
