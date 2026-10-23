@@ -6,8 +6,8 @@ const CONFIG = {
   distancia: 2.2,          // unidades de escena entre la cámara y la orbe (≈ metros)
   elevacion: 0.28,         // la orbe aparece un poco arriba del centro para dejar sitio a los subtítulos
   radio: 0.22,
-  colorNucleo: new THREE.Color('#ffd27a'),
-  colorBorde: new THREE.Color('#ff8a3d'),
+  colorNucleo: new THREE.Color('#CFE84A'),  // lima claro CCOIA
+  colorBorde: new THREE.Color('#A7C41C'),   // lima CCOIA
   retrasoVoz: 1.4,         // segundos entre que aparece la orbe y empieza a hablar
 };
 
@@ -294,11 +294,13 @@ function alternarPausa() {
   }
 }
 
+// Cada frase se queda hasta que empieza la siguiente: así no se borra si Whisper no ubicó sus últimas
+// palabras (una dirección web, una sigla). La última se va 1.2 s después de terminar.
 function subtituloEn(t) {
-  let actual = null;
-  for (const f of frases) if (f.inicio <= t + 0.05) actual = f;
-  if (!actual || t > actual.fin + 1.2) return '';
-  return actual.texto;
+  const i = frases.findLastIndex((f) => f.inicio <= t + 0.05);
+  if (i < 0) return '';
+  if (i === frases.length - 1 && t > frases[i].fin + 1.2) return '';
+  return frases[i].texto;
 }
 
 function medirVoz() {

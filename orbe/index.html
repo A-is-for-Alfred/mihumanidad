@@ -3,22 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Orbe parlante</title>
-<meta name="theme-color" content="#07090c">
+<title>Orbe CCOIA</title>
+<meta name="theme-color" content="#04070F">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&display=swap">
 <style>
   /* Capas, de atrás hacia adelante: fondo de respaldo → video de la cámara → escena 3D transparente → interfaz.
-     Un solo aspecto oscuro: la interfaz flota sobre la imagen de la cámara. */
+     Identidad de exposición del CCOIA: fondo tinta, lima como luz, Instrument Sans. */
   :root {
-    --noche: #07090c;
-    --tinta: #f2f5f7;
-    --tenue: #aab4be;
-    --luz: #ffd27a;
-    --luz-tinta: #241a06;
-    --velo: rgba(7, 9, 12, .64);
-    --fuente: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --noche: #04070F;
+    --tinta: #F2F5F9;
+    --tenue: #A9B3C7;
+    --luz: #A7C41C;
+    --luz-clara: #CFE84A;
+    --luz-tinta: #04070F;
+    --velo: rgba(4, 7, 15, .72);
+    --fuente: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     --margen: max(16px, env(safe-area-inset-left, 0px));
     --margen-der: max(16px, env(safe-area-inset-right, 0px));
     color-scheme: dark;
@@ -29,7 +30,7 @@
   [hidden] { display: none !important; }
 
   #fondo { position: fixed; inset: 0;
-    background: radial-gradient(120% 80% at 50% 32%, #1b2431 0%, #0d1118 45%, var(--noche) 75%); }
+    background: radial-gradient(120% 80% at 50% 32%, #0C1426 0%, #070C18 45%, var(--noche) 75%); }
   #camara { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0;
     transition: opacity .8s ease; }
   #camara.encendida { opacity: 1; }
@@ -41,8 +42,16 @@
     padding: 18vh var(--margen-der) calc(28px + env(safe-area-inset-bottom, 0px)) var(--margen);
     background: linear-gradient(to bottom, transparent, rgba(7, 9, 12, .82) 30%, var(--noche)); }
   .tarjeta { width: 100%; max-width: 30rem; display: grid; gap: 14px; }
-  .ceja { margin: 0; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--luz); }
-  h1 { margin: 0; font-size: clamp(1.8rem, 7.5vw, 2.5rem); line-height: 1.08; text-wrap: balance; }
+  .marca { margin: 0; font-size: 1.05rem; font-weight: 700; letter-spacing: .02em; color: var(--tinta); }
+  .marca b { color: var(--luz); font-weight: 700; }
+  .marca span { margin-left: 8px; font-weight: 400; color: var(--tenue); }
+  /* La señalética va en tinta-2 con su punto de luz delante, como en las piezas del CCOIA. */
+  .ceja { display: flex; align-items: center; gap: 8px; margin: 0; font-size: .78rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--tenue); }
+  .ceja::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--luz-clara);
+    box-shadow: 0 0 10px var(--luz); }
+  h1 { margin: 0; font-size: clamp(1.8rem, 7.5vw, 2.5rem); line-height: 1.08; letter-spacing: -.02em; text-wrap: balance; }
+  h1 em { font-style: normal; color: var(--luz-clara); }
   .tarjeta p { margin: 0; line-height: 1.45; color: var(--tenue); }
   .datos { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .9rem; color: var(--tenue);
     font-variant-numeric: tabular-nums; }
@@ -50,11 +59,11 @@
   .datos span:first-child::before { content: none; }
   #empezar { margin-top: 4px; padding: 16px 20px; border: 0; border-radius: 999px; background: var(--luz);
     color: var(--luz-tinta); font-size: 1.15rem; font-weight: 700; cursor: pointer;
-    box-shadow: 0 0 32px rgba(255, 210, 122, .35); }
+    box-shadow: 0 0 32px rgba(167, 196, 28, .35); }
   #empezar:disabled { opacity: .7; cursor: progress; }
   .nota { font-size: .85rem; }
-  .aviso { padding: 12px 14px; border-radius: 12px; background: rgba(255, 210, 122, .12);
-    border: 1px solid rgba(255, 210, 122, .4); color: var(--tinta); line-height: 1.4; }
+  .aviso { padding: 12px 14px; border-radius: 12px; background: rgba(167, 196, 28, .12);
+    border: 1px solid rgba(167, 196, 28, .4); color: var(--tinta); line-height: 1.4; }
   #qr { display: flex; gap: 14px; align-items: center; padding-top: 6px; border-top: 1px solid rgba(255, 255, 255, .12); }
   #qr-imagen { flex: none; width: 112px; height: 112px; padding: 6px; border-radius: 10px; background: #fff; }
   #qr-imagen svg { display: block; width: 100%; height: 100%; }
@@ -89,8 +98,9 @@
 
   <section id="inicio" aria-labelledby="titulo">
     <div class="tarjeta">
-      <p class="ceja">Prueba de realidad aumentada</p>
-      <h1 id="titulo">Una orbe te va a contar algo</h1>
+      <p class="marca" aria-label="CCOIA, UNAM"><b>CCO</b>IA<span>UNAM</span></p>
+      <p class="ceja">Realidad aumentada</p>
+      <h1 id="titulo">Una orbe te cuenta qué es el <em>CCOIA</em></h1>
       <p>Usaremos la cámara trasera y el sonido. Sube el volumen y apunta tu teléfono hacia el frente.</p>
       <div class="datos"><span id="duracion">Voz de 30 s</span><span>Con subtítulos</span><span>Sin instalar nada</span></div>
       <p class="aviso" id="aviso-app" hidden>Estás dentro de otra app y aquí la cámara suele estar bloqueada.
