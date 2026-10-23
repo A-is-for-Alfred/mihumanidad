@@ -15,6 +15,8 @@ Fase 1: la portada. El resto de las secciones se construye por fases (ver el pla
 - `assets/img/` — imágenes optimizadas: el retrato recortado, su mapa de profundidad, la foto del espejo y la imagen para redes (`og.jpg`).
 - `tools/preparar_avatar.py` — genera los recursos del avatar a partir de las fotos originales (que no se suben al repositorio).
 - `tools/build.mjs` — copia a `dist/` solo los archivos públicos; es lo que publica Hostinger.
+- `hablo-unam/` — Hablo UNAM, herramienta interna de estudio del CCOIA-UNAM en `/hablo-unam/` (no se enlaza desde la portada). Llega ya construida desde `lenguaje-unam/app` con `node tools/publicar-en-mihumanidad.mjs --api https://…`; el build la copia sin tocarla y falla si le falta `index.html` o `kb.json`. No se edita aquí.
+- `robots.txt` — solo pide a los buscadores no rastrear `/hablo-unam/`.
 
 ## Publicación
 
