@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 const CONFIG = {
-  audio: 'voz.mp3',
+  audio: 'voz.mp3?v=d844339290',
   subtitulos: 'subtitulos.json',
   distancia: 2.2,          // unidades de escena entre la cámara y la orbe (≈ metros)
   elevacion: 0.28,         // la orbe aparece un poco arriba del centro para dejar sitio a los subtítulos
