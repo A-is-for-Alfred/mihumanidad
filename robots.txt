@@ -1,3 +1,4 @@
 User-agent: *
 Disallow: /hablo-unam/
 Disallow: /orbe/
+Disallow: /entrevista/

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>Entrevista · mihumanidad</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#05070a">
+<meta name="color-scheme" content="dark">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://entrevistas.srv1091049.hstgr.cloud http://localhost:* http://127.0.0.1:*; img-src 'self' data:; media-src blob:; base-uri 'none'; form-action 'none'">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2305070a'/%3E%3Cpath d='M16 6a10 10 0 0 0 0 20z' fill='%23ece8e1'/%3E%3Cpath d='M16 6a10 10 0 0 1 0 20' fill='none' stroke='%236ff3ff' stroke-width='1.6' stroke-dasharray='2 2'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="entrevista.css">
+<script type="module" src="entrevista.js"></script>
+</head>
+<body>
+<div class="app" id="app" data-pantalla="cargando">
+
+  <header class="cabeza">
+    <div class="marca">
+      <span class="punto" aria-hidden="true"></span>
+      <span class="mono" id="marca-texto">mihumanidad · entrevista</span>
+    </div>
+    <h1 class="titulo" id="titulo">Entrevista</h1>
+    <button class="boton-texto" id="terminar" type="button" hidden>Terminar</button>
+  </header>
+
+  <!-- Cargando -->
+  <section class="pantalla" data-de="cargando" aria-live="polite">
+    <p class="mono tenue">Abriendo tu entrevista…</p>
+  </section>
+
+  <!-- Enlace inválido o sin conexión -->
+  <section class="pantalla tarjeta" data-de="error" role="alert">
+    <h2 class="serif">No pude abrir la entrevista</h2>
+    <p id="error-texto">Revisa que hayas abierto el enlace completo que te mandaron.</p>
+    <button class="boton" id="reintentar" type="button">Intentar de nuevo</button>
+  </section>
+
+  <!-- Aviso antes de empezar -->
+  <section class="pantalla tarjeta" data-de="aviso">
+    <h2 class="serif" id="aviso-titulo">Antes de empezar</h2>
+    <div id="aviso-propio" class="aviso-propio" hidden></div>
+    <ul class="aviso" id="aviso-general">
+      <li>Vas a conversar con un <strong>asistente de inteligencia artificial</strong> que Alfredo preparó. No es una persona.</li>
+      <li>Puedes <strong>escribir o mandar notas de voz</strong>. Los audios se convierten en texto y no se guardan.</li>
+      <li>La conversación se guarda y <strong>Alfredo la va a leer</strong>, junto con un resumen hecho por IA. Él revisa todo y es quien decide; la IA no decide nada.</li>
+      <li>Las respuestas las genera un modelo de IA de un proveedor externo (Anthropic), que procesa el texto solo para responderte.</li>
+      <li>Puedes <strong>pausar y volver</strong> cuando quieras con este mismo enlace. Es personal: no lo compartas.</li>
+      <li>No hace falta que compartas datos sensibles (contraseñas, datos bancarios o de salud). Si quieres que se borre tu conversación, pídeselo a Alfredo.</li>
+    </ul>
+    <p class="mono tenue" id="aviso-duracion"></p>
+    <button class="boton" id="aceptar" type="button">Entendido, empezar</button>
+  </section>
+
+  <!-- Conversación -->
+  <main class="pantalla chat" data-de="chat">
+    <ol class="mensajes" id="mensajes" role="log" aria-live="polite" aria-relevant="additions" aria-label="Conversación"></ol>
+  </main>
+
+  <footer class="pie" id="pie" hidden>
+    <p class="estado mono" id="estado" aria-live="polite"></p>
+    <div class="opciones" id="opciones" role="group" aria-label="Respuestas rápidas"></div>
+
+    <div class="redactor" id="redactor">
+      <label class="oculto" for="texto">Tu respuesta</label>
+      <textarea id="texto" rows="1" placeholder="Escribe tu respuesta…" autocomplete="off" enterkeyhint="send"></textarea>
+      <button class="icono" id="microfono" type="button" aria-label="Grabar nota de voz" title="Grabar nota de voz">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+      </button>
+      <button class="icono enviar" id="enviar" type="button" aria-label="Enviar" title="Enviar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+
+    <div class="grabando" id="grabando" hidden>
+      <span class="rojo" aria-hidden="true"></span>
+      <span class="mono" id="cronometro">0:00</span>
+      <span class="tenue">Grabando…</span>
+      <button class="boton-texto" id="cancelar-audio" type="button">Cancelar</button>
+      <button class="boton" id="enviar-audio" type="button">Enviar audio</button>
+    </div>
+
+    <p class="nota tenue" id="nota-pausa">Puedes cerrar esta página y volver después con el mismo enlace.</p>
+  </footer>
+
+  <div class="final tarjeta" id="final" hidden>
+    <p class="serif" id="final-texto">La entrevista terminó. ¡Gracias!</p>
+    <p class="tenue">Ya puedes cerrar esta página.</p>
+  </div>
+
+  <dialog id="confirmar" aria-labelledby="confirmar-texto">
+    <p id="confirmar-texto">¿Quieres terminar la entrevista? Después ya no podrás seguir escribiendo.</p>
+    <div class="acciones">
+      <button class="boton-texto" id="confirmar-no" type="button">Seguir</button>
+      <button class="boton" id="confirmar-si" type="button">Terminar</button>
+    </div>
+  </dialog>
+</div>
+</body>
+</html>

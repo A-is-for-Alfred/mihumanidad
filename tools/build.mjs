@@ -1,6 +1,6 @@
 // Prepara dist/ con los archivos públicos del sitio, para Hostinger.
 // Sin dependencias: el sitio es HTML, CSS y JS escritos a mano; el "build" solo copia.
-import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync } from "node:fs";
+import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -63,6 +63,20 @@ for (const [carpeta, requeridos] of Object.entries(subpaginas)) {
       process.exit(1);
     }
   }
+}
+
+// Hostinger guarda en caché los .js y .css por días: en las páginas que lo necesitan, cada referencia
+// local a un .js o .css se sella con ?v=<huella> para que un cambio llegue en cuanto se publica.
+//   entrevista/ → chat del entrevistador de IA (el servicio vive en el VPS, ver S:\Trabajo\Claude\entrevistas).
+const sellar = ["entrevista/index.html"];
+for (const pagina of sellar) {
+  const ruta = join(salida, pagina);
+  const dir = join(ruta, "..");
+  const html = readFileSync(ruta, "utf8").replace(/(src|href)="([\w./-]+\.(?:js|css))"/g, (todo, attr, archivo) => {
+    const local = join(dir, archivo);
+    return existsSync(local) ? `${attr}="${archivo}?v=${huella(local).slice(0, 10)}"` : todo;
+  });
+  writeFileSync(ruta, html);
 }
 
 console.log("dist/ listo:", readdirSync(salida).join(", "));
