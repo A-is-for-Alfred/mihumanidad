@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ofrenda a Acteal</title>
+<meta name="theme-color" content="#0E0814">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+  /* Capas, de atrás hacia adelante: fondo de respaldo → video de la cámara → escena 3D transparente → interfaz.
+     Ofrenda: noche morada (el color del luto en las ofrendas) y la luz naranja del cempasúchil.
+     Spectral para lo que se lee con calma (títulos, subtítulos); Atkinson Hyperlegible para controles. */
+  :root {
+    --noche: #0E0814;
+    --tinta: #F6EFE9;
+    --tenue: #BBAEC2;
+    --luz: #F2711C;
+    --luz-clara: #FFB52E;
+    --luz-tinta: #1E0C02;
+    --morado: #A57CC4;
+    --velo: rgba(14, 8, 20, .7);
+    --serif: "Spectral", Georgia, "Times New Roman", serif;
+    --sans: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --margen: max(16px, env(safe-area-inset-left, 0px));
+    --margen-der: max(16px, env(safe-area-inset-right, 0px));
+    color-scheme: dark;
+  }
+  html, body { height: 100%; margin: 0; overflow: hidden; background: var(--noche); color: var(--tinta);
+    font-family: var(--sans); -webkit-tap-highlight-color: transparent; }
+  button, a { font: inherit; }
+  [hidden] { display: none !important; }
+
+  #fondo { position: fixed; inset: 0;
+    background: radial-gradient(120% 80% at 50% 30%, #2A1434 0%, #170B20 45%, var(--noche) 78%); }
+  #camara { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0;
+    transition: opacity .8s ease; }
+  #camara.encendida { opacity: 1; }
+  #camara.espejo { transform: scaleX(-1); }
+  #escena { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+
+  /* Pantalla de inicio: la orbe ya flota arriba; el texto queda abajo sobre un degradado. */
+  #inicio { position: fixed; inset: auto 0 0 0; display: flex; justify-content: center; max-height: 100%;
+    overflow-y: auto; padding: 16vh var(--margen-der) calc(24px + env(safe-area-inset-bottom, 0px)) var(--margen);
+    background: linear-gradient(to bottom, transparent, rgba(14, 8, 20, .86) 26%, var(--noche)); }
+  .tarjeta { width: 100%; max-width: 30rem; display: grid; gap: 14px; }
+  .ceja { display: flex; align-items: center; gap: 8px; margin: 0; font-size: .78rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--tenue); }
+  .ceja::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--luz-clara);
+    box-shadow: 0 0 10px var(--luz); }
+  h1 { margin: 0; font-family: var(--serif); font-weight: 600; font-size: clamp(1.75rem, 7.2vw, 2.4rem);
+    line-height: 1.12; text-wrap: balance; }
+  .bajada { margin: 0; font-family: var(--serif); font-size: 1.08rem; line-height: 1.5; color: var(--tinta); }
+  .tarjeta p { margin: 0; }
+  .nota { font-size: .9rem; line-height: 1.45; color: var(--tenue); }
+  .datos { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .9rem; color: var(--tenue);
+    font-variant-numeric: tabular-nums; }
+  .datos span::before { content: "·"; margin-right: 14px; }
+  .datos span:first-child::before { content: none; }
+  #empezar { margin-top: 2px; padding: 16px 20px; border: 0; border-radius: 999px; background: var(--luz);
+    color: var(--luz-tinta); font-size: 1.15rem; font-weight: 700; cursor: pointer;
+    box-shadow: 0 0 32px rgba(242, 113, 28, .4); }
+  #empezar:disabled { opacity: .7; cursor: progress; }
+  .dedicatoria { padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, .12); font-family: var(--serif);
+    font-style: italic; font-size: .98rem; line-height: 1.5; color: var(--tenue); }
+  .aviso { padding: 12px 14px; border-radius: 12px; background: rgba(242, 113, 28, .12);
+    border: 1px solid rgba(242, 113, 28, .45); line-height: 1.4; }
+  #qr { display: flex; gap: 14px; align-items: center; }
+  #qr-imagen { flex: none; width: 104px; height: 104px; padding: 6px; border-radius: 10px; background: #fff; }
+  #qr-imagen svg { display: block; width: 100%; height: 100%; }
+  #qr p { font-size: .9rem; line-height: 1.45; color: var(--tenue); }
+
+  /* Durante la experiencia */
+  #pista { position: fixed; top: calc(14px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%);
+    width: max-content; max-width: calc(100% - 32px); margin: 0; padding: 8px 14px; border-radius: 999px;
+    background: var(--velo); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    font-size: .9rem; text-align: center; transition: opacity .6s ease; }
+  #pista.oculta { opacity: 0; }
+  #abajo { position: fixed; inset: auto 0 0 0; display: grid; justify-items: center; gap: 12px;
+    padding: 0 var(--margen-der) calc(18px + env(safe-area-inset-bottom, 0px)) var(--margen); }
+  #subtitulo { max-width: 34rem; min-height: 1em; margin: 0; padding: 12px 16px; border-radius: 14px;
+    background: var(--velo); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    font-family: var(--serif); font-size: clamp(1.08rem, 4.5vw, 1.32rem); line-height: 1.4; text-align: center;
+    text-wrap: balance; transition: opacity .3s ease; }
+  #subtitulo:empty { opacity: 0; }
+  .controles { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .controles button { min-width: 6.5rem; padding: 11px 16px; border-radius: 999px; cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, .22); background: var(--velo); color: var(--tinta);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-weight: 700; }
+  .controles button:disabled { opacity: .45; cursor: default; }
+  .controles button.destacado { background: var(--luz); color: var(--luz-tinta); border-color: var(--luz); }
+  button:focus-visible, a:focus-visible { outline: 3px solid var(--tinta); outline-offset: 3px; }
+
+  /* Al terminar: las demás voces de la ofrenda, por si alguien no alcanza un código. */
+  #otras { width: 100%; max-width: 30rem; padding: 14px 16px; border-radius: 16px; background: var(--velo);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  #otras h2 { margin: 0 0 8px; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+    font-weight: 400; color: var(--tenue); }
+  #otras ol { margin: 0; padding: 0; list-style: none; display: grid; }
+  #otras a { display: flex; gap: 12px; align-items: baseline; padding: 9px 2px; color: var(--tinta);
+    text-decoration: none; border-top: 1px solid rgba(255, 255, 255, .08); }
+  #otras li:first-child a { border-top: 0; }
+  #otras a b { flex: none; width: 1.4em; font-variant-numeric: tabular-nums; color: var(--luz-clara); }
+  #otras a span { font-family: var(--serif); line-height: 1.35; }
+  #otras a[aria-current] span { color: var(--tenue); }
+  #otras a[aria-current]::after { content: "aquí"; margin-left: auto; font-size: .8rem; color: var(--tenue); }
+  #otras a.escuchada:not([aria-current])::after { content: "escuchada"; margin-left: auto; font-size: .8rem;
+    color: var(--morado); }
+</style>
+</head>
+<body>
+  <div id="fondo"></div>
+  <video id="camara" playsinline muted autoplay></video>
+  <canvas id="escena" aria-hidden="true"></canvas>
+
+  <section id="inicio" aria-labelledby="titulo">
+    <div class="tarjeta">
+      <p class="ceja" id="segmento">Ofrenda · Acteal, 1997</p>
+      <h1 id="titulo">Ofrenda a Acteal</h1>
+      <p class="bajada" id="bajada">Una luz guarda la memoria de quienes murieron en Acteal.</p>
+      <div class="datos"><span id="duracion">Voz</span><span>Con subtítulos</span><span>Sin instalar nada</span></div>
+      <p class="aviso" id="aviso-app" hidden>Estás dentro de otra app y aquí la cámara suele estar bloqueada.
+        Abre esta página en Safari o Chrome desde el menú de la app («Abrir en el navegador»).</p>
+      <button id="empezar" type="button">Escuchar</button>
+      <p class="nota">Usaremos la cámara trasera y el sonido; tu navegador te pedirá permiso. Sube el volumen.</p>
+      <div id="qr" hidden>
+        <div id="qr-imagen"></div>
+        <p>¿Estás en una computadora? Escanea este código con tu celular para verla con la cámara.
+          También puedes empezar aquí.</p>
+      </div>
+      <p class="dedicatoria" id="dedicatoria">En memoria de las personas tsotsiles asesinadas en Acteal, Chenalhó,
+        el 22 de diciembre de 1997.</p>
+    </div>
+  </section>
+
+  <div id="experiencia" hidden>
+    <p id="pista">Mueve el teléfono despacio: la luz se queda en su lugar.</p>
+    <div id="abajo">
+      <nav id="otras" aria-labelledby="otras-titulo" hidden>
+        <h2 id="otras-titulo">Otras voces de esta ofrenda</h2>
+        <ol id="otras-lista"></ol>
+      </nav>
+      <p id="subtitulo" aria-live="polite"></p>
+      <div class="controles">
+        <button id="pausa" type="button">Pausa</button>
+        <button id="repetir" type="button">Repetir</button>
+        <button id="recentrar" type="button" hidden>Traerla al frente</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bibliotecas copiadas junto a la página (three 0.160.0, qrcode-generator 1.4.4) para no depender de un CDN. -->
+  <script src="qrcode.min.js" defer></script>
+  <script type="importmap">
+    { "imports": { "three": "./three.module.min.js" } }
+  </script>
+  <script type="module" src="orbe.js?v=da50997953"></script>
+</body>
+</html>

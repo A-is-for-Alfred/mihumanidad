@@ -1,0 +1,252 @@
+[
+  {
+    "inicio": 0.0,
+    "fin": 4.64,
+    "texto": "Esta voz guarda sus nombres, tal como los reconoce el documento oficial del caso."
+  },
+  {
+    "inicio": 5.22,
+    "fin": 6.42,
+    "texto": "Escúchalos despacio."
+  },
+  {
+    "inicio": 6.47,
+    "fin": 8.89,
+    "texto": "Manuel Santiz Culebra."
+  },
+  {
+    "inicio": 8.89,
+    "fin": 10.93,
+    "texto": "Daniel Gómez Pérez."
+  },
+  {
+    "inicio": 10.93,
+    "fin": 13.11,
+    "texto": "Victorio Vázquez Gómez."
+  },
+  {
+    "inicio": 13.11,
+    "fin": 15.11,
+    "texto": "Miguel Pérez Jiménez."
+  },
+  {
+    "inicio": 15.11,
+    "fin": 17.07,
+    "texto": "Ignacio Pucuj Luna."
+  },
+  {
+    "inicio": 17.07,
+    "fin": 19.15,
+    "texto": "Alonso Vázquez Gómez."
+  },
+  {
+    "inicio": 19.15,
+    "fin": 21.07,
+    "texto": "Lorenzo Gómez Pérez."
+  },
+  {
+    "inicio": 21.07,
+    "fin": 22.95,
+    "texto": "Antonio Vázquez Luna."
+  },
+  {
+    "inicio": 22.95,
+    "fin": 24.85,
+    "texto": "María Pérez Oyalté."
+  },
+  {
+    "inicio": 25.02,
+    "fin": 26.9,
+    "texto": "Marcela Capote Ruiz."
+  },
+  {
+    "inicio": 27.08,
+    "fin": 28.78,
+    "texto": "Marcela Pucuj Luna."
+  },
+  {
+    "inicio": 29.38,
+    "fin": 30.76,
+    "texto": "Catalina Luna Pérez."
+  },
+  {
+    "inicio": 31.36,
+    "fin": 32.6,
+    "texto": "Manuela Pérez Moreno."
+  },
+  {
+    "inicio": 33.18,
+    "fin": 34.74,
+    "texto": "Margarita Méndez Paciencia."
+  },
+  {
+    "inicio": 35.36,
+    "fin": 36.56,
+    "texto": "Marcela Luna Ruiz."
+  },
+  {
+    "inicio": 37.14,
+    "fin": 38.34,
+    "texto": "Juana Pérez Pérez."
+  },
+  {
+    "inicio": 38.76,
+    "fin": 40.06,
+    "texto": "María Gómez Ruiz."
+  },
+  {
+    "inicio": 40.62,
+    "fin": 41.9,
+    "texto": "Verónica Vázquez Luna."
+  },
+  {
+    "inicio": 42.48,
+    "fin": 43.86,
+    "texto": "Paulina Hernández Vázquez."
+  },
+  {
+    "inicio": 44.46,
+    "fin": 45.76,
+    "texto": "Susana Jiménez Luna."
+  },
+  {
+    "inicio": 46.28,
+    "fin": 47.58,
+    "texto": "Rosa Pérez Pérez."
+  },
+  {
+    "inicio": 47.87,
+    "fin": 49.59,
+    "texto": "Antonia Vázquez Pérez."
+  },
+  {
+    "inicio": 49.75,
+    "fin": 51.57,
+    "texto": "Marcela Vázquez Pérez."
+  },
+  {
+    "inicio": 52.05,
+    "fin": 53.25,
+    "texto": "Juana Luna Vázquez."
+  },
+  {
+    "inicio": 53.67,
+    "fin": 55.05,
+    "texto": "Juana Gómez Pérez."
+  },
+  {
+    "inicio": 55.55,
+    "fin": 56.89,
+    "texto": "María Capote Pérez."
+  },
+  {
+    "inicio": 57.13,
+    "fin": 58.93,
+    "texto": "Marcela Capote Vázquez."
+  },
+  {
+    "inicio": 59.39,
+    "fin": 60.97,
+    "texto": "Y las niñas y los niños."
+  },
+  {
+    "inicio": 62.09,
+    "fin": 62.99,
+    "texto": "Martha Capote Pérez."
+  },
+  {
+    "inicio": 63.25,
+    "fin": 64.63,
+    "texto": "Rosa Vázquez Luna."
+  },
+  {
+    "inicio": 65.25,
+    "fin": 66.31,
+    "texto": "Loida Ruiz Gómez."
+  },
+  {
+    "inicio": 66.89,
+    "fin": 68.31,
+    "texto": "Micaela Vázquez Pérez."
+  },
+  {
+    "inicio": 68.85,
+    "fin": 70.23,
+    "texto": "Josefa Vázquez Pérez."
+  },
+  {
+    "inicio": 70.63,
+    "fin": 72.17,
+    "texto": "Sebastián Gómez Pérez."
+  },
+  {
+    "inicio": 72.42,
+    "fin": 73.7,
+    "texto": "Juana Pérez Luna."
+  },
+  {
+    "inicio": 73.96,
+    "fin": 75.86,
+    "texto": "Roselina Gómez Hernández."
+  },
+  {
+    "inicio": 76.08,
+    "fin": 77.7,
+    "texto": "Lucía Méndez Capote."
+  },
+  {
+    "inicio": 78.04,
+    "fin": 79.7,
+    "texto": "Graciela Gómez Hernández."
+  },
+  {
+    "inicio": 79.92,
+    "fin": 81.36,
+    "texto": "María Luna Méndez."
+  },
+  {
+    "inicio": 81.62,
+    "fin": 82.92,
+    "texto": "Silvia Pérez Luna."
+  },
+  {
+    "inicio": 83.36,
+    "fin": 84.88,
+    "texto": "Vicente Méndez Capote."
+  },
+  {
+    "inicio": 85.4,
+    "fin": 86.66,
+    "texto": "Micaela Vázquez Luna."
+  },
+  {
+    "inicio": 87.1,
+    "fin": 88.34,
+    "texto": "Juana Vázquez Luna."
+  },
+  {
+    "inicio": 88.82,
+    "fin": 90.08,
+    "texto": "Alejandro Pérez Luna."
+  },
+  {
+    "inicio": 90.54,
+    "fin": 92.02,
+    "texto": "Juan Carlos Luna Pérez."
+  },
+  {
+    "inicio": 92.27,
+    "fin": 94.19,
+    "texto": "Guadalupe Gómez Hernández."
+  },
+  {
+    "inicio": 94.97,
+    "fin": 98.81,
+    "texto": "Catalina, Juana, María y Rosa estaban embarazadas."
+  },
+  {
+    "inicio": 99.17,
+    "fin": 102.35,
+    "texto": "Con ellas murieron cuatro bebés que no llegaron a nacer."
+  }
+]
