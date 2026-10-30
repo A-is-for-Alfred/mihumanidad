@@ -33,5 +33,12 @@
     "bajada": "Lo que vino después y lo que todavía se exige.",
     "audio": "5.mp3?v=2be1baf80f",
     "subtitulos": "5.json"
+  },
+  {
+    "id": "6",
+    "titulo": "Calaverita para Acteal",
+    "bajada": "La catrina borda su huipil y un colibrí le trae una noticia.",
+    "audio": "6.mp3?v=40a2ddafb1",
+    "subtitulos": "6.json"
   }
 ]
