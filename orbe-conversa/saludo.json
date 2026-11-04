@@ -1,0 +1,20 @@
+{
+  "audio": "saludo.mp3?v=d9dfb5a8ea",
+  "frases": [
+    {
+      "texto": "Hola, soy la orbe del CCOIA, el Consejo Coordinador de Inteligencia Artificial de la UNAM.",
+      "inicio": 0,
+      "fin": 6.373
+    },
+    {
+      "texto": "Pregúntame lo que quieras sobre la inteligencia artificial en tu universidad.",
+      "inicio": 6.815,
+      "fin": 11.284
+    },
+    {
+      "texto": "Toca «Hablar» y dime.",
+      "inicio": 11.726,
+      "fin": 14.071
+    }
+  ]
+}

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Orbe CCOIA · Conversa</title>
+<meta name="description" content="Pregúntale a la orbe del CCOIA sobre la inteligencia artificial en la UNAM.">
+<meta name="theme-color" content="#04070F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&display=swap">
+<style>
+  /* Capas, de atrás hacia adelante: fondo de respaldo → video de la cámara → escena 3D transparente → interfaz.
+     Identidad de exposición del CCOIA: fondo tinta, lima como luz, Instrument Sans. */
+  :root {
+    --noche: #04070F;
+    --tinta: #F2F5F9;
+    --tenue: #A9B3C7;
+    --luz: #A7C41C;
+    --luz-clara: #CFE84A;
+    --luz-tinta: #04070F;
+    --velo: rgba(4, 7, 15, .72);
+    --fuente: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --margen: max(16px, env(safe-area-inset-left, 0px));
+    --margen-der: max(16px, env(safe-area-inset-right, 0px));
+    color-scheme: dark;
+  }
+  html, body { height: 100%; margin: 0; overflow: hidden; background: var(--noche); color: var(--tinta);
+    font-family: var(--fuente); -webkit-tap-highlight-color: transparent; }
+  button, input { font: inherit; }
+  [hidden] { display: none !important; }
+
+  #fondo { position: fixed; inset: 0;
+    background: radial-gradient(120% 80% at 50% 32%, #0C1426 0%, #070C18 45%, var(--noche) 75%); }
+  #camara { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0;
+    transition: opacity .8s ease; }
+  #camara.encendida { opacity: 1; }
+  #camara.espejo { transform: scaleX(-1); }
+  #escena { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+
+  /* Pantalla de inicio: la orbe ya flota arriba; el texto queda abajo sobre un degradado. */
+  #inicio { position: fixed; inset: auto 0 0 0; display: flex; justify-content: center;
+    padding: 18vh var(--margen-der) calc(28px + env(safe-area-inset-bottom, 0px)) var(--margen);
+    background: linear-gradient(to bottom, transparent, rgba(7, 9, 12, .82) 30%, var(--noche)); }
+  .tarjeta { width: 100%; max-width: 30rem; display: grid; gap: 14px; }
+  .marca { margin: 0; font-size: 1.05rem; font-weight: 700; letter-spacing: .02em; color: var(--tinta); }
+  .marca b { color: var(--luz); font-weight: 700; }
+  .marca span { margin-left: 8px; font-weight: 400; color: var(--tenue); }
+  /* La señalética va en tinta-2 con su punto de luz delante, como en las piezas del CCOIA. */
+  .ceja { display: flex; align-items: center; gap: 8px; margin: 0; font-size: .78rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--tenue); }
+  .ceja::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--luz-clara);
+    box-shadow: 0 0 10px var(--luz); }
+  h1 { margin: 0; font-size: clamp(1.8rem, 7.5vw, 2.5rem); line-height: 1.08; letter-spacing: -.02em; text-wrap: balance; }
+  h1 em { font-style: normal; color: var(--luz-clara); }
+  .tarjeta p { margin: 0; line-height: 1.45; color: var(--tenue); }
+  .datos { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .9rem; color: var(--tenue); }
+  .datos span::before { content: "·"; margin-right: 14px; }
+  .datos span:first-child::before { content: none; }
+  #empezar { margin-top: 4px; padding: 16px 20px; border: 0; border-radius: 999px; background: var(--luz);
+    color: var(--luz-tinta); font-size: 1.15rem; font-weight: 700; cursor: pointer;
+    box-shadow: 0 0 32px rgba(167, 196, 28, .35); }
+  #empezar:disabled { opacity: .7; cursor: progress; }
+  .nota { font-size: .85rem; }
+  .aviso { padding: 12px 14px; border-radius: 12px; background: rgba(167, 196, 28, .12);
+    border: 1px solid rgba(167, 196, 28, .4); color: var(--tinta); line-height: 1.4; }
+  a { color: var(--luz-clara); }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid var(--tinta); outline-offset: 3px; }
+
+  /* Durante la conversación */
+  #pista { position: fixed; top: calc(14px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%);
+    width: max-content; max-width: calc(100% - 32px); padding: 8px 14px; border-radius: 999px;
+    background: var(--velo); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    font-size: .9rem; text-align: center; transition: opacity .6s ease; }
+  #pista.oculta { opacity: 0; }
+  #abajo { position: fixed; inset: auto 0 0 0; display: grid; justify-items: center; gap: 10px;
+    padding: 0 var(--margen-der) calc(18px + env(safe-area-inset-bottom, 0px)) var(--margen); }
+  #abajo > * { max-width: 34rem; }
+  /* Lo que dijo la persona, arriba y discreto; lo que dice la orbe, como subtítulo. */
+  #oido { margin: 0; padding: 6px 12px; border-radius: 12px; background: var(--velo);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    font-size: .95rem; line-height: 1.35; color: var(--tenue); text-align: center; text-wrap: balance; }
+  #oido:empty { display: none; }
+  #oido::before { content: "Tú: "; color: var(--luz-clara); font-weight: 600; }
+  #subtitulo { min-height: 1em; margin: 0; padding: 12px 16px; border-radius: 14px;
+    background: var(--velo); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    font-size: clamp(1.05rem, 4.4vw, 1.3rem); line-height: 1.35; text-align: center; text-wrap: balance;
+    transition: opacity .3s ease; }
+  #subtitulo:empty { display: none; }
+  #fuentes { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; font-size: .8rem; }
+  #fuentes:empty { display: none; }
+  #fuentes > * { padding: 5px 10px; border-radius: 999px; background: var(--velo); color: var(--tenue);
+    border: 1px solid rgba(255, 255, 255, .14); text-decoration: none;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  #fuentes a { color: var(--luz-clara); border-color: rgba(167, 196, 28, .45); }
+  #fuentes .etiqueta { border: 0; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; padding-inline: 2px; }
+  #sugerencias { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  #sugerencias button { padding: 8px 12px; border-radius: 999px; cursor: pointer; font-size: .9rem;
+    border: 1px solid rgba(167, 196, 28, .5); background: var(--velo); color: var(--tinta);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  #escribir { display: flex; gap: 8px; width: 100%; }
+  #escribir input { flex: 1; min-width: 0; padding: 12px 16px; border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, .28); background: var(--velo); color: var(--tinta);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-size: 1rem; }
+  #escribir button { padding: 12px 18px; border: 0; border-radius: 999px; background: var(--luz);
+    color: var(--luz-tinta); font-weight: 700; cursor: pointer; }
+  .controles { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
+  .controles button { padding: 11px 16px; border-radius: 999px; cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, .22); background: var(--velo); color: var(--tinta);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-weight: 700; }
+  /* El botón principal: hablar, o enviar mientras escucha, o interrumpir mientras la orbe habla. */
+  #microfono { min-width: 11rem; padding: 15px 22px; border: 0; background: var(--luz); color: var(--luz-tinta);
+    font-size: 1.1rem; box-shadow: 0 0 28px rgba(167, 196, 28, .35); }
+  #microfono[data-estado="escuchando"] { background: var(--tinta); animation: latido 1.1s ease-in-out infinite; }
+  #microfono[data-estado="pensando"] { background: var(--velo); color: var(--tinta); border: 1px solid var(--luz);
+    box-shadow: none; }
+  #microfono[data-estado="hablando"] { background: var(--velo); color: var(--tinta); border: 1px solid rgba(255, 255, 255, .3);
+    box-shadow: none; }
+  @keyframes latido { 50% { box-shadow: 0 0 0 10px rgba(242, 245, 249, .18), 0 0 32px rgba(167, 196, 28, .5); } }
+  @media (prefers-reduced-motion: reduce) { #microfono[data-estado="escuchando"] { animation: none; } }
+</style>
+</head>
+<body>
+  <div id="fondo"></div>
+  <video id="camara" playsinline muted autoplay></video>
+  <canvas id="escena" aria-hidden="true"></canvas>
+
+  <section id="inicio" aria-labelledby="titulo">
+    <div class="tarjeta">
+      <p class="marca" aria-label="CCOIA, UNAM"><b>CCO</b>IA<span>UNAM</span></p>
+      <p class="ceja">Realidad aumentada · Conversa</p>
+      <h1 id="titulo">Pregúntale a la orbe por la <em>inteligencia artificial</em> en la UNAM</h1>
+      <p>Háblale y te responde en voz alta, con información de fuentes oficiales de la UNAM.</p>
+      <div class="datos"><span>Con voz</span><span>Con subtítulos</span><span>Sin instalar nada</span></div>
+      <p class="aviso" id="aviso-app" hidden>Estás dentro de otra app y aquí la cámara y el micrófono suelen estar
+        bloqueados. Abre esta página en Safari o Chrome desde el menú de la app («Abrir en el navegador»).</p>
+      <button id="empezar" type="button">Empezar</button>
+      <p class="nota">Usaremos la cámara trasera, el micrófono, el sonido y el movimiento del teléfono; tu navegador
+        te pedirá permiso. Sube el volumen.</p>
+      <p class="nota">La orbe es una inteligencia artificial y puede equivocarse: confirma lo importante en
+        <a href="https://ccoia.unam.mx/" target="_blank" rel="noopener">ccoia.unam.mx</a>. Tu navegador convierte tu voz
+        en texto; la orbe solo recibe ese texto y no guarda tus preguntas.</p>
+    </div>
+  </section>
+
+  <div id="experiencia" hidden>
+    <p id="pista">Mueve el teléfono despacio: la orbe se queda en su lugar.</p>
+    <div id="abajo">
+      <p id="oido" aria-live="polite"></p>
+      <p id="subtitulo" aria-live="polite"></p>
+      <div id="fuentes"></div>
+      <div id="sugerencias" aria-label="Preguntas sugeridas"></div>
+      <form id="escribir" hidden>
+        <label for="texto" hidden>Tu pregunta</label>
+        <input id="texto" type="text" maxlength="400" autocomplete="off" enterkeyhint="send"
+          placeholder="Escribe tu pregunta">
+        <button type="submit">Enviar</button>
+      </form>
+      <div class="controles">
+        <button id="microfono" type="button" data-estado="espera">Hablar</button>
+        <button id="teclado" type="button" aria-pressed="false">Escribir</button>
+        <button id="recentrar" type="button" hidden>Traerla al frente</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- three 0.160.0 copiado junto a la página para no depender de un CDN. -->
+  <script type="importmap">
+    { "imports": { "three": "./three.module.min.js" } }
+  </script>
+  <script type="module" src="orbe.js?v=43feb356c9"></script>
+</body>
+</html>

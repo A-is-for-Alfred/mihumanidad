@@ -1,5 +1,6 @@
 User-agent: *
 Disallow: /hablo-unam/
 Disallow: /orbe/
+Disallow: /orbe-conversa/
 Disallow: /acteal/
 Disallow: /entrevista/

@@ -12,11 +12,14 @@ const salida = join(raiz, "dist");
 // y el build falla si les falta algo o si la copia no quedó idéntica.
 //   hablo-unam/ → Hablo UNAM, herramienta interna del CCOIA-UNAM (lenguaje-unam/app/tools/publicar-en-mihumanidad.mjs).
 //   orbe/       → Orbe CCOIA: la orbe verde cuenta en episodios qué hace la UNAM en IA (?e=<n>; orbe-ra/publicar-en-mihumanidad.mjs).
+//   orbe-conversa/ → la misma orbe, pero conversa por voz; responde un flujo de n8n con Claude Sonnet y ElevenLabs
+//                 (rama conversa de orbe-ra, en orbe-conversa/publicar-en-mihumanidad.mjs).
 //   acteal/     → ofrenda a las víctimas de Acteal: la orbe en naranja, un diálogo por código QR
 //                 (rama ofrenda-acteal de orbe-ra, en orbe-ofrenda-acteal/publicar-en-mihumanidad.mjs).
 const subpaginas = {
   "hablo-unam": ["index.html", "kb.json"],
   orbe: ["index.html", "orbe.js", "episodios.json", "three.module.min.js"],
+  "orbe-conversa": ["index.html", "orbe.js", "three.module.min.js", "saludo.json", "saludo.mp3"],
   acteal: ["index.html", "orbe.js", "dialogos.json", "three.module.min.js", "qrcode.min.js"],
 };
 
