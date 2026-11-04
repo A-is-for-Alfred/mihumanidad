@@ -64,10 +64,14 @@
   .nota { font-size: .85rem; }
   .aviso { padding: 12px 14px; border-radius: 12px; background: rgba(167, 196, 28, .12);
     border: 1px solid rgba(167, 196, 28, .4); color: var(--tinta); line-height: 1.4; }
-  #qr { display: flex; gap: 14px; align-items: center; padding-top: 6px; border-top: 1px solid rgba(255, 255, 255, .12); }
-  #qr-imagen { flex: none; width: 112px; height: 112px; padding: 6px; border-radius: 10px; background: #fff; }
-  #qr-imagen svg { display: block; width: 100%; height: 100%; }
-  #qr p { font-size: .9rem; }
+  /* Un número por episodio: el actual en lima, los ya escuchados con borde lima. */
+  #selector { display: flex; flex-wrap: wrap; gap: 8px; }
+  #selector a { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, .22); color: var(--tinta); text-decoration: none; font-weight: 700;
+    font-variant-numeric: tabular-nums; }
+  #selector a.escuchado { border-color: var(--luz); color: var(--luz-clara); }
+  #selector a[aria-current] { background: var(--luz); border-color: var(--luz); color: var(--luz-tinta); }
+  a:focus-visible { outline: 3px solid var(--tinta); outline-offset: 3px; }
 
   /* Durante la experiencia */
   #pista { position: fixed; top: calc(14px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%);
@@ -88,6 +92,23 @@
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-weight: 700; }
   .controles button:disabled { opacity: .45; cursor: default; }
   .controles button.destacado { background: var(--luz); color: var(--luz-tinta); border-color: var(--luz); }
+
+  /* Al terminar un episodio: el siguiente, y todos los demás por si se quiere saltar. */
+  #fin { width: 100%; max-width: 30rem; max-height: 48vh; overflow-y: auto; box-sizing: border-box;
+    padding: 14px 16px; border-radius: 16px; background: var(--velo);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  #siguiente { width: 100%; margin-bottom: 10px; padding: 13px 16px; border: 0; border-radius: 999px;
+    background: var(--luz); color: var(--luz-tinta); font-weight: 700; cursor: pointer; text-wrap: balance; }
+  #fin h2 { margin: 4px 0 6px; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+    font-weight: 400; color: var(--tenue); }
+  #fin ol { margin: 0; padding: 0; list-style: none; display: grid; }
+  #fin a { display: flex; gap: 12px; align-items: baseline; padding: 9px 2px; color: var(--tinta);
+    text-decoration: none; border-top: 1px solid rgba(255, 255, 255, .08); line-height: 1.35; }
+  #fin li:first-child a { border-top: 0; }
+  #fin a b { flex: none; width: 1.4em; font-variant-numeric: tabular-nums; color: var(--luz-clara); }
+  #fin a[aria-current] span { color: var(--tenue); }
+  #fin a[aria-current]::after { content: "este"; margin-left: auto; padding-left: 8px; font-size: .8rem; color: var(--tenue); }
+  #fin a.escuchado:not([aria-current])::after { content: "✓"; margin-left: auto; padding-left: 8px; color: var(--luz-clara); }
   button:focus-visible { outline: 3px solid var(--tinta); outline-offset: 3px; }
 </style>
 </head>
@@ -99,19 +120,16 @@
   <section id="inicio" aria-labelledby="titulo">
     <div class="tarjeta">
       <p class="marca" aria-label="CCOIA, UNAM"><b>CCO</b>IA<span>UNAM</span></p>
-      <p class="ceja">Realidad aumentada</p>
-      <h1 id="titulo">Una orbe te cuenta qué es el <em>CCOIA</em></h1>
-      <p>Usaremos la cámara trasera y el sonido. Sube el volumen y apunta tu teléfono hacia el frente.</p>
-      <div class="datos"><span id="duracion">Voz de 30 s</span><span>Con subtítulos</span><span>Sin instalar nada</span></div>
+      <p class="ceja" id="ceja">Realidad aumentada</p>
+      <h1 id="titulo">La UNAM y la <em>inteligencia artificial</em></h1>
+      <p id="bajada">Una orbe te lo cuenta en episodios breves.</p>
+      <nav id="selector" aria-label="Episodios"></nav>
+      <div class="datos"><span id="duracion">Voz</span><span>Con subtítulos</span><span>Sin instalar nada</span></div>
       <p class="aviso" id="aviso-app" hidden>Estás dentro de otra app y aquí la cámara suele estar bloqueada.
         Abre esta página en Safari o Chrome desde el menú de la app («Abrir en el navegador»).</p>
       <button id="empezar" type="button">Empezar</button>
-      <p class="nota">Tu navegador te pedirá permiso para usar la cámara y el movimiento del teléfono.</p>
-      <div id="qr" hidden>
-        <div id="qr-imagen"></div>
-        <p>¿Estás en una computadora? Escanea este código con tu celular para verla con la cámara.
-          También puedes empezar aquí con la webcam.</p>
-      </div>
+      <p class="nota">Usaremos la cámara trasera, el sonido y el movimiento del teléfono; tu navegador te pedirá permiso.
+        Sube el volumen.</p>
     </div>
   </section>
 
@@ -119,6 +137,11 @@
     <p id="pista">Mueve el teléfono despacio: la orbe se queda en su lugar.</p>
     <div id="abajo">
       <p id="subtitulo" aria-live="polite"></p>
+      <nav id="fin" aria-labelledby="fin-titulo" hidden>
+        <button id="siguiente" type="button">Siguiente episodio</button>
+        <h2 id="fin-titulo">Todos los episodios</h2>
+        <ol id="lista"></ol>
+      </nav>
       <div class="controles">
         <button id="pausa" type="button">Pausa</button>
         <button id="repetir" type="button">Repetir</button>
@@ -127,11 +150,10 @@
     </div>
   </div>
 
-  <!-- Bibliotecas copiadas junto a la página (three 0.160.0, qrcode-generator 1.4.4) para no depender de un CDN. -->
-  <script src="qrcode.min.js" defer></script>
+  <!-- three 0.160.0 copiado junto a la página para no depender de un CDN. -->
   <script type="importmap">
     { "imports": { "three": "./three.module.min.js" } }
   </script>
-  <script type="module" src="orbe.js?v=adf33fcaf8"></script>
+  <script type="module" src="orbe.js?v=c97778f7b2"></script>
 </body>
 </html>

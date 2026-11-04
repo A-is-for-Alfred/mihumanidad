@@ -1,8 +1,7 @@
 import * as THREE from 'three';
 
 const CONFIG = {
-  audio: 'voz.mp3?v=d844339290',
-  subtitulos: 'subtitulos.json',
+  episodios: 'episodios.json', // cada enlace abre uno con ?e=<id>; al terminar se pasa al siguiente sin recargar
   distancia: 2.2,          // unidades de escena entre la cámara y la orbe (≈ metros)
   elevacion: 0.28,         // la orbe aparece un poco arriba del centro para dejar sitio a los subtítulos
   radio: 0.22,
@@ -229,20 +228,95 @@ function colocarOrbe() {
   base.copy(frente).multiplyScalar(CONFIG.distancia).addScaledVector(arriba, CONFIG.elevacion);
 }
 
+/* ---------- Episodios ---------- */
+
+const ESCUCHADOS = 'orbe-ccoia:escuchados';
+function leerEscuchados() {
+  try { return new Set(JSON.parse(localStorage.getItem(ESCUCHADOS) || '[]')); } catch { return new Set(); }
+}
+function marcarEscuchado(id) {
+  try { localStorage.setItem(ESCUCHADOS, JSON.stringify([...leerEscuchados().add(id)])); } catch { /* sin almacenamiento */ }
+}
+
+let episodios = [];
+let episodio = null;
+
+// Cada voz y cada juego de subtítulos se descarga una sola vez, aunque se repita o se vuelva a elegir el episodio.
+const descargas = new Map();
+function descargar(url, como) {
+  if (!descargas.has(url)) {
+    descargas.set(url, fetch(url).then((r) => {
+      if (!r.ok) throw new Error(`No se encontró ${url}`);
+      return r[como]();
+    }).catch((e) => { descargas.delete(url); throw e; })); // si falla la red, el siguiente intento vuelve a pedirla
+  }
+  return descargas.get(url);
+}
+const bytesDe = (ep) => descargar(ep.audio, 'arrayBuffer');
+const frasesDe = (ep) => descargar(ep.subtitulos, 'json').catch(() => []);
+const siguienteDe = (ep) => episodios[episodios.indexOf(ep) + 1] ?? null;
+
+function elegir(ep) {
+  episodio = ep;
+  $('ceja').textContent = `Episodio ${episodios.indexOf(ep) + 1} de ${episodios.length}`;
+  $('titulo').textContent = ep.titulo;
+  $('bajada').textContent = ep.bajada;
+  $('duracion').textContent = 'Voz';
+  document.title = `${ep.titulo} · Orbe CCOIA`;
+  const url = new URL(location.href);
+  url.searchParams.set('e', ep.id);
+  history.replaceState(null, '', url);
+  frasesDe(ep).then((f) => {
+    if (episodio === ep && f.length) $('duracion').textContent = `Voz de ${Math.round(f.at(-1).fin)} s`;
+  });
+  bytesDe(ep).catch(() => {}); // se descarga mientras la persona lee
+  pintarEpisodios();
+}
+
+function enlace(ep, escuchados, alElegir, ...contenido) {
+  const a = document.createElement('a');
+  a.href = `?e=${encodeURIComponent(ep.id)}`;
+  if (ep === episodio) a.setAttribute('aria-current', 'page');
+  if (escuchados.has(ep.id)) a.classList.add('escuchado');
+  a.append(...contenido);
+  a.addEventListener('click', (e) => { e.preventDefault(); alElegir(ep); });
+  return a;
+}
+
+function pintarEpisodios() {
+  const escuchados = leerEscuchados();
+  // Al inicio, un número por episodio; al terminar uno, la lista con sus títulos.
+  $('selector').replaceChildren(...episodios.map((ep, i) => {
+    const a = enlace(ep, escuchados, elegir, String(i + 1));
+    a.setAttribute('aria-label', `Episodio ${i + 1}: ${ep.titulo}`);
+    a.title = ep.titulo;
+    return a;
+  }));
+  $('lista').replaceChildren(...episodios.map((ep, i) => {
+    const num = document.createElement('b');
+    num.textContent = i + 1;
+    const nombre = document.createElement('span');
+    nombre.textContent = ep.titulo;
+    const li = document.createElement('li');
+    li.append(enlace(ep, escuchados, reproducir, num, nombre));
+    return li;
+  }));
+  const sig = siguienteDe(episodio);
+  $('siguiente').hidden = !sig;
+  if (sig) $('siguiente').textContent = `Siguiente: ${sig.titulo}`;
+}
+
+const promesaEpisodios = fetch(CONFIG.episodios).then((r) => r.json()).then((lista) => {
+  episodios = lista;
+  const pedido = new URLSearchParams(location.search).get('e');
+  elegir(lista.find((x) => x.id === pedido) ?? lista[0]);
+});
+
 /* ---------- Voz y subtítulos ---------- */
 
-const promesaAudio = fetch(CONFIG.audio).then((r) => {
-  if (!r.ok) throw new Error(`No se encontró ${CONFIG.audio}`);
-  return r.arrayBuffer();
-});
-const promesaSubs = fetch(CONFIG.subtitulos).then((r) => r.json()).catch(() => []);
 let frases = [];
-promesaSubs.then((f) => {
-  frases = f;
-  if (f.length) $('duracion').textContent = `Voz de ${Math.round(f.at(-1).fin)} s`;
-});
-
 let ctx, analizador, buffer, fuente;
+let bufferDe = null; // el episodio cuya voz está en buffer
 let inicioVoz = 0;
 let estado = 'espera'; // espera | hablando | pausa | terminado
 const muestras = new Float32Array(1024);
@@ -257,9 +331,44 @@ function crearAudio() {
   analizador.connect(ctx.destination);
 }
 
+// Devuelve false si mientras cargaba se eligió otro episodio.
 async function prepararVoz() {
-  const bytes = await promesaAudio;
-  buffer = await ctx.decodeAudioData(bytes.slice(0));
+  const ep = episodio;
+  const [bytes, f] = await Promise.all([bytesDe(ep), frasesDe(ep)]);
+  const decodificado = await ctx.decodeAudioData(bytes.slice(0));
+  if (ep !== episodio) return false;
+  buffer = decodificado;
+  bufferDe = ep;
+  frases = f;
+  const sig = siguienteDe(ep);
+  if (sig) { bytesDe(sig).catch(() => {}); frasesDe(sig); } // el siguiente ya estará listo al terminar este
+  return true;
+}
+
+function detener() {
+  if (fuente) { fuente.onended = null; try { fuente.stop(); } catch { /* ya terminó */ } fuente = null; }
+  if (ctx?.state === 'suspended') ctx.resume();
+  estado = 'espera';
+  $('subtitulo').textContent = '';
+}
+
+// Cambia de episodio sin salir de la cámara: el sonido quedó desbloqueado con el primer toque.
+async function reproducir(ep) {
+  detener();
+  elegir(ep);
+  $('fin').hidden = true;
+  $('pausa').disabled = true;
+  $('repetir').classList.remove('destacado');
+  try {
+    if (!await prepararVoz()) return;
+  } catch (e) {
+    console.error(e);
+    $('subtitulo').textContent = 'No se pudo cargar la voz. Revisa la conexión e inténtalo otra vez.';
+    terminar(false);
+    return;
+  }
+  materializar();
+  setTimeout(() => { if (episodio === ep && estado === 'espera') hablar(); }, CONFIG.retrasoVoz * 1000);
 }
 
 function hablar() {
@@ -277,13 +386,20 @@ function hablar() {
   $('pausa').disabled = false;
   $('pausa').textContent = 'Pausa';
   $('repetir').classList.remove('destacado');
+  $('fin').hidden = true;
 }
 
-function terminar() {
+// Al terminar se ofrece el siguiente episodio; si era el último, el botón destacado es «Repetir».
+function terminar(escuchado = true) {
   estado = 'terminado';
-  $('subtitulo').textContent = '';
+  if (escuchado) {
+    $('subtitulo').textContent = '';
+    marcarEscuchado(episodio.id);
+  }
   $('pausa').disabled = true;
-  $('repetir').classList.add('destacado');
+  pintarEpisodios();
+  $('repetir').classList.toggle('destacado', !siguienteDe(episodio));
+  $('fin').hidden = episodios.length < 2;
 }
 
 function alternarPausa() {
@@ -346,7 +462,9 @@ $('empezar').addEventListener('click', async () => {
   crearAudio();                       // dentro del toque: desbloquea el sonido
   const pMovimiento = pedirMovimiento(); // dentro del toque: iOS lo exige
   const pCamara = encenderCamara();
-  const pVoz = prepararVoz().catch((e) => { console.error(e); return 'error'; });
+  const pVoz = promesaEpisodios.then(async () => {
+    while (!await prepararVoz()); // si eligió otro número mientras cargaba, se prepara ese
+  }).catch((e) => { console.error(e); return 'error'; });
 
   const [movimiento, hayCamara, voz] = await Promise.all([pMovimiento, pCamara, pVoz]);
   usarGiro = movimiento && await esperarGiro(900);
@@ -376,7 +494,8 @@ $('empezar').addEventListener('click', async () => {
 function materializar() { aparicion = 0; tAparicion = reloj.getElapsedTime(); }
 
 $('pausa').addEventListener('click', alternarPausa);
-$('repetir').addEventListener('click', hablar);
+$('repetir').addEventListener('click', () => (bufferDe === episodio ? hablar() : reproducir(episodio)));
+$('siguiente').addEventListener('click', () => { const sig = siguienteDe(episodio); if (sig) reproducir(sig); });
 $('recentrar').addEventListener('click', () => { colocarOrbe(); materializar(); });
 
 document.addEventListener('visibilitychange', () => {
@@ -386,15 +505,6 @@ document.addEventListener('visibilitychange', () => {
 // Navegadores dentro de otras apps (Instagram, Facebook, TikTok…) suelen bloquear la cámara.
 if (/Instagram|FBAN|FBAV|FB_IAB|Line\/|TikTok|musical_ly|Snapchat/i.test(navigator.userAgent)) {
   $('aviso-app').hidden = false;
-}
-
-// En computadora: código QR de esta misma dirección para abrirla en el celular.
-if (!matchMedia('(pointer: coarse)').matches && typeof qrcode !== 'undefined') {
-  const qr = qrcode(0, 'M');
-  qr.addData(location.href);
-  qr.make();
-  $('qr-imagen').innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
-  $('qr').hidden = false;
 }
 
 /* ---------- Animación ---------- */

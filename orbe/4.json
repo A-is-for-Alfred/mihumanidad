@@ -1,0 +1,22 @@
+[
+  {
+    "inicio": 0.0,
+    "fin": 4.4,
+    "texto": "Sobre esa base se desarrolla software y se lleva la tecnología a la comunidad."
+  },
+  {
+    "inicio": 5.22,
+    "fin": 9.82,
+    "texto": "El proyecto PC Puma acerca la conectividad a estudiantes y docentes."
+  },
+  {
+    "inicio": 10.76,
+    "fin": 15.88,
+    "texto": "Presta dispositivos, ofrece capacitación y desarrolla proyectos de transformación digital."
+  },
+  {
+    "inicio": 16.82,
+    "fin": 22.5,
+    "texto": "Así, la tecnología no se queda en los laboratorios: llega a quien estudia y a quien enseña."
+  }
+]

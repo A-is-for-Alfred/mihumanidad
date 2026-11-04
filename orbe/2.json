@@ -1,0 +1,77 @@
+[
+  {
+    "inicio": 0.0,
+    "fin": 3.18,
+    "texto": "La UNAM lleva años preparándose para la era digital."
+  },
+  {
+    "inicio": 3.82,
+    "fin": 7.46,
+    "texto": "En 2017 creó el Centro Virtual de Computación,"
+  },
+  {
+    "inicio": 7.46,
+    "fin": 11.92,
+    "texto": "y en 2020 lo transformó en el Centro de Estudios en Computación Avanzada."
+  },
+  {
+    "inicio": 12.46,
+    "fin": 18.74,
+    "texto": "Hoy la inteligencia artificial ya está en las aulas, los laboratorios, las bibliotecas y las oficinas,"
+  },
+  {
+    "inicio": 18.92,
+    "fin": 22.0,
+    "texto": "y la universidad decidió no dejar ese cambio al azar."
+  },
+  {
+    "inicio": 22.35,
+    "fin": 25.31,
+    "texto": "El 17 de marzo de 2026,"
+  },
+  {
+    "inicio": 25.77,
+    "fin": 32.05,
+    "texto": "la Gaceta UNAM publicó el acuerdo del rector Leonardo Lomelí que creó el Consejo Coordinador de Inteligencia Artificial,"
+  },
+  {
+    "inicio": 32.35,
+    "fin": 33.11,
+    "texto": "el CCOIA."
+  },
+  {
+    "inicio": 33.85,
+    "fin": 37.93,
+    "texto": "Su Coordinación General heredó la experiencia de aquel centro de cómputo."
+  },
+  {
+    "inicio": 38.2,
+    "fin": 42.52,
+    "texto": "El Consejo se instaló en mayo, y lo preside el propio Rector."
+  },
+  {
+    "inicio": 43.04,
+    "fin": 50.12,
+    "texto": "En agosto se sumó su Comité Académico Interdisciplinario, con personal académico de las ciencias, las humanidades,"
+  },
+  {
+    "inicio": 50.48,
+    "fin": 53.24,
+    "texto": "la cultura, las facultades y el bachillerato."
+  },
+  {
+    "inicio": 53.6,
+    "fin": 56.66,
+    "texto": "Y en octubre se publicó su Reglamento Interno."
+  },
+  {
+    "inicio": 56.95,
+    "fin": 61.99,
+    "texto": "Su tarea es articular lo que la UNAM ya sabe y ya hace en inteligencia artificial,"
+  },
+  {
+    "inicio": 62.33,
+    "fin": 65.65,
+    "texto": "con una mirada humanista, ética e interdisciplinaria."
+  }
+]

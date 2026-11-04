@@ -1,0 +1,37 @@
+[
+  {
+    "inicio": 0.0,
+    "fin": 2.32,
+    "texto": "Todo empieza con la capacidad de cálculo."
+  },
+  {
+    "inicio": 3.04,
+    "fin": 8.26,
+    "texto": "La DGTIC, la Dirección General de Cómputo y de Tecnologías de Información y Comunicación,"
+  },
+  {
+    "inicio": 8.52,
+    "fin": 11.56,
+    "texto": "opera la infraestructura de supercómputo de la universidad."
+  },
+  {
+    "inicio": 12.3,
+    "fin": 18.42,
+    "texto": "El supercómputo consiste en usar muchas computadoras que trabajan juntas para resolver cálculos enormes."
+  },
+  {
+    "inicio": 18.75,
+    "fin": 24.35,
+    "texto": "Con esa infraestructura, quienes investigan en la UNAM procesan enormes cantidades de datos,"
+  },
+  {
+    "inicio": 24.79,
+    "fin": 28.39,
+    "texto": "simulan fenómenos complejos y entrenan modelos de inteligencia artificial."
+  },
+  {
+    "inicio": 29.05,
+    "fin": 32.31,
+    "texto": "Es la base sobre la que se construye todo lo demás."
+  }
+]
