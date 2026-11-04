@@ -425,18 +425,22 @@ function pintarSugerencias() {
 }
 
 // Debajo de la respuesta, de dónde salió: enlaces a Gaceta UNAM y a los sitios oficiales.
-function pintarFuentes(lista = []) {
+// Las fuentes internas (el discurso unificado, los mensajes del CCOIA) no tienen enlace y no se muestran.
+function pintarFuentes(todas = []) {
   const caja = $('fuentes');
   caja.replaceChildren();
+  const lista = todas.filter((f) => f.url);
   if (!lista.length) return;
   const etiqueta = document.createElement('span');
   etiqueta.className = 'etiqueta';
   etiqueta.textContent = lista.length > 1 ? 'Fuentes:' : 'Fuente:';
   caja.append(etiqueta, ...lista.map((f) => {
-    const el = document.createElement(f.url ? 'a' : 'span');
-    el.textContent = f.titulo;
-    if (f.url) { el.href = f.url; el.target = '_blank'; el.rel = 'noopener'; }
-    return el;
+    const a = document.createElement('a');
+    a.textContent = f.titulo;
+    a.href = f.url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    return a;
   }));
 }
 
