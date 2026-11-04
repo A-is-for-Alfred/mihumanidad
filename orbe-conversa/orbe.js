@@ -444,12 +444,16 @@ function pintarFuentes(todas = []) {
   }));
 }
 
+// El reconocimiento de voz escribe «CCOIA» como se oye: «Secoya», «seco ya», «sequoia», «secuoya»…
+const SECOYA = /\b(?:sec[oó]\s?(?:y|ll|i\s?)as?|secu?o[iy]as?|sequo[iy]as?|sekoyas?|cecoyas?|(?:se|ce)\s[ck]oyas?)\b/gi;
+const conSiglas = (texto) => texto.replace(SECOYA, 'CCOIA');
+
 function respuestaLocal(texto) {
   return { ok: false, texto, frases: [{ texto, inicio: null, fin: null }], audio: null, fuentes: [] };
 }
 
 async function preguntar(texto) {
-  texto = texto.replace(/\s+/g, ' ').trim().slice(0, 400);
+  texto = conSiglas(texto.replace(/\s+/g, ' ').trim()).slice(0, 400);
   if (!texto) return;
   const mio = ++turno;
   if (reconocedor) { const r = reconocedor; reconocedor = null; r.abort(); }
