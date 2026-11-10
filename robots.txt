@@ -4,3 +4,4 @@ Disallow: /orbe/
 Disallow: /orbe-conversa/
 Disallow: /acteal/
 Disallow: /entrevista/
+Disallow: /normal/

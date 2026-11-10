@@ -16,7 +16,10 @@ const salida = join(raiz, "dist");
 //                 (rama conversa de orbe-ra, en orbe-conversa/publicar-en-mihumanidad.mjs).
 //   acteal/     → ofrenda a las víctimas de Acteal: la orbe en naranja, un diálogo por código QR
 //                 (rama ofrenda-acteal de orbe-ra, en orbe-ofrenda-acteal/publicar-en-mihumanidad.mjs).
+//   normal/     → Normal: app de prueba para conocerse mejor y conocer gente parecida (Preact, ya compilada;
+//                 la genera web/publicar-en-mihumanidad.mjs del repositorio privado «normal»; su API vive en el VPS).
 const subpaginas = {
+  normal: ["index.html"],
   "hablo-unam": ["index.html", "kb.json"],
   orbe: ["index.html", "orbe.js", "episodios.json", "three.module.min.js"],
   "orbe-conversa": ["index.html", "orbe.js", "three.module.min.js", "saludo.json", "saludo.mp3"],
