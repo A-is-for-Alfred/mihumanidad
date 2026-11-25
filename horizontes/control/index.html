@@ -431,6 +431,10 @@ html,body{margin:0;height:100%;overflow:hidden}
 #entrada p{margin:0 0 14px;color:var(--tinta-suave);line-height:1.45}
 #entrada input{width:100%;background:#0b2446;border:1px solid var(--linea);border-radius:10px;color:#fff;padding:12px;font-size:16px}
 #entrada .err{color:#f3b2a3;min-height:20px;margin:8px 0 0}
+#entrada form[hidden]{display:none}
+#entrada .oculto{width:1px;height:1px;padding:0;border:0}
+#entrada label.mini{display:block;margin:12px 0 6px}
+#entrada button:disabled{opacity:.6;cursor:wait}
 #marco{right:var(--dock)}
 @media (max-width:900px){
   :root{--panel-w:100vw;--dock:0px}
@@ -688,13 +692,27 @@ html,body{margin:0;height:100%;overflow:hidden}
   </details>
 </aside>
 
-<div id="entrada"><form id="f-entrada" autocomplete="off">
+<div id="entrada">
+<form id="f-entrada">
   <h2>Control de la Mesa Horizontes</h2>
-  <p>Escribe la clave del control. Se guarda sólo en este navegador.</p>
-  <input type="password" id="clave-in" aria-label="Clave" autocomplete="current-password">
+  <p>Escribe tu contraseña. Este navegador mantiene la sesión 30 días o hasta que salgas.</p>
+  <input type="text" name="usuario" value="Mesa Horizontes" autocomplete="username" class="oculto" tabindex="-1" aria-hidden="true">
+  <input type="password" id="clave-in" aria-label="Contraseña" autocomplete="current-password">
   <p class="err" id="clave-err"></p>
   <button class="b prim" type="submit">Entrar</button>
-</form></div>
+</form>
+<form id="f-alta" hidden>
+  <h2>Crea tu contraseña</h2>
+  <p>Este enlace sirve una sola vez. Usa al menos 8 caracteres; una frase que recuerdes funciona bien.</p>
+  <input type="text" name="usuario" value="Mesa Horizontes" autocomplete="username" class="oculto" tabindex="-1" aria-hidden="true">
+  <label class="mini" for="alta-1">Contraseña nueva</label>
+  <input type="password" id="alta-1" autocomplete="new-password">
+  <label class="mini" for="alta-2">Escríbela otra vez</label>
+  <input type="password" id="alta-2" autocomplete="new-password">
+  <p class="err" id="alta-err"></p>
+  <button class="b prim" type="submit">Guardar y entrar</button>
+</form>
+</div>
 <div id="aviso" role="alert"></div>
 <input type="file" id="archivo" accept="image/*" class="oculto" tabindex="-1">
 
@@ -1432,7 +1450,7 @@ MH.iniciarEscena = function (opciones) {
 };
 })();
 </script>
-<script>/* Panel de control: sólo con la clave. Todo cambio va al servidor y regresa por el flujo de eventos. */
+<script>/* Panel de control: sólo con la contraseña (o la clave larga). Todo cambio va al servidor y regresa por el flujo de eventos. */
 (function () {
 'use strict';
 var MH = window.MH;
@@ -1441,23 +1459,49 @@ var E = null, R = null, A = null, CLAVE = null;
 var firmas = {};
 function cambio(nombre, valor) { var f = JSON.stringify(valor); if (firmas[nombre] === f) return false; firmas[nombre] = f; return true; }
 
-/* ---------- clave ---------- */
+/* ---------- acceso: contraseña, sesión y enlace de un solo uso ---------- */
+var ALTA = null;
 (function () {
-  var m = /[#&]clave=([^&]+)/.exec(location.hash);
-  if (m) { try { localStorage.setItem('mh-clave', decodeURIComponent(m[1])); } catch (e) { } history.replaceState(null, '', location.pathname + location.search); }
+  var m = /[#&]clave=([^&]+)/.exec(location.hash), a = /[#&]alta=([^&]+)/.exec(location.hash);
+  if (m) { try { localStorage.setItem('mh-clave', decodeURIComponent(m[1])); } catch (e) { } }
+  if (a) ALTA = decodeURIComponent(a[1]);
+  if (m || a) history.replaceState(null, '', location.pathname + location.search);
   try { CLAVE = localStorage.getItem('mh-clave'); } catch (e) { }
 })();
+function guardarSesion(s) { try { localStorage.setItem('mh-clave', s); } catch (x) { } location.reload(); }
+function olvidarSesion() { try { localStorage.removeItem('mh-clave'); } catch (e) { } }
 function pedirClave(msg) {
+  $('f-alta').hidden = true; $('f-entrada').hidden = false;
   $('entrada').classList.add('ver'); $('clave-err').textContent = msg || '';
   setTimeout(function () { $('clave-in').focus(); }, 50);
+}
+function pedirAlta() {
+  $('f-entrada').hidden = true; $('f-alta').hidden = false;
+  $('entrada').classList.add('ver');
+  setTimeout(function () { $('alta-1').focus(); }, 50);
+}
+function enviarAcceso(form, ruta, cuerpo, err) {
+  var btn = form.querySelector('button'); btn.disabled = true; err.textContent = '';
+  MH.post(ruta, cuerpo).then(function (j) {
+    if (j.sesion) return guardarSesion(j.sesion);
+    btn.disabled = false; err.textContent = j.error || 'No se pudo entrar.';
+  }).catch(function () { btn.disabled = false; err.textContent = 'No hay conexión con el servidor. Intenta otra vez.'; });
 }
 $('f-entrada').addEventListener('submit', function (e) {
   e.preventDefault();
   var c = $('clave-in').value.trim(); if (!c) return;
-  try { localStorage.setItem('mh-clave', c); } catch (x) { }
-  location.reload();
+  enviarAcceso(this, '/acceso/entrar', { contrasena: c }, $('clave-err'));
 });
-$('b-salir').addEventListener('click', function () { try { localStorage.removeItem('mh-clave'); } catch (e) { } location.reload(); });
+$('f-alta').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var a = $('alta-1').value.trim(), b = $('alta-2').value.trim(), err = $('alta-err');
+  if (Array.from(a).length < 8) { err.textContent = 'Usa al menos 8 caracteres.'; return; }
+  if (a !== b) { err.textContent = 'Las dos no coinciden.'; return; }
+  enviarAcceso(this, '/acceso/alta', { token: ALTA, contrasena: a }, err);
+});
+$('b-salir').addEventListener('click', function () {
+  MH.post('/acceso/salir', {}, CLAVE).catch(function () { }).then(function () { olvidarSesion(); location.reload(); });
+});
 
 /* ---------- acciones ---------- */
 var avisoT = null;
@@ -1465,7 +1509,7 @@ function aviso(t) { var a = $('aviso'); a.textContent = t; a.classList.add('ver'
 function hacer(accion, extra) {
   var b = extra || {}; b.accion = accion;
   return MH.post('/admin', b, CLAVE).then(function (j) {
-    if (j._status === 401) pedirClave('La clave ya no es válida.');
+    if (j._status === 401) { olvidarSesion(); pedirClave('Tu sesión se cerró. Vuelve a entrar.'); }
     else if (j.error) aviso(j.error);
     return j;
   }).catch(function () { aviso('No se pudo enviar. Revisa la conexión.'); });
@@ -1873,14 +1917,15 @@ function pintarPanel() {
 }
 setInterval(function () { if (E) pintarTurnosCtl(); }, 500);
 
-if (!CLAVE) pedirClave();
+if (ALTA) pedirAlta();
+else if (!CLAVE) pedirClave();
 else MH.escucharControl(CLAVE, function (d) {
   E = d.e; R = d.r; A = d.a || A;
   $('entrada').classList.remove('ver');
   MH.pintar(E, R); pintarPanel();
 }, MH.reaccion, function (ok) {
   $('luz').classList.toggle('ok', ok); $('con-t').textContent = ok ? 'En vivo' : 'Reconectando…';
-}, function () { try { localStorage.removeItem('mh-clave'); } catch (e) { } pedirClave('Clave incorrecta.'); });
+}, function () { olvidarSesion(); pedirClave('Tu sesión se cerró o la clave ya no sirve. Vuelve a entrar.'); });
 })();
 </script>
 </body>
