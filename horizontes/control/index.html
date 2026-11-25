@@ -1989,7 +1989,10 @@ function pintarPanelistasCtl() {
       var t = null;
       inp.addEventListener('input', function () {
         clearTimeout(t);
-        t = setTimeout(function () { hacer('marca', { id: id, k: inp.dataset.m, v: inp.value.trim() }); }, 250);
+        t = setTimeout(function () {
+          hacer('marca', { id: id, k: inp.dataset.m, v: inp.value.trim() });
+          if (inp.value.trim() !== '' && E && !E.verPos) hacer('verPos', { v: true });   // en cuanto hay un valor, la ficha se ve
+        }, 250);
       });
     });
     d.addEventListener('click', function (e) {
