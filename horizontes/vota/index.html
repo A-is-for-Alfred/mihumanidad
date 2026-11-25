@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#001F3E">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="data:,">
+<title>Mesa Horizontes · Participa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --nodo:#001F3E; --noche:#062750; --nucleo:#0E3266; --azul:#1E488E; --azul-300:#7696C6;
+  --lima:#D2DC83; --pulso:#B5C445; --claro:#F4F5EC; --tinta-suave:#C6CFDC; --linea:#2A426B;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;min-height:100dvh;color:var(--claro);font-family:'Montserrat',Arial,sans-serif;-webkit-font-smoothing:antialiased;background:transparent}
+html{min-height:100%;
+  background:
+    radial-gradient(ellipse 90% 40% at 50% 100%,rgba(210,220,131,.16),rgba(210,220,131,0) 70%),
+    linear-gradient(180deg,#001F3E 0%,#062750 60%,#0E3266 100%) #001F3E}
+button,input,textarea{font-family:inherit}
+.columna{max-width:520px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 16px max(26px,env(safe-area-inset-bottom))}
+.oculto-v{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* Encabezado */
+.cab{padding:6px 2px 14px}
+.cab .ceja{margin:0;font-size:11px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:var(--lima);line-height:1.5}
+.cab h1{margin:6px 0 0;font-size:34px;font-weight:800;letter-spacing:-.5px;line-height:1.05;color:#fff}
+.cab .sub{margin:6px 0 0;font-size:15px;font-weight:500;line-height:1.4;color:var(--tinta-suave)}
+.vivo{display:inline-flex;align-items:center;gap:8px;margin:12px 0 0;padding:5px 12px 5px 10px;border-radius:999px;border:1px solid var(--linea);
+  font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tinta-suave);background:rgba(0,24,52,.6)}
+.vivo .luz{width:9px;height:9px;border-radius:50%;background:#e2a05b}
+.vivo.ok .luz{background:var(--lima);box-shadow:0 0 0 0 rgba(210,220,131,.6);animation:latido 2s ease-out infinite}
+.vivo.ok{color:var(--lima)}
+@keyframes latido{0%{box-shadow:0 0 0 0 rgba(210,220,131,.55)}70%{box-shadow:0 0 0 8px rgba(210,220,131,0)}100%{box-shadow:0 0 0 0 rgba(210,220,131,0)}}
+
+main{display:flex;flex-direction:column;gap:14px}
+
+/* Tarjetas */
+.tarjeta{position:relative;padding:18px 16px 18px;border-radius:20px;background:rgba(0,24,52,.78);border:1px solid var(--linea);
+  box-shadow:0 14px 40px rgba(0,10,25,.35);animation:aparece .45s ease both}
+@keyframes aparece{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.tarjeta.viva{border-color:rgba(210,220,131,.55)}
+.etq{margin:0;font-size:12px;font-weight:800;letter-spacing:2.4px;text-transform:uppercase;color:var(--lima)}
+.preg{margin:8px 0 0;font-size:19px;font-weight:700;line-height:1.32;color:#fff;text-wrap:pretty}
+.aviso{margin:10px 0 0;font-size:14px;font-weight:600;line-height:1.4;color:var(--tinta-suave)}
+.aviso:empty{display:none}
+.aviso.error{color:#f3b2a3}
+.aviso.bien{color:var(--lima)}
+
+/* Espera */
+.espera{text-align:center;padding:22px 18px 22px}
+.espera .horizonte{display:block;width:160px;height:56px;margin:0 auto 8px}
+.espera .tit{margin:0;font-size:18px;font-weight:700;color:#fff}
+.espera .txt{margin:8px 0 0;font-size:15px;line-height:1.45;color:var(--tinta-suave)}
+
+/* Termómetro */
+.barra-esc{height:10px;margin-top:16px;border-radius:5px;background:linear-gradient(90deg,#1E488E 0%,#7696C6 38%,#D2DC83 72%,#B5C445 100%)}
+.escala{display:flex;justify-content:space-between;gap:12px;margin-top:8px;font-size:12px;font-weight:700;line-height:1.3}
+.escala span{max-width:48%}
+.escala .pes{color:var(--azul-300)}
+.escala .opt{color:var(--lima);text-align:right}
+.numeros{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:14px}
+.num{appearance:none;min-height:56px;border-radius:14px;border:1px solid var(--linea);background:#0e2a52;color:#fff;
+  font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;cursor:pointer;touch-action:manipulation;
+  transition:background .15s ease,transform .1s ease,border-color .15s ease;position:relative;overflow:hidden}
+.num::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--tono,#7696C6);opacity:.85}
+.num:active{transform:scale(.95)}
+.num:focus-visible{outline:3px solid var(--lima);outline-offset:2px}
+.num.sel{background:var(--lima);color:var(--nodo);border-color:var(--lima)}
+.num.sel::after{opacity:0}
+.num:disabled{cursor:default;opacity:.6}
+.num.enviando{opacity:.7}
+
+.resultados{margin-top:16px;padding-top:14px;border-top:1px solid var(--linea);display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:end}
+.media{display:flex;flex-direction:column;align-items:flex-start}
+.media .cifra{font-size:52px;font-weight:800;line-height:1;color:var(--lima);font-variant-numeric:tabular-nums}
+.media .leyenda{margin-top:4px;font-size:12px;font-weight:600;line-height:1.3;color:var(--tinta-suave)}
+.histo{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;align-items:end;height:92px}
+.histo .col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
+.histo .col i{display:block;width:100%;min-height:3px;border-radius:5px 5px 2px 2px;background:rgba(118,150,198,.55);transition:height .5s cubic-bezier(.2,.8,.2,1)}
+.histo .col.mio i{background:var(--lima)}
+.histo .col span{font-size:11px;font-weight:700;color:var(--tinta-suave);font-variant-numeric:tabular-nums}
+.histo .col.mio span{color:var(--lima)}
+.pie-res{grid-column:1 / -1;margin:8px 0 0;font-size:13px;font-weight:600;line-height:1.4;color:var(--tinta-suave)}
+.pie-res:empty{display:none}
+.pie-res b{color:#fff}
+
+/* Encuesta */
+.opciones{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.op{appearance:none;position:relative;overflow:hidden;width:100%;min-height:54px;padding:12px 64px 12px 16px;border-radius:14px;border:1px solid var(--linea);
+  background:#0e2a52;color:#fff;font-size:16px;font-weight:600;line-height:1.3;text-align:left;cursor:pointer;touch-action:manipulation;transition:border-color .15s ease,transform .1s ease}
+.op:active{transform:scale(.985)}
+.op:focus-visible{outline:3px solid var(--lima);outline-offset:2px}
+.op .lleno{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(118,150,198,.28);transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.op .txt{position:relative}
+.op .pc{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:16px;font-weight:800;color:var(--lima);font-variant-numeric:tabular-nums;display:none}
+.con-res .op .pc{display:block}
+.op.sel{border-color:var(--lima);box-shadow:0 0 0 1px var(--lima) inset}
+.op.sel .lleno{background:rgba(210,220,131,.3)}
+.op.sel .txt::before{content:"✓";display:inline-block;margin-right:8px;color:var(--lima);font-weight:800}
+.op:disabled{cursor:default}
+
+/* Reacciones */
+.a-quien{margin:6px 0 0;font-size:14px;font-weight:600;line-height:1.4;color:var(--tinta-suave)}
+.a-quien b{color:#fff}
+.reacciones{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.rb{appearance:none;position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:0;border:0;background:none;color:var(--claro);
+  font-size:12px;font-weight:700;line-height:1.25;text-align:center;cursor:pointer;touch-action:manipulation}
+.rb .circ{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;box-shadow:0 6px 16px rgba(0,10,25,.4);transition:transform .12s ease,opacity .2s ease}
+.rb .circ svg{width:34px;height:34px}
+.rb.acuerdo .circ{background:var(--lima);color:var(--nodo)}
+.rb.desacuerdo .circ{background:var(--azul-300);color:var(--nodo)}
+.rb.duda .circ{background:#fff;color:var(--azul)}
+.rb.idea .circ{background:var(--pulso);color:var(--nodo)}
+.rb:active .circ{transform:scale(.9)}
+.rb:focus-visible .circ{outline:3px solid var(--lima);outline-offset:3px}
+.rb.toque .circ{animation:toque .35s ease}
+@keyframes toque{40%{transform:scale(1.14)}100%{transform:scale(1)}}
+.rb .mas{position:absolute;left:50%;top:6px;font-size:18px;font-weight:800;color:var(--lima);pointer-events:none;animation:mas .9s ease-out forwards}
+@keyframes mas{0%{opacity:0;transform:translate(-50%,0) scale(.6)}20%{opacity:1;transform:translate(-50%,-14px) scale(1.1)}100%{opacity:0;transform:translate(-50%,-46px) scale(1)}}
+
+/* Pregunta */
+textarea,input[type=text]{width:100%;margin-top:12px;background:#0b2446;border:1px solid var(--linea);border-radius:12px;color:#fff;
+  padding:12px 14px;font-size:16px;line-height:1.4}
+textarea{min-height:110px;resize:vertical}
+textarea:focus,input:focus{outline:2px solid var(--lima);outline-offset:1px;border-color:transparent}
+textarea::placeholder,input::placeholder{color:rgba(198,207,220,.6)}
+.contador{margin:6px 2px 0;text-align:right;font-size:12px;font-weight:600;color:var(--tinta-suave);font-variant-numeric:tabular-nums}
+.contador.casi{color:var(--lima)}
+.mini{display:block;margin:8px 0 0;font-size:13px;font-weight:600;color:var(--tinta-suave)}
+.mini+input{margin-top:6px}
+.b{appearance:none;border:1px solid var(--linea);background:#0e2a52;color:#fff;border-radius:999px;padding:14px 18px;min-height:52px;font-size:16px;font-weight:700;cursor:pointer;touch-action:manipulation}
+.b.prim{background:var(--lima);color:var(--nodo);border-color:var(--lima)}
+.b.ancho{width:100%;margin-top:14px}
+.b:disabled{opacity:.55;cursor:default}
+.b:focus-visible{outline:3px solid #fff;outline-offset:2px}
+
+.pie{margin:22px 4px 0;font-size:12px;font-weight:500;line-height:1.5;text-align:center;color:var(--tinta-suave)}
+
+@media (min-width:600px){
+  .columna{padding-top:36px}
+  .cab h1{font-size:40px}
+  .preg{font-size:21px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+</style>
+</head>
+<body>
+<div class="columna">
+  <header class="cab">
+    <p class="ceja">Foro · La UNAM frente a los dilemas de la IA</p>
+    <h1>Mesa Horizontes</h1>
+    <p class="sub">La humanidad frente a la inteligencia artificial: escenarios posibles</p>
+    <p class="vivo" id="vivo"><span class="luz" aria-hidden="true"></span><span id="vivo-t">Conectando…</span></p>
+  </header>
+
+  <main>
+    <section class="tarjeta espera" id="s-espera">
+      <svg class="horizonte" viewBox="0 0 200 70" aria-hidden="true"><path d="M30 60a70 70 0 0 1 140 0" fill="none" stroke="#D2DC83" stroke-width="2.2"/><path d="M48 60a52 52 0 0 1 104 0" fill="none" stroke="rgba(181,196,69,.5)" stroke-width="2" stroke-dasharray="6 6"/><circle cx="100" cy="60" r="18" fill="rgba(210,220,131,.35)"/><rect x="0" y="59" width="200" height="2" fill="#B5C445"/></svg>
+      <p class="tit" id="espera-t">Conectando con la mesa…</p>
+      <p class="txt" id="espera-s">Mantén esta página abierta: aquí aparecerá la votación cuando empiece.</p>
+    </section>
+
+    <section class="tarjeta" id="s-termo" hidden aria-labelledby="t-etq">
+      <p class="etq" id="t-etq">Termómetro inicial</p>
+      <h2 class="preg">En una escala del 1 al 10, ¿dónde ubicas a la humanidad frente a la inteligencia artificial dentro de diez años?</h2>
+      <div id="t-elegir">
+        <div class="barra-esc" aria-hidden="true"></div>
+        <div class="escala"><span class="pes">1 · el escenario más grave</span><span class="opt">10 · el más esperanzador</span></div>
+        <div class="numeros" id="t-nums" role="group" aria-label="Elige un número del 1 al 10"></div>
+      </div>
+      <p class="aviso" id="t-aviso"></p>
+      <div class="resultados" id="t-res" hidden>
+        <div class="media"><span class="cifra" id="t-media">·</span><span class="leyenda">promedio<br>del público</span></div>
+        <div class="histo" id="t-histo" aria-hidden="true"></div>
+        <p class="pie-res" id="t-pie"></p>
+      </div>
+    </section>
+
+    <section class="tarjeta" id="s-enc" hidden aria-labelledby="e-preg">
+      <p class="etq" id="e-etq">Encuesta</p>
+      <h2 class="preg" id="e-preg"></h2>
+      <div class="opciones" id="e-ops" role="group" aria-labelledby="e-preg"></div>
+      <p class="aviso" id="e-aviso"></p>
+      <p class="pie-res" id="e-pie"></p>
+    </section>
+
+    <section class="tarjeta" id="s-reac" hidden aria-labelledby="r-tit">
+      <p class="etq" id="r-tit">Reacciona</p>
+      <p class="a-quien" id="r-quien">Reacciona a lo que se dice en la mesa</p>
+      <div class="reacciones" id="r-btns"></div>
+      <p class="aviso" id="r-aviso"></p>
+    </section>
+
+    <section class="tarjeta" id="s-preg" hidden aria-labelledby="p-tit">
+      <p class="etq" id="p-tit">Envía tu pregunta</p>
+      <form id="f-preg" novalidate>
+        <label class="oculto-v" for="p-texto">Tu pregunta para la mesa</label>
+        <textarea id="p-texto" maxlength="300" rows="4" placeholder="Escribe tu pregunta para la mesa"></textarea>
+        <p class="contador" aria-hidden="true"><span id="p-n">0</span> / 300</p>
+        <label class="mini" for="p-nombre">Tu nombre o adscripción (opcional)</label>
+        <input type="text" id="p-nombre" maxlength="60" autocomplete="off">
+        <button class="b prim ancho" type="submit" id="p-enviar">Enviar</button>
+        <p class="aviso" id="p-aviso"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="pie">Participación anónima: no pedimos registro ni datos personales. CCOIA-UNAM.</footer>
+</div>
+<p class="oculto-v" id="anuncio" aria-live="polite"></p>
+
+<script>/* Contenido fijo de la Mesa Horizontes (guion de moderación v7, 24/11/2026).
+   Español de México: comillas “ ”, sin comillas francesas ni rayas. No inventar cargos ni datos. */
+var MH = window.MH || (window.MH = {});
+
+MH.PANEL = [
+  { id: 'pineda', nombre: 'Dr. Luis A. Pineda Cortés', ini: 'LP', corto: 'Luis A. Pineda',
+    adsc: 'IIMAS-UNAM · Creador del robot Golem', inst: 'IIMAS-UNAM',
+    semblanza: 'Doctor por la Universidad de Edimburgo, investigador titular del IIMAS, fundador del Grupo Golem y creador del robot del mismo nombre y de la Memoria Asociativa Entrópica; presidente fundador de la Academia Mexicana de Computación.' },
+  { id: 'baeza', nombre: 'Dr. Ricardo Baeza-Yates', ini: 'RB', corto: 'Ricardo Baeza-Yates',
+    adsc: 'Exdirectivo de Yahoo Labs · Especialista en IA responsable', inst: 'KTH, UPF y Universidad de Chile',
+    semblanza: 'Científico de la computación chileno, referente mundial en recuperación de información e IA responsable; exvicepresidente de Investigación de Yahoo Labs, profesor en el KTH de Suecia; Fellow de la ACM y del IEEE; coautor de los principios de la ACM para sistemas algorítmicos responsables.' },
+  { id: 'gershenson', nombre: 'Dr. Carlos Gershenson', ini: 'CG', corto: 'Carlos Gershenson',
+    adsc: 'Binghamton University · Especialista en sistemas complejos', inst: 'Binghamton University (SUNY)',
+    semblanza: 'Investigador mexicano en sistemas complejos e inteligencia artificial; profesor en Binghamton University y exinvestigador de la UNAM (de 2008 a 2023); presidente de la Complex Systems Society y miembro de la Academia Mexicana de Ciencias.' },
+  { id: 'aliseda', nombre: 'Dra. Atocha Aliseda', ini: 'AA', corto: 'Atocha Aliseda',
+    adsc: 'Instituto de Investigaciones Filosóficas, UNAM', inst: 'Instituto de Investigaciones Filosóficas, UNAM',
+    semblanza: 'Matemática por la UNAM y doctora en Filosofía por Stanford; investigadora titular del Instituto de Investigaciones Filosóficas, especialista en lógica, razonamiento abductivo y filosofía de la ciencia; Premio Universidad Nacional 2021.' },
+  { id: 'giron', nombre: 'Itzul Girón', ini: 'IG', corto: 'Itzul Girón',
+    adsc: 'Fundadora y directora general de Celestial Dynamics', inst: 'Celestial Dynamics',
+    semblanza: 'Fundadora y directora general de Celestial Dynamics Technology Lab (2020), laboratorio mexicano de IA y cómputo de alto rendimiento, y creadora de MATRIA A.I.; pionera del desarrollo de la inteligencia artificial en México.' }
+];
+MH.POR_ID = {};
+MH.PANEL.forEach(function (p) { MH.POR_ID[p.id] = p; });
+
+MH.BANCO = [
+  { label: 'Termómetro inicial', text: 'En una escala del uno al diez, donde uno es el escenario más grave y diez el más esperanzador, ¿dónde ubican a la humanidad frente a la inteligencia artificial dentro de diez años?' },
+  { label: 'Premisa', text: '¿Podemos encauzar la inteligencia artificial o detenerla, o vamos al encuentro de nuestro destino de manera inercial, sin posibilidad de alterarlo?' },
+  { label: 'Ronda 1 · Luis A. Pineda', text: '¿Sigue pensando lo mismo? ¿Qué les falta a estos sistemas para parecerse a la inteligencia natural?' },
+  { label: 'Ronda 1 · Atocha Aliseda', text: '¿Qué pasa cuando el resultado es una demostración que una máquina verifica, pero que ningún ser humano puede comprender? ¿Es eso conocimiento?' },
+  { label: 'Ronda 1 · Carlos Gershenson', text: 'Desde las ciencias de la complejidad, ¿qué efectos que nadie diseñó estamos viendo ya? ¿Sigue siendo el escenario intermedio el más probable?' },
+  { label: 'Ronda 1 · Ricardo Baeza-Yates', text: '¿Cuáles son hoy los daños más graves? ¿Quién está tomando las decisiones que nos afectan en América Latina?' },
+  { label: 'Ronda 1 · Itzul Girón', text: '¿Es realista la soberanía tecnológica frente a empresas que invierten cientos de miles de millones de dólares? ¿Qué hace falta para que México desarrolle IA y no sólo la consuma?' },
+  { label: 'Tensión 1 · ¿Quién responde?', text: '¿Sigue siendo exagerado hablar de riesgo para la viabilidad humana? Y cuando un sistema actúa por su cuenta, ¿quién responde?' },
+  { label: 'Tensión 2 · ¿Encauzar o detener?', text: '¿Se puede desacelerar sin un acuerdo de todos? ¿Es la contención voluntaria de una empresa la forma de encauzar la IA, o la competencia nos lleva de manera inercial? ¿Quién debería decidir qué se libera y qué no?' },
+  { label: 'Tensión 3 · ¿Desplazamiento del conocimiento humano?', text: '¿Es esta crisis la primera expresión concreta del desplazamiento de las habilidades y capacidades humanas frente a la superioridad de la máquina? ¿Seguirán ese mismo camino las demás áreas del conocimiento?' },
+  { label: 'Ronda 3 · Trabajo y vida humana', text: 'Atocha Aliseda: ¿Qué trabajo humano nunca delegaría a una máquina?\nLuis A. Pineda: ¿Qué trabajo humano definitivamente delegaría a una máquina?\nCarlos Gershenson: ¿Cómo vislumbra la actividad humana en el trabajo?\nRicardo Baeza-Yates: ¿Cómo vislumbra la actividad humana en el entorno social?\nItzul Girón: ¿Cómo vislumbra la actividad humana en la familia?' },
+  { label: 'Termómetro final', text: 'Después de esta conversación, ¿se mantienen en su posición o se movieron?\nY en un minuto: una recomendación para la UNAM frente a lo que viene.' }
+];
+
+/* Cortinillas: una por bloque del minuto a minuto. “hora” sólo se muestra en el control. */
+MH.CORTINILLAS = [
+  { id: 'apertura', kicker: 'Mesa Horizontes', titulo: 'La humanidad frente a la inteligencia artificial', sub: 'Escenarios posibles', hora: '12:30' },
+  { id: 'termo-ini', kicker: 'Termómetro inicial', titulo: '¿Dónde estaremos dentro de diez años?', sub: 'Del 1, el escenario más grave, al 10, el más esperanzador', hora: '12:35' },
+  { id: 'r1', kicker: 'Ronda 1', titulo: 'El escenario', sub: 'Una pregunta para cada panelista', hora: '12:38' },
+  { id: 'r2', kicker: 'Ronda 2', titulo: 'Los cruces', sub: 'Tres casos; las y los cinco panelistas opinan sobre cada uno', hora: '13:03' },
+  { id: 't1', kicker: 'Tensión 1', titulo: '¿Quién responde?', sub: '', hora: '13:03' },
+  { id: 't2', kicker: 'Tensión 2', titulo: '¿Encauzar o detener?', sub: '', hora: '13:10' },
+  { id: 't3', kicker: 'Tensión 3', titulo: '¿Desplazamiento del conocimiento humano?', sub: '', hora: '13:17' },
+  { id: 'r3', kicker: 'Ronda 3', titulo: 'Trabajo y vida humana', sub: 'Una pregunta distinta para cada panelista', hora: '13:25' },
+  { id: 'publico', kicker: 'Preguntas del público', titulo: 'Tu pregunta, a la mesa', sub: 'Envíala desde tu celular', hora: '13:37' },
+  { id: 'termo-fin', kicker: 'Termómetro final', titulo: '¿Se mantienen o se movieron?', sub: 'Y una recomendación para la UNAM frente a lo que viene', hora: '13:50' }
+];
+
+MH.CASOS = [
+  { id: 't1', nombre: 'Tensión 1 · ¿Quién responde?' },
+  { id: 't2', nombre: 'Tensión 2 · ¿Encauzar o detener?' },
+  { id: 't3', nombre: 'Tensión 3 · ¿Desplazamiento del conocimiento humano?' }
+];
+
+MH.REACCIONES = [
+  { id: 'acuerdo', nombre: 'De acuerdo' },
+  { id: 'desacuerdo', nombre: 'En desacuerdo' },
+  { id: 'duda', nombre: 'Tengo una duda' },
+  { id: 'idea', nombre: 'Me hizo pensar' }
+];
+
+MH.URL_VOTA = 'mihumanidad.com/horizontes/vota';
+
+/* Íconos de reacción (SVG en línea, mismos en el celular y en la pantalla) */
+MH.icono = function (id) {
+  var g = {
+    acuerdo: '<path d="M14 25l7 7 14-15" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>',
+    desacuerdo: '<path d="M16 16l16 16M32 16L16 32" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>',
+    duda: '<path d="M18.5 18.5a5.8 5.8 0 1 1 8.6 5.1c-2 1.1-3.1 2.3-3.1 4.6v1.2" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round"/><circle cx="24" cy="35.5" r="2.6" fill="currentColor"/>',
+    idea: '<path d="M24 9l3.2 9.6 9.8.2-7.8 6 2.9 9.6L24 28.6l-8.1 5.8 2.9-9.6-7.8-6 9.8-.2z" fill="currentColor"/>'
+  }[id] || '';
+  return '<svg viewBox="0 0 48 48" aria-hidden="true">' + g + '</svg>';
+};
+</script>
+<script>/* Conexión con el servidor de la mesa (VPS). En mihumanidad.com las páginas son estáticas y el servicio vive
+   en horizontes.srv1091049.hstgr.cloud; servidas desde el propio servicio, usan el mismo origen. */
+(function () {
+'use strict';
+var MH = window.MH || (window.MH = {});
+var q = new URLSearchParams(location.search);
+MH.API = q.get('api') || (/(^|\.)mihumanidad\.com$/.test(location.hostname) ? 'https://horizontes.srv1091049.hstgr.cloud' : location.origin);
+
+function sincronizar(t) { if (typeof t === 'number') MH.offset = t - Date.now(); }
+
+/* Pantalla y público: EventSource, que se reconecta solo. */
+MH.escuchar = function (rol, alEstado, alReac, alConexion) {
+  var es = null, vivo = 0;
+  function abrir() {
+    es = new EventSource(MH.API + '/eventos?rol=' + rol);
+    es.addEventListener('estado', function (ev) { var d = JSON.parse(ev.data); sincronizar(d.t); vivo = Date.now(); alConexion && alConexion(true); alEstado(d); });
+    es.addEventListener('reac', function (ev) { var d = JSON.parse(ev.data); alReac && alReac(d); });
+    es.addEventListener('ping', function (ev) { var d = JSON.parse(ev.data); sincronizar(d.t); vivo = Date.now(); alConexion && alConexion(true); });
+    es.onerror = function () { alConexion && alConexion(false); };
+  }
+  abrir();
+  // si en 40 s no llega nada (ni el ping de cada 15 s), se reabre
+  setInterval(function () { if (vivo && Date.now() - vivo > 40000) { try { es.close(); } catch (e) { } vivo = 0; abrir(); } }, 5000);
+};
+
+/* Control: fetch con la clave en la cabecera, leyendo el flujo de eventos a mano. */
+MH.escucharControl = function (clave, alEstado, alReac, alConexion, alRechazo) {
+  var ctl = null, vivo = 0, cerrado = false;
+  function abrir() {
+    ctl = new AbortController();
+    fetch(MH.API + '/admin/eventos', { headers: { Authorization: 'Bearer ' + clave }, signal: ctl.signal, cache: 'no-store' })
+      .then(function (r) {
+        if (r.status === 401) { cerrado = true; alRechazo && alRechazo(); return; }
+        if (!r.ok || !r.body) throw new Error('HTTP ' + r.status);
+        alConexion && alConexion(true); vivo = Date.now();
+        var lector = r.body.getReader(), dec = new TextDecoder(), buf = '';
+        function leer() {
+          return lector.read().then(function (x) {
+            if (x.done) throw new Error('fin');
+            buf += dec.decode(x.value, { stream: true });
+            var i;
+            while ((i = buf.indexOf('\n\n')) >= 0) {
+              var bloque = buf.slice(0, i); buf = buf.slice(i + 2);
+              var ev = 'message', datos = '';
+              bloque.split('\n').forEach(function (l) {
+                if (l.indexOf('event: ') === 0) ev = l.slice(7);
+                else if (l.indexOf('data: ') === 0) datos += l.slice(6);
+              });
+              if (!datos) continue;
+              var d = JSON.parse(datos); vivo = Date.now();
+              if (d.t) sincronizar(d.t);
+              if (ev === 'estado') alEstado(d);
+              else if (ev === 'reac') alReac && alReac(d);
+            }
+            return leer();
+          });
+        }
+        return leer();
+      })
+      .catch(function () {})
+      .then(function () { if (cerrado) return; alConexion && alConexion(false); setTimeout(abrir, 1500); });
+  }
+  abrir();
+  setInterval(function () { if (!cerrado && vivo && Date.now() - vivo > 40000) { vivo = 0; try { ctl.abort(); } catch (e) { } } }, 5000);
+};
+
+MH.post = function (ruta, cuerpo, clave) {
+  var h = { 'Content-Type': 'application/json' };
+  if (clave) h.Authorization = 'Bearer ' + clave;
+  return fetch(MH.API + ruta, { method: 'POST', headers: h, body: JSON.stringify(cuerpo), cache: 'no-store' })
+    .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { j._status = r.status; return j; }); });
+};
+})();
+</script>
+<script>/* Página del público (celular): termómetro, encuestas, reacciones y preguntas.
+   El estado llega varias veces por segundo: aquí sólo se reconstruye lo que cambió. */
+(function () {
+'use strict';
+var MH = window.MH;
+var $ = function (id) { return document.getElementById(id); };
+var E = null, R = null;
+
+/* ---------- almacenamiento y dispositivo ---------- */
+var memoria = {};
+function leer(k) { try { var v = localStorage.getItem(k); return v === null ? (k in memoria ? memoria[k] : null) : v; } catch (e) { return k in memoria ? memoria[k] : null; } }
+function guardar(k, v) { memoria[k] = String(v); try { localStorage.setItem(k, String(v)); } catch (e) { } }
+function idNuevo() {
+  var s = '', a = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  var r = new Uint8Array(20);
+  try { crypto.getRandomValues(r); } catch (e) { for (var j = 0; j < 20; j++) r[j] = Math.floor(Math.random() * 256); }
+  for (var i = 0; i < 20; i++) s += a[r[i] % a.length];
+  return s;
+}
+var DISP = leer('mh-disp');
+if (!DISP || !/^[a-z0-9]{12,40}$/.test(DISP)) { DISP = idNuevo(); guardar('mh-disp', DISP); }
+
+function claveTermo() { return 'mh-t:' + (E.sesion || '') + ':' + E.termo.fase + ':' + ((E.termo.rondas || {})[E.termo.fase] || 0); }
+function claveEnc(id) { return 'mh-e:' + (E.sesion || '') + ':' + id + ':' + ((E.encRondas || {})[id] || 0); }
+function miTermo() { var v = parseInt(leer(claveTermo()), 10); return v >= 1 && v <= 10 ? v : null; }
+function miEnc(id) { var v = leer(claveEnc(id)); if (v === null) return null; var i = parseInt(v, 10); return isNaN(i) ? null : i; }
+
+function fmt(v) { return (Math.round(v * 10) / 10).toFixed(1); }
+function plural(n, uno, varios) { return n + ' ' + (n === 1 ? uno : varios); }
+function anunciar(t) { var a = $('anuncio'); a.textContent = ''; setTimeout(function () { a.textContent = t; }, 50); }
+function aviso(id, t, tipo) { var el = $(id); el.textContent = t || ''; el.className = 'aviso' + (tipo ? ' ' + tipo : ''); }
+
+/* ---------- termómetro ---------- */
+var TONOS = ['#1E488E', '#2C5598', '#4A6EAD', '#6386BF', '#7E9CC0', '#A0B6A8', '#C2CF92', '#D2DC83', '#C4D064', '#B5C445'];
+(function construirTermo() {
+  var g = $('t-nums'), h = $('t-histo');
+  for (var n = 1; n <= 10; n++) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'num'; b.textContent = n; b.dataset.v = n;
+    b.style.setProperty('--tono', TONOS[n - 1]);
+    b.setAttribute('aria-label', n + (n === 1 ? ', el escenario más grave' : n === 10 ? ', el más esperanzador' : ''));
+    b.setAttribute('aria-pressed', 'false');
+    g.appendChild(b);
+    var c = document.createElement('div'); c.className = 'col'; c.innerHTML = '<i></i><span>' + n + '</span>'; h.appendChild(c);
+  }
+  g.addEventListener('click', function (ev) {
+    var b = ev.target.closest('.num'); if (!b || b.disabled) return;
+    votarTermo(parseInt(b.dataset.v, 10));
+  });
+})();
+var enviandoT = false;
+function votarTermo(v) {
+  if (!E || !E.termo.abierta || enviandoT) return;
+  enviandoT = true;
+  var clave = claveTermo(), antes = leer(clave);
+  marcarNumeros(v, true);
+  MH.post('/votar', { d: DISP, tipo: 'termo', v: v }).then(function (j) {
+    enviandoT = false;
+    if (j.ok) {
+      guardar(clave, v);
+      if (j.r) R = j.r;
+      aviso('t-aviso', '');
+      pintarTermo();
+      var r = R && R[E.termo.fase];
+      anunciar('Votaste ' + v + '.' + (r && r.media !== null ? ' Promedio del público: ' + fmt(r.media) + '.' : ''));
+    } else {
+      marcarNumeros(antes ? parseInt(antes, 10) : null, false);
+      aviso('t-aviso', j.error || 'No se pudo registrar tu voto. Intenta de nuevo.', 'error');
+    }
+  }).catch(function () {
+    enviandoT = false;
+    marcarNumeros(antes ? parseInt(antes, 10) : null, false);
+    aviso('t-aviso', 'Sin conexión. Intenta de nuevo en un momento.', 'error');
+  });
+}
+function marcarNumeros(v, enviando) {
+  Array.prototype.forEach.call($('t-nums').children, function (b) {
+    var es = parseInt(b.dataset.v, 10) === v;
+    b.classList.toggle('sel', es);
+    b.classList.toggle('enviando', !!(enviando && es));
+    b.setAttribute('aria-pressed', es ? 'true' : 'false');
+  });
+}
+function pintarTermo() {
+  var t = E.termo, mio = miTermo();
+  var ver = !!(t.abierta || mio !== null);
+  $('s-termo').hidden = !ver;
+  if (!ver) return false;
+  $('s-termo').classList.toggle('viva', !!t.abierta);
+  $('t-etq').textContent = t.fase === 'fin' ? 'Termómetro final' : 'Termómetro inicial';
+  $('t-elegir').hidden = !t.abierta;
+  if (!enviandoT) marcarNumeros(mio, false);
+  Array.prototype.forEach.call($('t-nums').children, function (b) { b.disabled = !t.abierta; });
+  // resultados sólo después de votar
+  var res = $('t-res');
+  res.hidden = mio === null;
+  if (mio !== null && R) {
+    var r = R[t.fase] || { n: 0, media: null, h: [] };
+    $('t-media').textContent = r.media === null ? '·' : fmt(r.media);
+    var max = 1; (r.h || []).forEach(function (x) { if (x > max) max = x; });
+    Array.prototype.forEach.call($('t-histo').children, function (c, i) {
+      var x = (r.h || [])[i] || 0;
+      c.querySelector('i').style.height = Math.round(3 + 64 * x / max) + 'px';
+      c.classList.toggle('mio', i + 1 === mio);
+    });
+    $('t-pie').innerHTML = 'Tu número: <b>' + mio + '</b> · ' + plural(r.n, 'voto', 'votos') +
+      (t.abierta ? '<br>Puedes cambiarlo mientras la votación esté abierta.' : '<br>Votación cerrada.');
+  }
+  if (t.abierta && mio === null && !$('t-aviso').classList.contains('error')) aviso('t-aviso', 'Toca tu número. Después verás el promedio del público.');
+  else if (!$('t-aviso').classList.contains('error')) aviso('t-aviso', '');
+  return true;
+}
+
+/* ---------- encuesta ---------- */
+var encFirma = '', enviandoE = false;
+function pintarEncuesta() {
+  var e = E.encuesta;
+  var mio = e ? miEnc(e.id) : null;
+  var ver = !!(e && (e.abierta || mio !== null));
+  $('s-enc').hidden = !ver;
+  if (!ver) { encFirma = ''; return false; }
+  var firma = e.id + '|' + ((E.encRondas || {})[e.id] || 0) + '|' + e.pregunta + '|' + e.opciones.join('|');
+  var ops = $('e-ops');
+  if (firma !== encFirma) {
+    encFirma = firma;
+    $('e-etq').textContent = e.etiqueta || 'Encuesta';
+    $('e-preg').textContent = e.pregunta;
+    ops.innerHTML = '';
+    e.opciones.forEach(function (o, i) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'op'; b.dataset.i = i;
+      b.innerHTML = '<span class="lleno"></span><span class="txt"></span><span class="pc">0 %</span>';
+      b.querySelector('.txt').textContent = o;
+      b.setAttribute('aria-pressed', 'false');
+      ops.appendChild(b);
+    });
+    aviso('e-aviso', '');
+  }
+  $('s-enc').classList.toggle('viva', !!e.abierta);
+  var conRes = mio !== null;
+  ops.classList.toggle('con-res', conRes);
+  var r = R && R.enc && R.enc.id === e.id ? R.enc : null;
+  Array.prototype.forEach.call(ops.children, function (b, i) {
+    var es = mio === i;
+    b.classList.toggle('sel', es);
+    b.setAttribute('aria-pressed', es ? 'true' : 'false');
+    b.disabled = !e.abierta;
+    var pc = conRes && r && r.n ? Math.round(100 * (r.c[i] || 0) / r.n) : 0;
+    b.querySelector('.lleno').style.width = conRes ? pc + '%' : '0';
+    b.querySelector('.pc').textContent = pc + ' %';
+    b.setAttribute('aria-label', e.opciones[i] + (conRes ? ', ' + pc + ' por ciento' : ''));
+  });
+  if (conRes) {
+    var n = r ? r.n : 0;
+    $('e-pie').innerHTML = plural(n, 'voto', 'votos') + (e.abierta ? ' · Puedes cambiar tu respuesta mientras esté abierta.' : ' · Encuesta cerrada.');
+  } else {
+    $('e-pie').textContent = '';
+  }
+  return true;
+}
+$('e-ops').addEventListener('click', function (ev) {
+  var b = ev.target.closest('.op'); if (!b || b.disabled || enviandoE || !E || !E.encuesta) return;
+  var e = E.encuesta, i = parseInt(b.dataset.i, 10), clave = claveEnc(e.id);
+  enviandoE = true; b.classList.add('sel');
+  MH.post('/votar', { d: DISP, tipo: 'enc', id: e.id, i: i }).then(function (j) {
+    enviandoE = false;
+    if (j.ok) { guardar(clave, i); if (j.r) R = j.r; aviso('e-aviso', ''); anunciar('Respuesta registrada: ' + e.opciones[i] + '.'); }
+    else aviso('e-aviso', j.error || 'No se pudo registrar tu respuesta.', 'error');
+    pintarEncuesta();
+  }).catch(function () {
+    enviandoE = false; aviso('e-aviso', 'Sin conexión. Intenta de nuevo en un momento.', 'error'); pintarEncuesta();
+  });
+});
+
+/* ---------- reacciones ---------- */
+(function construirReac() {
+  var g = $('r-btns');
+  MH.REACCIONES.forEach(function (x) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'rb ' + x.id; b.dataset.r = x.id;
+    b.innerHTML = '<span class="circ">' + MH.icono(x.id) + '</span><span class="nom"></span>';
+    b.querySelector('.nom').textContent = x.nombre;
+    b.setAttribute('aria-label', x.nombre);
+    g.appendChild(b);
+  });
+  g.addEventListener('click', function (ev) {
+    var b = ev.target.closest('.rb'); if (!b) return;
+    reaccionar(b);
+  });
+})();
+var ultimaR = 0;
+function reaccionar(b) {
+  if (!E || !E.reac.activas) return;
+  if (Date.now() - ultimaR < 1000) return;      // una reacción por segundo
+  ultimaR = Date.now();
+  var mas = document.createElement('span'); mas.className = 'mas'; mas.textContent = '+1';
+  b.appendChild(mas); mas.addEventListener('animationend', function () { mas.remove(); });
+  b.classList.remove('toque'); void b.offsetWidth; b.classList.add('toque');
+  MH.post('/reaccion', { d: DISP, r: b.dataset.r }).then(function (j) {
+    if (j.ok) aviso('r-aviso', '');
+    else aviso('r-aviso', j.error || 'No se pudo enviar tu reacción.', 'error');
+  }).catch(function () { aviso('r-aviso', 'Sin conexión. Intenta de nuevo en un momento.', 'error'); });
+}
+var quienPintado = null;
+function pintarReac() {
+  var ver = !!E.reac.activas;
+  $('s-reac').hidden = !ver;
+  if (!ver) return false;
+  var t = E.turno, nombre = null;
+  if (t && MH.POR_ID[t.id]) {
+    var ahora = Date.now() + (MH.offset || 0);
+    if (t.pausa || ahora < t.fin) nombre = MH.POR_ID[t.id].nombre;
+  }
+  if (nombre !== quienPintado) {
+    quienPintado = nombre;
+    var q = $('r-quien');
+    if (nombre) { q.innerHTML = 'Reaccionas a: <b></b>'; q.querySelector('b').textContent = nombre; }
+    else q.textContent = 'Reacciona a lo que se dice en la mesa';
+  }
+  return true;
+}
+
+/* ---------- preguntas ---------- */
+var texto = $('p-texto'), nombreIn = $('p-nombre'), enviando = false;
+function contar() {
+  var n = texto.value.length; $('p-n').textContent = n;
+  $('p-n').parentNode.classList.toggle('casi', n >= 260);
+}
+texto.addEventListener('input', contar);
+$('f-preg').addEventListener('submit', function (ev) {
+  ev.preventDefault();
+  if (enviando) return;
+  var t = texto.value.trim();
+  if (t.length < 5) { aviso('p-aviso', 'Escribe tu pregunta (al menos unas palabras).', 'error'); texto.focus(); return; }
+  enviando = true; $('p-enviar').disabled = true; $('p-enviar').textContent = 'Enviando…';
+  MH.post('/pregunta', { d: DISP, texto: t, nombre: nombreIn.value.trim() }).then(function (j) {
+    if (j.ok) {
+      texto.value = ''; contar();
+      aviso('p-aviso', 'Recibida. El moderador elige las preguntas que se leen en la mesa.', 'bien');
+      anunciar('Pregunta recibida.');
+    } else aviso('p-aviso', j.error || 'No se pudo enviar tu pregunta.', 'error');
+  }).catch(function () {
+    aviso('p-aviso', 'Sin conexión. Tu pregunta sigue escrita; intenta de nuevo en un momento.', 'error');
+  }).then(function () {
+    enviando = false; $('p-enviar').disabled = false; $('p-enviar').textContent = 'Enviar';
+  });
+});
+function pintarPreguntas() {
+  var ver = !!(E.preguntas && E.preguntas.abiertas);
+  $('s-preg').hidden = !ver;
+  return ver;
+}
+
+/* ---------- espera y conexión ---------- */
+function pintar() {
+  if (!E) return;
+  var hayAlgo = false;
+  if (pintarTermo()) hayAlgo = true;
+  if (pintarEncuesta()) hayAlgo = true;
+  if (pintarReac()) hayAlgo = true;
+  pintarPreguntas();
+  // lo abierto va primero; los resultados de votaciones cerradas bajan
+  $('s-termo').style.order = E.termo.abierta ? 1 : 6;
+  $('s-enc').style.order = E.encuesta && E.encuesta.abierta ? 2 : 7;
+  $('s-reac').style.order = 3;
+  $('s-preg').style.order = 5;
+  $('s-espera').hidden = hayAlgo;
+  $('espera-t').textContent = 'Por ahora no hay votación abierta';
+  $('espera-s').textContent = 'Mantén esta página abierta: aquí aparecerá la votación cuando empiece.';
+}
+var caida = null;
+MH.escuchar('publico', function (d) {
+  E = d.e; R = d.r;
+  pintar();
+}, null, function (ok) {
+  clearTimeout(caida);
+  if (ok) { $('vivo').classList.add('ok'); $('vivo-t').textContent = 'En vivo'; }
+  else caida = setTimeout(function () { $('vivo').classList.remove('ok'); $('vivo-t').textContent = 'Reconectando…'; }, 2500);
+});
+// el turno puede terminar sin que llegue estado nuevo: se revisa cada segundo
+setInterval(function () { if (E) pintarReac(); }, 1000);
+})();
+</script>
+</body>
+</html>
