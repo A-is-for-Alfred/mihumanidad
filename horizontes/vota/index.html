@@ -111,15 +111,11 @@ main{display:flex;flex-direction:column;gap:14px}
 /* Reacciones */
 .a-quien{margin:6px 0 0;font-size:14px;font-weight:600;line-height:1.4;color:var(--tinta-suave)}
 .a-quien b{color:#fff}
-.reacciones{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
-.rb{appearance:none;position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:0;border:0;background:none;color:var(--claro);
-  font-size:12px;font-weight:700;line-height:1.25;text-align:center;cursor:pointer;touch-action:manipulation}
-.rb .circ{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;box-shadow:0 6px 16px rgba(0,10,25,.4);transition:transform .12s ease,opacity .2s ease}
-.rb .circ svg{width:34px;height:34px}
-.rb.acuerdo .circ{background:var(--lima);color:var(--nodo)}
-.rb.desacuerdo .circ{background:var(--azul-300);color:var(--nodo)}
-.rb.duda .circ{background:#fff;color:var(--azul)}
-.rb.idea .circ{background:var(--pulso);color:var(--nodo)}
+.reacciones{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:14px}
+.rb{appearance:none;position:relative;min-width:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:0;border:0;background:none;color:var(--claro);
+  font-size:11.5px;font-weight:700;line-height:1.25;text-align:center;cursor:pointer;touch-action:manipulation}
+.rb .circ{width:100%;max-width:60px;aspect-ratio:1;height:auto;border-radius:50%;display:block;filter:drop-shadow(0 6px 10px rgba(0,10,25,.45));transition:transform .12s ease,opacity .2s ease}
+.rb .circ svg{display:block;width:100%;height:100%}
 .rb:active .circ{transform:scale(.9)}
 .rb:focus-visible .circ{outline:3px solid var(--lima);outline-offset:3px}
 .rb.toque .circ{animation:toque .35s ease}
@@ -151,6 +147,7 @@ textarea::placeholder,input::placeholder{color:rgba(198,207,220,.6)}
   .preg{font-size:21px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:440px){.reacciones{grid-template-columns:repeat(6,1fr);row-gap:14px}.rb{grid-column:span 2}.rb:nth-child(4){grid-column:2 / span 2}}
 
 </style>
 </head>
@@ -278,25 +275,109 @@ MH.CASOS = [
   { id: 't3', nombre: 'Tensión 3 · ¿Desplazamiento del conocimiento humano?' }
 ];
 
-MH.REACCIONES = [
-  { id: 'acuerdo', nombre: 'De acuerdo' },
-  { id: 'desacuerdo', nombre: 'En desacuerdo' },
-  { id: 'duda', nombre: 'Tengo una duda' },
-  { id: 'idea', nombre: 'Me hizo pensar' }
-];
-
+/* Las reacciones (lista e íconos de puma) están en pumas.js. */
 MH.URL_VOTA = 'mihumanidad.com/horizontes/vota';
+</script>
+<script>/* Reacciones con puma: ilustración original (no es el logotipo de Pumas ni la mascota Goya).
+   Cabeza en oro UNAM, ojos en lima CCOIA, fondo azul noche; un anillo y una insignia de color dicen la reacción. */
+(function () {
+'use strict';
+var MH = window.MH || (window.MH = {});
+var C = { oro: '#D9A62E', oroOsc: '#A8781A', crema: '#F7EBCB', tinta: '#0B2245', fondo: '#0E2D63', lima: '#D2DC83',
+  azul300: '#7696C6', blanco: '#F4F5EC', foco: '#F3D46A', lengua: '#D9707F', azulUnam: '#1B3C84' };
 
-/* Íconos de reacción (SVG en línea, mismos en el celular y en la pantalla) */
-MH.icono = function (id) {
-  var g = {
-    acuerdo: '<path d="M14 25l7 7 14-15" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>',
-    desacuerdo: '<path d="M16 16l16 16M32 16L16 32" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>',
-    duda: '<path d="M18.5 18.5a5.8 5.8 0 1 1 8.6 5.1c-2 1.1-3.1 2.3-3.1 4.6v1.2" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round"/><circle cx="24" cy="35.5" r="2.6" fill="currentColor"/>',
-    idea: '<path d="M24 9l3.2 9.6 9.8.2-7.8 6 2.9 9.6L24 28.6l-8.1 5.8 2.9-9.6-7.8-6 9.8-.2z" fill="currentColor"/>'
-  }[id] || '';
-  return '<svg viewBox="0 0 48 48" aria-hidden="true">' + g + '</svg>';
+MH.REACCIONES = [
+  { id: 'acuerdo', nombre: 'De acuerdo', color: C.lima },
+  { id: 'desacuerdo', nombre: 'En desacuerdo', color: C.azul300 },
+  { id: 'duda', nombre: 'Tengo una duda', color: C.blanco },
+  { id: 'idea', nombre: 'Me hizo pensar', color: C.foco },
+  { id: 'goya', nombre: '¡Goya!', color: C.oro }
+];
+var COLOR = {}; MH.REACCIONES.forEach(function (r) { COLOR[r.id] = r.color; });
+
+function trazo(d, ancho, color) { return '<path d="' + d + '" fill="none" stroke="' + (color || C.tinta) + '" stroke-width="' + (ancho || 3) + '" stroke-linecap="round" stroke-linejoin="round"/>'; }
+function relleno(d, color) { return '<path d="' + d + '" fill="' + color + '"/>'; }
+function espejo(d) { return d.replace(/(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)/g, function (_, x, y) { return (100 - parseFloat(x)) + ' ' + y; }); }
+
+/* orejas: giro en grados (las orejas hacia atrás cuando no está de acuerdo) */
+function orejas(giro) {
+  var ext = 'M17 42 C14 31 19 19 30 13 C35 16 40 22 43 29 Z', int = 'M22 36 C20.5 29 23.5 22.5 29.5 19 C32 21.5 35 25 37 30 Z';
+  var izq = relleno(ext, C.oro) + relleno(int, C.oroOsc), der = relleno(espejo(ext), C.oro) + relleno(espejo(int), C.oroOsc);
+  return '<g transform="rotate(' + (-giro) + ' 32 34)">' + izq + '</g><g transform="rotate(' + giro + ' 68 34)">' + der + '</g>';
+}
+function cara() {
+  return relleno('M50 24 C69 24 84 35 85 50 C86 62 80 71 72 78 C65 85 58 90 50 90 C42 90 35 85 28 78 C20 71 14 62 15 50 C16 35 31 24 50 24 Z', C.oro) +
+    relleno('M50 55 C59 54 67 58 70 66 C73 77 64 88 50 88 C36 88 27 77 30 66 C33 58 41 54 50 55 Z', C.crema) +
+    /* lo que distingue al puma: las líneas del lagrimal y las manchas oscuras a los lados del hocico */
+    trazo('M42 52 C42 56 40.5 60 38 63.5', 2.6, C.oroOsc) + trazo(espejo('M42 52 C42 56 40.5 60 38 63.5'), 2.6, C.oroOsc) +
+    '<ellipse cx="37.5" cy="66" rx="3.6" ry="2.5" transform="rotate(-28 37.5 66)" fill="' + C.tinta + '" opacity=".8"/>' +
+    '<ellipse cx="62.5" cy="66" rx="3.6" ry="2.5" transform="rotate(28 62.5 66)" fill="' + C.tinta + '" opacity=".8"/>';
+}
+function nariz(dy) {
+  dy = dy || 0;
+  return '<g transform="translate(0 ' + dy + ')">' + relleno('M42.5 59 C42.5 57.2 57.5 57.2 57.5 59 C57.5 61.5 52.5 65.5 50 66 C47.5 65.5 42.5 61.5 42.5 59 Z', C.tinta) +
+    '<circle cx="47" cy="59.5" r="1.3" fill="#fff" opacity=".55"/></g>';
+}
+function bigotes() {
+  return [[36.5, 66], [38.8, 67.6], [63.5, 66], [61.2, 67.6]].map(function (p) { return '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="1" fill="#fff" opacity=".7"/>'; }).join('');
+}
+function ojo(cx, cy, esc, pupilaDy) {
+  esc = esc || 1; pupilaDy = pupilaDy || 0;
+  var rx = 7 * esc, ry = 4.6 * esc;
+  return '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + ry + '" fill="' + C.lima + '" stroke="' + C.tinta + '" stroke-width="2"/>' +
+    '<ellipse cx="' + cx + '" cy="' + (cy + pupilaDy) + '" rx="' + (1.9 * esc) + '" ry="' + (3.6 * esc) + '" fill="' + C.tinta + '"/>' +
+    '<circle cx="' + (cx - 1.8 * esc) + '" cy="' + (cy - 1.6 * esc + pupilaDy) + '" r="' + (1.1 * esc) + '" fill="#fff"/>';
+}
+
+var EXPRESIONES = {
+  acuerdo: function () {   // contento: ojos cerrados en arco y sonrisa
+    return orejas(0) + cara() + trazo('M30 49 C33 43 41 43 44 49', 3.4) + trazo(espejo('M30 49 C33 43 41 43 44 49'), 3.4) +
+      nariz() + trazo('M50 66 L50 70', 2.6) + trazo('M40 71 C44 78 56 78 60 71', 3) + bigotes();
+  },
+  desacuerdo: function () {   // ceño fruncido, orejas hacia atrás, boca hacia abajo
+    return orejas(22) + cara() + ojo(37, 48, .95) + ojo(63, 48, .95) +
+      trazo('M28 40 L45 45', 3.6) + trazo(espejo('M28 40 L45 45'), 3.6) +
+      nariz() + trazo('M50 66 L50 70', 2.6) + trazo('M42 77 C46 72 54 72 58 77', 3) + bigotes();
+  },
+  duda: function () {   // una ceja arriba, ojos desiguales, boca de lado, cabeza ladeada
+    return '<g transform="rotate(-9 50 58)">' + orejas(4) + cara() + ojo(37, 48, 1.12) +
+      '<ellipse cx="63" cy="48.5" rx="6.2" ry="2.4" fill="' + C.lima + '" stroke="' + C.tinta + '" stroke-width="2"/><ellipse cx="63" cy="48.5" rx="1.6" ry="2.2" fill="' + C.tinta + '"/>' +
+      trazo('M29 39 C33 34 40 34 45 38', 3.2) + trazo('M56 43 L70 42', 3.2) +
+      nariz() + trazo('M50 66 L50 70', 2.6) + trazo('M44 75 L57 73', 3) + bigotes() + '</g>';
+  },
+  idea: function () {   // ojos grandes mirando arriba, boca en “o”
+    return orejas(-4) + cara() + ojo(37, 47, 1.18, -1.6) + ojo(63, 47, 1.18, -1.6) +
+      trazo('M30 38 C34 35 40 35 44 37', 2.8) + trazo(espejo('M30 38 C34 35 40 35 44 37'), 2.8) +
+      nariz() + '<ellipse cx="50" cy="74" rx="3.6" ry="4.2" fill="' + C.tinta + '"/>' + bigotes();
+  },
+  goya: function () {   // rugido: hocico abierto con colmillos
+    return orejas(-6) + cara() + ojo(37, 45, .9) + ojo(63, 45, .9) +
+      trazo('M29 38 L44 42', 3.4) + trazo(espejo('M29 38 L44 42'), 3.4) +
+      nariz(-3) +
+      relleno('M38 68 C43 65 57 65 62 68 C63 78 58 87 50 87 C42 87 37 78 38 68 Z', C.tinta) +
+      relleno('M44 82 C47 78.5 53 78.5 56 82 C54 86 46 86 44 82 Z', C.lengua) +
+      relleno('M41.5 67.5 L44.5 75 L47 67 Z', '#fff') + relleno('M53 67 L55.5 75 L58.5 67.5 Z', '#fff');
+  }
 };
+
+var INSIGNIA = {
+  acuerdo: trazo('M74 80 L79 85 L88 75', 3.6, C.tinta),
+  desacuerdo: trazo('M75 75 L87 87 M87 75 L75 87', 3.6, C.tinta),
+  duda: trazo('M77 76.5 C77 72.5 85 72.5 85 76.5 C85 79.5 81 79.5 81 83', 3.2, C.tinta) + '<circle cx="81" cy="87.6" r="1.9" fill="' + C.tinta + '"/>',
+  idea: relleno('M81 71.5 L83.6 78.2 L90.5 78.5 L85.1 82.8 L87 89.5 L81 85.6 L75 89.5 L76.9 82.8 L71.5 78.5 L78.4 78.2 Z', C.tinta),
+  goya: '<text x="81" y="87.5" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-size="15" font-weight="800" fill="' + C.oro + '">¡!</text>'
+};
+
+MH.icono = function (id) {
+  var exp = EXPRESIONES[id]; if (!exp) return '';
+  var color = COLOR[id], fondoInsignia = id === 'goya' ? C.azulUnam : color;
+  return '<svg viewBox="0 0 100 100" aria-hidden="true">' +
+    '<circle cx="50" cy="50" r="47" fill="' + C.fondo + '" stroke="' + color + '" stroke-width="5"/>' +
+    '<g transform="translate(0 -1)">' + exp() + '</g>' +
+    '<circle cx="81" cy="81" r="14.5" fill="' + fondoInsignia + '" stroke="' + C.fondo + '" stroke-width="3.5"/>' + INSIGNIA[id] +
+    '</svg>';
+};
+})();
 </script>
 <script>/* Conexión con el servidor de la mesa (VPS). En mihumanidad.com las páginas son estáticas y el servicio vive
    en horizontes.srv1091049.hstgr.cloud; servidas desde el propio servicio, usan el mismo origen. */
