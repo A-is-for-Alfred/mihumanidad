@@ -6,3 +6,4 @@ Disallow: /acteal/
 Disallow: /entrevista/
 Disallow: /normal/
 Disallow: /horizontes/
+Disallow: /frontend/
