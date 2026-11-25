@@ -321,6 +321,48 @@ button,input,textarea,select{font-family:inherit}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
   .lam.on *{opacity:1!important;transform:none!important}}
 
+/* ---------- destello del logo ---------- */
+.destello{position:absolute;left:560px;top:190px;width:800px;height:500px;overflow:hidden;pointer-events:none;opacity:0}
+.destello .luz{position:absolute;left:400px;top:422px;width:1000px;height:1000px;margin:-500px 0 0 -500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,236,.95) 0%,rgba(238,242,196,.7) 12%,rgba(210,220,131,.38) 28%,rgba(181,196,69,.12) 48%,rgba(181,196,69,0) 68%)}
+.destello img{position:absolute;left:233px;top:250px;width:334px;height:345px;object-fit:contain;
+  filter:brightness(1.8) saturate(1.15) drop-shadow(0 0 16px rgba(255,255,236,.95)) drop-shadow(0 0 50px rgba(210,220,131,.85))}
+.destellando .destello{animation:destello 4s ease-out both}
+.destellando .destello .luz{animation:destello-luz 4s ease-out both}
+.destellando .destello img{animation:destello-img 4s ease-in-out both}
+.destellando .logos .ccoia{animation:destello-logo 4s ease-in-out both}
+@keyframes destello{0%{opacity:0}8%{opacity:1}70%{opacity:1}100%{opacity:0}}
+@keyframes destello-luz{0%{transform:scale(.25);opacity:0}14%{opacity:1}55%{opacity:.85}100%{transform:scale(1.2);opacity:0}}
+@keyframes destello-img{0%,100%{transform:scale(1)}18%{transform:scale(1.07)}42%{transform:scale(1)}62%{transform:scale(1.04)}}
+@keyframes destello-logo{0%,100%{filter:none;transform:none}14%,62%{filter:brightness(1.7) drop-shadow(0 0 12px rgba(210,220,131,.95)) drop-shadow(0 0 26px rgba(210,220,131,.6));transform:scale(1.16)}}
+
+/* ---------- cintillo de redes del CCOIA ---------- */
+.cintillo{position:absolute;left:50%;top:630px;transform:translate(-50%,12px);display:flex;align-items:center;gap:26px;white-space:nowrap;
+  padding:11px 30px 11px 14px;border-radius:999px;background:rgba(0,31,62,.88);border:2px solid rgba(210,220,131,.55);
+  box-shadow:0 10px 40px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .5s ease,transform .5s ease;z-index:3}
+.con-redes .cintillo{opacity:1;transform:translate(-50%,0)}
+.con-lamina .cintillo,.con-enc .cintillo{opacity:0!important;transform:translate(-50%,12px)!important}
+.cintillo .sigue{padding:7px 16px;border-radius:999px;background:var(--lima);color:var(--nodo);font-size:17px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase}
+.cintillo .grupo{display:flex;align-items:center;gap:7px;color:#fff}
+.cintillo .grupo i{display:block;width:28px;height:28px;color:var(--lima)}
+.cintillo .grupo i svg{display:block;width:100%;height:100%}
+.cintillo .grupo b{margin-left:5px;font-size:25px;font-weight:800;letter-spacing:.3px}
+.cintillo .sitio b{color:var(--lima)}
+
+/* ---------- lámina de redes ---------- */
+.lam-redes{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.lam-redes .kicker{margin:0;font-size:24px;font-weight:800;letter-spacing:6px;text-transform:uppercase;color:var(--lima)}
+.lam-redes h2{margin:14px 0 6px;font-size:118px;font-weight:800;line-height:1;letter-spacing:-1px;color:#fff}
+.lam-redes .sub{margin:0 0 40px;font-size:28px;font-weight:500;color:var(--claro)}
+.lam-redes .redes{list-style:none;margin:0;padding:0;display:flex;gap:22px;flex-wrap:wrap;justify-content:center}
+.lam-redes .redes li{display:flex;align-items:center;gap:14px;padding:16px 26px 16px 18px;border-radius:20px;background:rgba(11,34,69,.85);border:1px solid rgba(210,220,131,.35)}
+.lam-redes .ic{display:block;width:54px;height:54px;color:var(--lima)}
+.lam-redes .ic svg{display:block;width:100%;height:100%}
+.lam-redes .tx{display:flex;flex-direction:column;align-items:flex-start;font-size:28px;font-weight:800;color:#fff;line-height:1.1}
+.lam-redes .tx small{font-size:16px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--azul-300)}
+.lam.on.lam-redes h2,.lam.on.lam-redes .redes{animation:entra .8s cubic-bezier(.2,.8,.2,1) both}
+.lam.on.lam-redes .redes{animation-delay:.15s}
+
 html,body{margin:0;height:100%;overflow:hidden}
 body.sin-cursor,body.sin-cursor *{cursor:none!important}
 #espera{position:fixed;inset:0;display:grid;place-items:center;font-size:22px;font-weight:600;color:var(--tinta-suave);background:var(--nodo);z-index:50;transition:opacity .6s ease}
@@ -371,6 +413,7 @@ body.sin-cursor,body.sin-cursor *{cursor:none!important}
     <g id="perspectiva" stroke="#7696C6" stroke-width="1"></g>
     <rect x="0" y="689" width="1920" height="2.5" fill="url(#linea)"/>
   </svg>
+  <div class="destello" id="destello" aria-hidden="true"><div class="luz"></div><img alt=""></div>
   <div class="velo" aria-hidden="true"></div>
 
   <header class="cab">
@@ -424,6 +467,7 @@ body.sin-cursor,body.sin-cursor *{cursor:none!important}
     <p class="url">mihumanidad.com<br>/horizontes/vota</p>
   </aside>
 
+  <aside class="cintillo" id="cintillo" aria-hidden="true"></aside>
   <div class="laminas" id="laminas"></div>
 
   <section class="fila-p" id="fila-p" aria-label="Panelistas"></section>
@@ -495,6 +539,30 @@ MH.CASOS = [
 
 /* Las reacciones (lista e íconos de puma) están en pumas.js. */
 MH.URL_VOTA = 'mihumanidad.com/horizontes/vota';
+
+/* Redes y sitio oficiales del CCOIA (enlaces tomados del pie de ccoia.unam.mx el 25-nov-2026). */
+MH.REDES = {
+  sitio: 'ccoia.unam.mx',
+  cuentas: [
+    { red: 'facebook', nombre: 'Facebook', usuario: '@CCOIAUNAM' },
+    { red: 'instagram', nombre: 'Instagram', usuario: '@ccoiaunam' },
+    { red: 'x', nombre: 'X', usuario: '@CCOIAUNAM' },
+    { red: 'youtube', nombre: 'YouTube', usuario: '@CCOIAUNAM' },
+    { red: 'linkedin', nombre: 'LinkedIn', usuario: 'CCOIA UNAM Oficial' }
+  ]
+};
+/* Íconos sencillos de una tinta (viewBox 24); el hueco va en el color del fondo. */
+MH.iconoRed = function (red, hueco) {
+  var h = hueco || '#062750', c = 'currentColor';
+  var s = {
+    facebook: '<circle cx="12" cy="12" r="11" fill="' + c + '"/><path d="M13.2 21.5v-7.3h2.4l.4-2.9h-2.8V9.5c0-.8.3-1.4 1.4-1.4h1.5V5.5c-.3 0-1.1-.1-2.1-.1-2.1 0-3.6 1.3-3.6 3.7v2.2H8v2.9h2.4v7.3z" fill="' + h + '"/>',
+    instagram: '<rect x="2" y="2" width="20" height="20" rx="6" fill="' + c + '"/><rect x="5" y="5" width="14" height="14" rx="4" fill="none" stroke="' + h + '" stroke-width="1.8"/><circle cx="12" cy="12" r="3.4" fill="none" stroke="' + h + '" stroke-width="1.8"/><circle cx="16.4" cy="7.6" r="1.1" fill="' + h + '"/>',
+    x: '<rect x="2" y="2" width="20" height="20" rx="5" fill="' + c + '"/><path d="M6.5 6.2h3.3l7.7 11.6h-3.3z" fill="' + h + '"/><path d="M17.2 6.2 12.8 11.3M11.2 12.9 6.8 17.8" stroke="' + h + '" stroke-width="1.6" stroke-linecap="round"/>',
+    youtube: '<rect x="1.5" y="4.5" width="21" height="15" rx="4.5" fill="' + c + '"/><path d="M10 8.6v6.8l5.8-3.4z" fill="' + h + '"/>',
+    linkedin: '<rect x="2" y="2" width="20" height="20" rx="4" fill="' + c + '"/><rect x="5.6" y="9.6" width="2.8" height="8.4" fill="' + h + '"/><circle cx="7" cy="6.8" r="1.6" fill="' + h + '"/><path d="M10.6 9.6h2.7v1.2c.5-.8 1.5-1.4 2.8-1.4 2.2 0 3 1.4 3 3.6V18h-2.8v-4.5c0-1.1-.3-1.8-1.3-1.8-1.1 0-1.6.8-1.6 1.9V18h-2.8z" fill="' + h + '"/>'
+  }[red] || '';
+  return '<svg viewBox="0 0 24 24" aria-hidden="true">' + s + '</svg>';
+};
 </script>
 <script>/* Reacciones con puma: ilustración original (no es el logotipo de Pumas ni la mascota Goya).
    Cabeza en oro UNAM, ojos en lima CCOIA, fondo azul noche; un anillo y una insignia de color dicen la reacción. */
@@ -1038,6 +1106,13 @@ function construirLaminas() {
     '<div class="caja"><div class="qr-caja">' + qrHTML() + '</div><div><p class="kicker">Desde tu celular</p><h2>Participa en la Mesa Horizontes</h2><ul>' +
     '<li><i>1</i>Marca tu termómetro del 0 al 10</li><li><i>2</i>Vota en las encuestas</li><li><i>3</i>Reacciona mientras hablan</li><li><i>4</i>Envía tu pregunta a la mesa</li>' +
     '</ul><p class="url">' + esc(MH.URL_VOTA) + '</p></div></div>');
+  var RD = MH.REDES;
+  lam('redes', 'lam-redes',
+    '<p class="kicker">Sigue al CCOIA</p><h2>' + esc(RD.sitio) + '</h2>' +
+    '<p class="sub">Consejo Coordinador de Inteligencia Artificial de la UNAM</p>' +
+    '<ul class="redes">' + RD.cuentas.map(function (c) {
+      return '<li><span class="ic">' + MH.iconoRed(c.red, '#0B2245') + '</span><span class="tx"><small>' + esc(c.nombre) + '</small>' + esc(c.usuario) + '</span></li>';
+    }).join('') + '</ul>');
   lam('cierre', 'lam-cierre',
     '<p class="kicker">Cierre</p><h2>El destino no está escrito</h2><ol class="ideas" id="ideas"></ol>' +
     '<p class="remate">La inteligencia artificial será lo que decidamos hacer con ella, y a la Universidad le corresponde participar en esa decisión.</p>');
@@ -1153,7 +1228,37 @@ MH.pintar = function (e, r) {
   if (o !== ordenPintado || f !== fotosPintadas) { construirFila(); ordenPintado = o; fotosPintadas = f; }
   pintarTermo(); pintarQ(); pintarEncuesta(); pintarLamina(); pintarTurnos();
   escena.classList.toggle('con-qr', !!E.qr);
+  escena.classList.toggle('con-redes', !!E.redes);
+  revisarDestello();
 };
+
+/* ---------- destello del logo: dura 4 s; sólo se ve si es reciente (al recargar no se repite) ---------- */
+var destelloVisto = null, destelloT = null;
+function revisarDestello() {
+  var t = E.destello || 0;
+  if (destelloVisto === null) { destelloVisto = t; if (!t || MH.ahora() - t > 2500) return; }
+  else if (t === destelloVisto) return;
+  destelloVisto = t;
+  if (!t || MH.ahora() - t > 6000) return;
+  escena.classList.remove('destellando'); void escena.offsetWidth; escena.classList.add('destellando');
+  clearTimeout(destelloT); destelloT = setTimeout(function () { escena.classList.remove('destellando'); }, 4300);
+}
+function construirCintillo() {
+  var RD = MH.REDES, porUsuario = {};
+  RD.cuentas.forEach(function (c) { (porUsuario[c.usuario.toLowerCase()] = porUsuario[c.usuario.toLowerCase()] || { usuario: c.usuario, redes: [] }).redes.push(c.red); });
+  var grupos = Object.keys(porUsuario).map(function (k) { return porUsuario[k]; });
+  // @CCOIAUNAM e @ccoiaunam son la misma cuenta: se muestran juntas
+  var arroba = grupos.filter(function (g) { return g.usuario.charAt(0) === '@'; });
+  var otros = grupos.filter(function (g) { return g.usuario.charAt(0) !== '@'; });
+  var html = '<span class="sigue">Sigue al CCOIA</span>';
+  if (arroba.length) {
+    var redes = [].concat.apply([], arroba.map(function (g) { return g.redes; }));
+    html += '<span class="grupo">' + redes.map(function (r) { return '<i>' + MH.iconoRed(r) + '</i>'; }).join('') + '<b>@CCOIAUNAM</b></span>';
+  }
+  otros.forEach(function (g) { html += '<span class="grupo">' + g.redes.map(function (r) { return '<i>' + MH.iconoRed(r) + '</i>'; }).join('') + '<b>' + esc(g.usuario) + '</b></span>'; });
+  html += '<span class="grupo sitio"><b>' + esc(RD.sitio) + '</b></span>';
+  $('cintillo').innerHTML = html;
+}
 MH.estado = function () { return E; };
 MH.resultados = function () { return R; };
 
@@ -1161,7 +1266,9 @@ MH.iniciarEscena = function (opciones) {
   OPC = opciones || {};
   marco = $('marco'); escena = $('escena'); fila = $('fila-p');
   if (OPC.interactiva) escena.classList.add('interactiva');
-  fondo(); construirTermo(); construirLaminas();
+  fondo(); construirTermo(); construirLaminas(); construirCintillo();
+  var simb = document.querySelector('#fondo .sol image');
+  if (simb) $('destello').querySelector('img').src = simb.getAttribute('href');
   escalar(); window.addEventListener('resize', escalar);
   setInterval(pintarTurnos, 100);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { MH.ajustarQ(); });
