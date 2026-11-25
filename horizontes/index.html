@@ -477,7 +477,7 @@ body.sin-cursor,body.sin-cursor *{cursor:none!important}
 
 <div id="espera">Conectando con la mesa…</div>
 <div id="punto" title="Sin conexión con el servidor; se reconecta sola"></div>
-<script>/* Contenido fijo de la Mesa Horizontes (guion de moderación v7, 24/11/2026).
+<script>/* Contenido fijo de la Mesa Horizontes (guion de conducción v10, 25/11/2026).
    Español de México: comillas “ ”, sin comillas francesas ni rayas. No inventar cargos ni datos. */
 var MH = window.MH || (window.MH = {});
 
@@ -485,56 +485,56 @@ MH.PANEL = [
   { id: 'pineda', nombre: 'Dr. Luis A. Pineda Cortés', ini: 'LP', corto: 'Luis A. Pineda',
     adsc: 'IIMAS-UNAM · Creador del robot Golem', inst: 'IIMAS-UNAM',
     semblanza: 'Doctor por la Universidad de Edimburgo, investigador titular del IIMAS, fundador del Grupo Golem y creador del robot del mismo nombre y de la Memoria Asociativa Entrópica; presidente fundador de la Academia Mexicana de Computación.' },
-  { id: 'baeza', nombre: 'Dr. Ricardo Baeza-Yates', ini: 'RB', corto: 'Ricardo Baeza-Yates',
-    adsc: 'Exdirectivo de Yahoo Labs · Especialista en IA responsable', inst: 'KTH, UPF y Universidad de Chile',
-    semblanza: 'Científico de la computación chileno, referente mundial en recuperación de información e IA responsable; exvicepresidente de Investigación de Yahoo Labs, profesor en el KTH de Suecia; Fellow de la ACM y del IEEE; coautor de los principios de la ACM para sistemas algorítmicos responsables.' },
-  { id: 'gershenson', nombre: 'Dr. Carlos Gershenson', ini: 'CG', corto: 'Carlos Gershenson',
-    adsc: 'Binghamton University · Especialista en sistemas complejos', inst: 'Binghamton University (SUNY)',
-    semblanza: 'Investigador mexicano en sistemas complejos e inteligencia artificial; profesor en Binghamton University y exinvestigador de la UNAM (de 2008 a 2023); presidente de la Complex Systems Society y miembro de la Academia Mexicana de Ciencias.' },
   { id: 'aliseda', nombre: 'Dra. Atocha Aliseda', ini: 'AA', corto: 'Atocha Aliseda',
     adsc: 'Instituto de Investigaciones Filosóficas, UNAM', inst: 'Instituto de Investigaciones Filosóficas, UNAM',
     semblanza: 'Matemática por la UNAM y doctora en Filosofía por Stanford; investigadora titular del Instituto de Investigaciones Filosóficas, especialista en lógica, razonamiento abductivo y filosofía de la ciencia; Premio Universidad Nacional 2021.' },
+  { id: 'gershenson', nombre: 'Dr. Carlos Gershenson', ini: 'CG', corto: 'Carlos Gershenson',
+    adsc: 'Binghamton University · Especialista en sistemas complejos', inst: 'Binghamton University (SUNY)',
+    semblanza: 'Investigador mexicano en sistemas complejos e inteligencia artificial; profesor en Binghamton University y exinvestigador de la UNAM (de 2008 a 2023); presidente de la Complex Systems Society y miembro de la Academia Mexicana de Ciencias.' },
+  { id: 'baeza', nombre: 'Dr. Ricardo Baeza-Yates', ini: 'RB', corto: 'Ricardo Baeza-Yates',
+    adsc: 'Exdirectivo de Yahoo Labs · Especialista en IA responsable', inst: 'KTH, UPF y Universidad de Chile',
+    semblanza: 'Científico de la computación chileno, referente mundial en recuperación de información e IA responsable; exvicepresidente de Investigación de Yahoo Labs, profesor en el KTH de Suecia; Fellow de la ACM y del IEEE; coautor de los principios de la ACM para sistemas algorítmicos responsables.' },
   { id: 'giron', nombre: 'Itzul Girón', ini: 'IG', corto: 'Itzul Girón',
     adsc: 'Fundadora y directora general de Celestial Dynamics', inst: 'Celestial Dynamics',
-    semblanza: 'Fundadora y directora general de Celestial Dynamics Technology Lab (2020), laboratorio mexicano de IA y cómputo de alto rendimiento, y creadora de MATRIA A.I.; pionera del desarrollo de la inteligencia artificial en México.' }
+    semblanza: 'Fundadora y directora general de Celestial Dynamics Technology Lab (2020), laboratorio mexicano de IA y cómputo de alto rendimiento, y creadora de MATRIA A.I.; pionera del desarrollo de la inteligencia artificial en México e integrante del Consejo Coordinador de Inteligencia Artificial de la UNAM.' }
 ];
 MH.POR_ID = {};
 MH.PANEL.forEach(function (p) { MH.POR_ID[p.id] = p; });
 
 MH.BANCO = [
-  { label: 'Termómetro inicial', text: 'Del 0 al 10, donde 0 es la extinción de la humanidad y 10 es el florecimiento absoluto de la especie humana, ¿dónde ves a la humanidad en los próximos 10 años?' },
+  { label: 'Termómetro inicial · panelistas', text: 'En una escala del cero al diez, donde cero es la extinción de la especie humana y diez el máximo florecimiento de la humanidad, ¿dónde ubican a la humanidad frente a la inteligencia artificial dentro de diez años?' },
+  { label: 'Termómetro · público (inicio y final)', text: 'Del 0 al 10, donde 0 es la extinción de la humanidad y 10 es el florecimiento absoluto de la especie humana, ¿dónde ves a la humanidad en los próximos 10 años?' },
   { label: 'Premisa', text: '¿Podemos encauzar la inteligencia artificial o detenerla, o vamos al encuentro de nuestro destino de manera inercial, sin posibilidad de alterarlo?' },
   { label: 'Ronda 1 · Luis A. Pineda', text: '¿Sigue pensando lo mismo? ¿Qué les falta a estos sistemas para parecerse a la inteligencia natural?' },
   { label: 'Ronda 1 · Atocha Aliseda', text: '¿Qué pasa cuando el resultado es una demostración que una máquina verifica, pero que ningún ser humano puede comprender? ¿Es eso conocimiento?' },
   { label: 'Ronda 1 · Carlos Gershenson', text: 'Desde las ciencias de la complejidad, ¿qué efectos que nadie diseñó estamos viendo ya? ¿Sigue siendo el escenario intermedio el más probable?' },
   { label: 'Ronda 1 · Ricardo Baeza-Yates', text: '¿Cuáles son hoy los daños más graves? ¿Quién está tomando las decisiones que nos afectan en América Latina?' },
   { label: 'Ronda 1 · Itzul Girón', text: '¿Es realista la soberanía tecnológica frente a empresas que invierten cientos de miles de millones de dólares? ¿Qué hace falta para que México desarrolle IA y no sólo la consuma?' },
-  { label: 'Tensión 1 · ¿Quién responde?', text: '¿Sigue siendo exagerado hablar de riesgo para la viabilidad humana? Y cuando un sistema actúa por su cuenta, ¿quién responde?' },
-  { label: 'Tensión 2 · ¿Encauzar o detener?', text: '¿Se puede desacelerar sin un acuerdo de todos? ¿Es la contención voluntaria de una empresa la forma de encauzar la IA, o la competencia nos lleva de manera inercial? ¿Quién debería decidir qué se libera y qué no?' },
-  { label: 'Tensión 3 · ¿Desplazamiento del conocimiento humano?', text: '¿Es esta crisis la primera expresión concreta del desplazamiento de las habilidades y capacidades humanas frente a la superioridad de la máquina? ¿Seguirán ese mismo camino las demás áreas del conocimiento?' },
-  { label: 'Ronda 3 · Trabajo y vida humana', text: 'Atocha Aliseda: ¿Qué trabajo humano nunca delegaría a una máquina?\nLuis A. Pineda: ¿Qué trabajo humano definitivamente delegaría a una máquina?\nCarlos Gershenson: ¿Cómo vislumbra la actividad humana en el trabajo?\nRicardo Baeza-Yates: ¿Cómo vislumbra la actividad humana en el entorno social?\nItzul Girón: ¿Cómo vislumbra la actividad humana en la familia?' },
-  { label: 'Termómetro final', text: 'Del 0 al 10, donde 0 es la extinción de la humanidad y 10 es el florecimiento absoluto de la especie humana, ¿dónde ves a la humanidad en los próximos 10 años?' },
-  { label: 'Cierre · panelistas', text: 'Después de esta conversación, ¿se mantienen en su posición o se movieron?\nY en un minuto: una recomendación para la UNAM frente a lo que viene.' }
+  { label: 'Caso 1 · ¿Quién responde?', text: '¿Sigue siendo exagerado hablar de riesgo para la viabilidad humana? Y cuando un sistema actúa por su cuenta, ¿quién responde?' },
+  { label: 'Caso 2 · ¿Encauzar o detener?', text: '¿Se puede desacelerar sin un acuerdo de todos? ¿Es la contención voluntaria de una empresa la forma de encauzar la IA, o la competencia nos lleva de manera inercial? ¿Quién debería decidir qué se libera y qué no?' },
+  { label: 'Caso 3 · ¿Desplazamiento del conocimiento humano?', text: '¿Es esta crisis la primera expresión concreta del desplazamiento de las habilidades y capacidades humanas frente a la superioridad de la máquina? ¿Seguirán ese mismo camino las demás áreas del conocimiento?' },
+  { label: 'Ronda 3 · Impacto de la IA en el trabajo y la vida humana', text: 'Atocha Aliseda: ¿Qué trabajo humano nunca delegaría a una máquina?\nLuis A. Pineda: ¿Qué trabajo humano definitivamente delegaría a una máquina?\nCarlos Gershenson: ¿Cómo vislumbra la actividad humana en el trabajo?\nRicardo Baeza-Yates: ¿Cómo vislumbra la actividad humana en el entorno social?\nItzul Girón: ¿Cómo vislumbra la actividad humana en la familia?' },
+  { label: 'Termómetro final · panelistas', text: 'Después de esta conversación, ¿se mantienen en esa posición o se movieron?\nY en un minuto: una recomendación para la UNAM frente a lo que viene.' }
 ];
 
 /* Cortinillas: una por bloque del minuto a minuto. “hora” sólo se muestra en el control. */
 MH.CORTINILLAS = [
   { id: 'apertura', kicker: 'Mesa Horizontes', titulo: 'La humanidad frente a la inteligencia artificial', sub: 'Escenarios posibles', hora: '12:30' },
-  { id: 'termo-ini', kicker: 'Termómetro inicial', titulo: '¿Dónde ves a la humanidad en los próximos 10 años?', sub: '0 es la extinción de la humanidad y 10 su florecimiento absoluto. Vota desde tu celular', hora: '12:35' },
-  { id: 'r1', kicker: 'Ronda 1', titulo: 'El escenario', sub: 'Una pregunta para cada panelista', hora: '12:38' },
-  { id: 'r2', kicker: 'Ronda 2', titulo: 'Los cruces', sub: 'Tres casos; las y los cinco panelistas opinan sobre cada uno', hora: '13:03' },
-  { id: 't1', kicker: 'Tensión 1', titulo: '¿Quién responde?', sub: '', hora: '13:03' },
-  { id: 't2', kicker: 'Tensión 2', titulo: '¿Encauzar o detener?', sub: '', hora: '13:10' },
-  { id: 't3', kicker: 'Tensión 3', titulo: '¿Desplazamiento del conocimiento humano?', sub: '', hora: '13:17' },
-  { id: 'r3', kicker: 'Ronda 3', titulo: 'Trabajo y vida humana', sub: 'Una pregunta distinta para cada panelista', hora: '13:25' },
-  { id: 'publico', kicker: 'Preguntas del público', titulo: 'Tu pregunta, a la mesa', sub: 'Envíala desde tu celular', hora: '13:37' },
-  { id: 'termo-fin', kicker: 'Termómetro final', titulo: '¿Dónde ves a la humanidad en los próximos 10 años?', sub: 'La misma pregunta del inicio: 0 es la extinción y 10 el florecimiento absoluto. ¿Cambió tu número?', hora: '13:50' }
+  { id: 'termo-ini', kicker: 'Termómetro inicial', titulo: '¿Dónde ubican a la humanidad frente a la IA dentro de diez años?', sub: '0 es la extinción de la especie humana y 10, el máximo florecimiento de la humanidad', hora: '12:35' },
+  { id: 'r1', kicker: 'Ronda 1', titulo: 'Posturas personales', sub: 'Una pregunta específica para cada panelista, hasta cinco minutos', hora: '12:38' },
+  { id: 'r2', kicker: 'Ronda 2', titulo: 'Postura frente a casos emblemáticos', sub: 'Tres casos; las y los panelistas dan su postura sobre cada uno, un minuto cada quien', hora: '13:03' },
+  { id: 't1', kicker: 'Caso 1', titulo: '¿Quién responde?', sub: '', hora: '13:03' },
+  { id: 't2', kicker: 'Caso 2', titulo: '¿Encauzar o detener?', sub: '', hora: '13:10' },
+  { id: 't3', kicker: 'Caso 3', titulo: '¿Desplazamiento del conocimiento humano?', sub: '', hora: '13:17' },
+  { id: 'r3', kicker: 'Ronda 3', titulo: 'Impacto de la IA en el trabajo y la vida humana', sub: 'Una pregunta distinta para cada panelista, dos minutos', hora: '13:25' },
+  { id: 'publico', kicker: 'Preguntas del público', titulo: 'Tu pregunta, a la mesa', sub: 'Enviadas por el código QR y agrupadas por tema', hora: '13:37' },
+  { id: 'termo-fin', kicker: 'Termómetro final', titulo: '¿Se mantienen o se movieron?', sub: 'Y una recomendación para la UNAM frente a lo que viene', hora: '13:50' }
 ];
 
 MH.CASOS = [
-  { id: 't1', nombre: 'Tensión 1 · ¿Quién responde?' },
-  { id: 't2', nombre: 'Tensión 2 · ¿Encauzar o detener?' },
-  { id: 't3', nombre: 'Tensión 3 · ¿Desplazamiento del conocimiento humano?' }
+  { id: 't1', nombre: 'Caso 1 · ¿Quién responde?' },
+  { id: 't2', nombre: 'Caso 2 · ¿Encauzar o detener?' },
+  { id: 't3', nombre: 'Caso 3 · ¿Desplazamiento del conocimiento humano?' }
 ];
 
 /* Las reacciones (lista e íconos de puma) están en pumas.js. */
@@ -1062,7 +1062,7 @@ function construirLaminas() {
     d.querySelector('.bio').textContent = p.semblanza;
   });
   lam('caso:t1', 'caso c1',
-    '<div class="encab"><p class="kicker">Tensión 1 · ¿Quién responde?</p><span class="tag">Caso emblemático</span></div>' +
+    '<div class="encab"><p class="kicker">Caso 1 · ¿Quién responde?</p><span class="tag">Caso emblemático</span></div>' +
     '<div class="cols">' +
       '<div class="bloque-c"><p class="fecha">Este verano</p>' +
         '<p class="dicho">Cientos de agentes de IA que OpenAI estaba evaluando escaparon de su entorno de prueba, se coordinaron entre sí y atacaron una plataforma abierta de modelos.</p>' +
@@ -1078,17 +1078,17 @@ function construirLaminas() {
     '</div>' +
     '<p class="pregunta-c">¿Sigue siendo exagerado hablar de riesgo para la viabilidad humana? Y cuando un sistema actúa por su cuenta, ¿quién responde?</p>');
   lam('caso:t2', 'caso c2',
-    '<div class="encab"><p class="kicker">Tensión 2 · ¿Encauzar o detener?</p><span class="tag">Caso emblemático</span></div>' +
+    '<div class="encab"><p class="kicker">Caso 2 · ¿Encauzar o detener?</p><span class="tag">Caso emblemático</span></div>' +
     '<div class="linea-t">' +
       '<div class="hito"><p class="fecha">2023</p><p class="dicho">Una carta firmada por más de mil personas pidió pausar seis meses el desarrollo de estos sistemas.</p><span class="sello">No se pausó nada</span></div>' +
       '<div class="hito"><p class="fecha">Abril de 2026</p><p class="dicho">Anthropic decidió no liberar Mythos: en pruebas encontraba y explotaba por sí solo miles de fallos de seguridad. Lo compartió sólo con empresas y organizaciones para repararlos (proyecto Glasswing).</p></div>' +
       '<div class="hito"><p class="fecha">Septiembre de 2026</p><p class="dicho">Dario Amodei pidió desacelerar la mejora de las capacidades de los modelos, con evaluadores externos y estándares comunes. Sam Altman (OpenAI) y Demis Hassabis (Google) se dijeron de acuerdo.</p></div>' +
     '</div>' +
     '<div class="dilema"><svg class="carrera" id="carrera" viewBox="0 0 900 150"></svg>' +
-      '<div><p class="fecha">El dilema</p><p class="dicho">Si una sola empresa desacelera, las demás la rebasan; y si desaceleran todas las estadounidenses, las rebasan las chinas.</p></div></div>' +
+      '<div><p class="fecha">El dilema</p><p class="dicho">Si una sola empresa desacelera, las demás la rebasan; y si desaceleran todas las empresas estadounidenses, las rebasan las chinas.</p></div></div>' +
     '<p class="pregunta-c">¿Se puede desacelerar sin un acuerdo de todos? ¿Quién debería decidir qué se libera y qué no?</p>');
   lam('caso:t3', 'caso c3',
-    '<div class="encab"><p class="kicker">Tensión 3 · ¿Desplazamiento del conocimiento humano?</p><span class="tag">Caso emblemático</span></div>' +
+    '<div class="encab"><p class="kicker">Caso 3 · ¿Desplazamiento del conocimiento humano?</p><span class="tag">Caso emblemático</span></div>' +
     '<div class="cols">' +
       '<div class="bloque-c"><p class="fecha">FrontierMath</p>' +
         '<div class="graf">' +
@@ -1101,7 +1101,7 @@ function construirLaminas() {
         '<div class="h3"><span class="pt">3</span><p>Hace unos días, un investigador presentó con ayuda de Claude una prueba de la hipótesis de Riemann que una máquina verifica, pero que ningún ser humano ha podido comprender.<br><span class="salvedad">Aún sujeta a validación: el Instituto Clay no la da por resuelta.</span></p></div>' +
       '</div></div>' +
     '</div>' +
-    '<p class="pregunta-c">¿Es la primera expresión concreta del desplazamiento de las capacidades humanas? ¿Seguirán ese camino las demás áreas del conocimiento?</p>');
+    '<p class="pregunta-c">¿Es esta crisis la primera expresión concreta del desplazamiento de las capacidades humanas frente a la máquina? ¿Seguirán ese mismo camino las demás áreas del conocimiento?</p>');
   lam('qr', 'lam-qr',
     '<div class="caja"><div class="qr-caja">' + qrHTML() + '</div><div><p class="kicker">Desde tu celular</p><h2>Participa en la Mesa Horizontes</h2><ul>' +
     '<li><i>1</i>Marca tu termómetro del 0 al 10</li><li><i>2</i>Vota en las encuestas</li><li><i>3</i>Reacciona mientras hablan</li><li><i>4</i>Envía tu pregunta a la mesa</li>' +
