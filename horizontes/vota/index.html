@@ -67,7 +67,9 @@ main{display:flex;flex-direction:column;gap:14px}
 .escala span{max-width:48%}
 .escala .pes{color:var(--azul-300)}
 .escala .opt{color:var(--lima);text-align:right}
-.numeros{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:14px}
+.numeros{display:grid;grid-template-columns:repeat(12,1fr);gap:8px;margin-top:14px}
+.numeros .num{grid-column:span 2}
+.numeros .num:nth-child(7){grid-column:2 / span 2}
 .num{appearance:none;min-height:56px;border-radius:14px;border:1px solid var(--linea);background:#0e2a52;color:#fff;
   font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;cursor:pointer;touch-action:manipulation;
   transition:background .15s ease,transform .1s ease,border-color .15s ease;position:relative;overflow:hidden}
@@ -83,7 +85,7 @@ main{display:flex;flex-direction:column;gap:14px}
 .media{display:flex;flex-direction:column;align-items:flex-start}
 .media .cifra{font-size:52px;font-weight:800;line-height:1;color:var(--lima);font-variant-numeric:tabular-nums}
 .media .leyenda{margin-top:4px;font-size:12px;font-weight:600;line-height:1.3;color:var(--tinta-suave)}
-.histo{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;align-items:end;height:92px}
+.histo{display:grid;grid-template-columns:repeat(11,1fr);gap:4px;align-items:end;height:92px}
 .histo .col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
 .histo .col i{display:block;width:100%;min-height:3px;border-radius:5px 5px 2px 2px;background:rgba(118,150,198,.55);transition:height .5s cubic-bezier(.2,.8,.2,1)}
 .histo .col.mio i{background:var(--lima)}
@@ -169,11 +171,11 @@ textarea::placeholder,input::placeholder{color:rgba(198,207,220,.6)}
 
     <section class="tarjeta" id="s-termo" hidden aria-labelledby="t-etq">
       <p class="etq" id="t-etq">Termómetro inicial</p>
-      <h2 class="preg">En una escala del 1 al 10, ¿dónde ubicas a la humanidad frente a la inteligencia artificial dentro de diez años?</h2>
+      <h2 class="preg">Del 0 al 10, donde 0 es la extinción de la humanidad y 10 es el florecimiento absoluto de la especie humana, ¿dónde ves a la humanidad en los próximos 10 años?</h2>
       <div id="t-elegir">
         <div class="barra-esc" aria-hidden="true"></div>
-        <div class="escala"><span class="pes">1 · el escenario más grave</span><span class="opt">10 · el más esperanzador</span></div>
-        <div class="numeros" id="t-nums" role="group" aria-label="Elige un número del 1 al 10"></div>
+        <div class="escala"><span class="pes">0 · extinción</span><span class="opt">10 · florecimiento</span></div>
+        <div class="numeros" id="t-nums" role="group" aria-label="Elige un número del 0 al 10"></div>
       </div>
       <p class="aviso" id="t-aviso"></p>
       <div class="resultados" id="t-res" hidden>
@@ -241,7 +243,7 @@ MH.POR_ID = {};
 MH.PANEL.forEach(function (p) { MH.POR_ID[p.id] = p; });
 
 MH.BANCO = [
-  { label: 'Termómetro inicial', text: 'En una escala del uno al diez, donde uno es el escenario más grave y diez el más esperanzador, ¿dónde ubican a la humanidad frente a la inteligencia artificial dentro de diez años?' },
+  { label: 'Termómetro inicial', text: 'Del 0 al 10, donde 0 es la extinción de la humanidad y 10 es el florecimiento absoluto de la especie humana, ¿dónde ves a la humanidad en los próximos 10 años?' },
   { label: 'Premisa', text: '¿Podemos encauzar la inteligencia artificial o detenerla, o vamos al encuentro de nuestro destino de manera inercial, sin posibilidad de alterarlo?' },
   { label: 'Ronda 1 · Luis A. Pineda', text: '¿Sigue pensando lo mismo? ¿Qué les falta a estos sistemas para parecerse a la inteligencia natural?' },
   { label: 'Ronda 1 · Atocha Aliseda', text: '¿Qué pasa cuando el resultado es una demostración que una máquina verifica, pero que ningún ser humano puede comprender? ¿Es eso conocimiento?' },
@@ -252,13 +254,14 @@ MH.BANCO = [
   { label: 'Tensión 2 · ¿Encauzar o detener?', text: '¿Se puede desacelerar sin un acuerdo de todos? ¿Es la contención voluntaria de una empresa la forma de encauzar la IA, o la competencia nos lleva de manera inercial? ¿Quién debería decidir qué se libera y qué no?' },
   { label: 'Tensión 3 · ¿Desplazamiento del conocimiento humano?', text: '¿Es esta crisis la primera expresión concreta del desplazamiento de las habilidades y capacidades humanas frente a la superioridad de la máquina? ¿Seguirán ese mismo camino las demás áreas del conocimiento?' },
   { label: 'Ronda 3 · Trabajo y vida humana', text: 'Atocha Aliseda: ¿Qué trabajo humano nunca delegaría a una máquina?\nLuis A. Pineda: ¿Qué trabajo humano definitivamente delegaría a una máquina?\nCarlos Gershenson: ¿Cómo vislumbra la actividad humana en el trabajo?\nRicardo Baeza-Yates: ¿Cómo vislumbra la actividad humana en el entorno social?\nItzul Girón: ¿Cómo vislumbra la actividad humana en la familia?' },
-  { label: 'Termómetro final', text: 'Después de esta conversación, ¿se mantienen en su posición o se movieron?\nY en un minuto: una recomendación para la UNAM frente a lo que viene.' }
+  { label: 'Termómetro final', text: 'Del 0 al 10, donde 0 es la extinción de la humanidad y 10 es el florecimiento absoluto de la especie humana, ¿dónde ves a la humanidad en los próximos 10 años?' },
+  { label: 'Cierre · panelistas', text: 'Después de esta conversación, ¿se mantienen en su posición o se movieron?\nY en un minuto: una recomendación para la UNAM frente a lo que viene.' }
 ];
 
 /* Cortinillas: una por bloque del minuto a minuto. “hora” sólo se muestra en el control. */
 MH.CORTINILLAS = [
   { id: 'apertura', kicker: 'Mesa Horizontes', titulo: 'La humanidad frente a la inteligencia artificial', sub: 'Escenarios posibles', hora: '12:30' },
-  { id: 'termo-ini', kicker: 'Termómetro inicial', titulo: '¿Dónde estaremos dentro de diez años?', sub: 'Del 1, el escenario más grave, al 10, el más esperanzador', hora: '12:35' },
+  { id: 'termo-ini', kicker: 'Termómetro inicial', titulo: '¿Dónde ves a la humanidad en los próximos 10 años?', sub: '0 es la extinción de la humanidad y 10 su florecimiento absoluto. Vota desde tu celular', hora: '12:35' },
   { id: 'r1', kicker: 'Ronda 1', titulo: 'El escenario', sub: 'Una pregunta para cada panelista', hora: '12:38' },
   { id: 'r2', kicker: 'Ronda 2', titulo: 'Los cruces', sub: 'Tres casos; las y los cinco panelistas opinan sobre cada uno', hora: '13:03' },
   { id: 't1', kicker: 'Tensión 1', titulo: '¿Quién responde?', sub: '', hora: '13:03' },
@@ -266,7 +269,7 @@ MH.CORTINILLAS = [
   { id: 't3', kicker: 'Tensión 3', titulo: '¿Desplazamiento del conocimiento humano?', sub: '', hora: '13:17' },
   { id: 'r3', kicker: 'Ronda 3', titulo: 'Trabajo y vida humana', sub: 'Una pregunta distinta para cada panelista', hora: '13:25' },
   { id: 'publico', kicker: 'Preguntas del público', titulo: 'Tu pregunta, a la mesa', sub: 'Envíala desde tu celular', hora: '13:37' },
-  { id: 'termo-fin', kicker: 'Termómetro final', titulo: '¿Se mantienen o se movieron?', sub: 'Y una recomendación para la UNAM frente a lo que viene', hora: '13:50' }
+  { id: 'termo-fin', kicker: 'Termómetro final', titulo: '¿Dónde ves a la humanidad en los próximos 10 años?', sub: 'La misma pregunta del inicio: 0 es la extinción y 10 el florecimiento absoluto. ¿Cambió tu número?', hora: '13:50' }
 ];
 
 MH.CASOS = [
@@ -477,7 +480,7 @@ if (!DISP || !/^[a-z0-9]{12,40}$/.test(DISP)) { DISP = idNuevo(); guardar('mh-di
 
 function claveTermo() { return 'mh-t:' + (E.sesion || '') + ':' + E.termo.fase + ':' + ((E.termo.rondas || {})[E.termo.fase] || 0); }
 function claveEnc(id) { return 'mh-e:' + (E.sesion || '') + ':' + id + ':' + ((E.encRondas || {})[id] || 0); }
-function miTermo() { var v = parseInt(leer(claveTermo()), 10); return v >= 1 && v <= 10 ? v : null; }
+function miTermo() { var v = parseInt(leer(claveTermo()), 10); return v >= 0 && v <= 10 ? v : null; }
 function miEnc(id) { var v = leer(claveEnc(id)); if (v === null) return null; var i = parseInt(v, 10); return isNaN(i) ? null : i; }
 
 function fmt(v) { return (Math.round(v * 10) / 10).toFixed(1); }
@@ -486,14 +489,14 @@ function anunciar(t) { var a = $('anuncio'); a.textContent = ''; setTimeout(func
 function aviso(id, t, tipo) { var el = $(id); el.textContent = t || ''; el.className = 'aviso' + (tipo ? ' ' + tipo : ''); }
 
 /* ---------- termómetro ---------- */
-var TONOS = ['#1E488E', '#2C5598', '#4A6EAD', '#6386BF', '#7E9CC0', '#A0B6A8', '#C2CF92', '#D2DC83', '#C4D064', '#B5C445'];
+var TONOS = ['#1E488E', '#2A5296', '#3C62A3', '#5276B2', '#6A8BBE', '#86A2BC', '#A5BBA4', '#C2CF92', '#D2DC83', '#C4D064', '#B5C445'];
 (function construirTermo() {
   var g = $('t-nums'), h = $('t-histo');
-  for (var n = 1; n <= 10; n++) {
+  for (var n = 0; n <= 10; n++) {
     var b = document.createElement('button');
     b.type = 'button'; b.className = 'num'; b.textContent = n; b.dataset.v = n;
-    b.style.setProperty('--tono', TONOS[n - 1]);
-    b.setAttribute('aria-label', n + (n === 1 ? ', el escenario más grave' : n === 10 ? ', el más esperanzador' : ''));
+    b.style.setProperty('--tono', TONOS[n]);
+    b.setAttribute('aria-label', n + (n === 0 ? ', extinción de la humanidad' : n === 10 ? ', florecimiento absoluto' : n === 5 ? ', punto intermedio' : ''));
     b.setAttribute('aria-pressed', 'false');
     g.appendChild(b);
     var c = document.createElement('div'); c.className = 'col'; c.innerHTML = '<i></i><span>' + n + '</span>'; h.appendChild(c);
@@ -556,7 +559,7 @@ function pintarTermo() {
     Array.prototype.forEach.call($('t-histo').children, function (c, i) {
       var x = (r.h || [])[i] || 0;
       c.querySelector('i').style.height = Math.round(3 + 64 * x / max) + 'px';
-      c.classList.toggle('mio', i + 1 === mio);
+      c.classList.toggle('mio', i === mio);
     });
     $('t-pie').innerHTML = 'Tu número: <b>' + mio + '</b> · ' + plural(r.n, 'voto', 'votos') +
       (t.abierta ? '<br>Puedes cambiarlo mientras la votación esté abierta.' : '<br>Votación cerrada.');

@@ -386,7 +386,7 @@ body.sin-cursor,body.sin-cursor *{cursor:none!important}
   </header>
 
   <section class="termo" id="termo" aria-label="Termómetro de la mesa">
-    <p class="polo pes">Pesimismo</p>
+    <p class="polo pes">Extinción</p>
     <div class="hist" id="hist-pub" aria-hidden="true"></div>
     <div class="barra" id="barra"></div>
     <div class="rastro" id="rastro"></div>
@@ -395,8 +395,8 @@ body.sin-cursor,body.sin-cursor *{cursor:none!important}
     <div class="pos-pan" id="pos-pan"></div>
     <p class="pub-etq" id="pub-etq"></p>
     <p class="leyenda-pos"><span>Inicial</span><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="7.5" fill="none" stroke="#D2DC83" stroke-width="2" stroke-dasharray="3 2.5"/></svg><span>Final</span><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="8.5" fill="#D2DC83"/></svg></p>
-    <div class="aguja" id="aguja">5.5</div>
-    <p class="polo opt">Optimismo</p>
+    <div class="aguja" id="aguja">5.0</div>
+    <p class="polo opt">Florecimiento</p>
     <p class="abierta" id="termo-abierta">Vota desde tu celular</p>
   </section>
 
@@ -458,7 +458,7 @@ MH.POR_ID = {};
 MH.PANEL.forEach(function (p) { MH.POR_ID[p.id] = p; });
 
 MH.BANCO = [
-  { label: 'Termómetro inicial', text: 'En una escala del uno al diez, donde uno es el escenario más grave y diez el más esperanzador, ¿dónde ubican a la humanidad frente a la inteligencia artificial dentro de diez años?' },
+  { label: 'Termómetro inicial', text: 'Del 0 al 10, donde 0 es la extinción de la humanidad y 10 es el florecimiento absoluto de la especie humana, ¿dónde ves a la humanidad en los próximos 10 años?' },
   { label: 'Premisa', text: '¿Podemos encauzar la inteligencia artificial o detenerla, o vamos al encuentro de nuestro destino de manera inercial, sin posibilidad de alterarlo?' },
   { label: 'Ronda 1 · Luis A. Pineda', text: '¿Sigue pensando lo mismo? ¿Qué les falta a estos sistemas para parecerse a la inteligencia natural?' },
   { label: 'Ronda 1 · Atocha Aliseda', text: '¿Qué pasa cuando el resultado es una demostración que una máquina verifica, pero que ningún ser humano puede comprender? ¿Es eso conocimiento?' },
@@ -469,13 +469,14 @@ MH.BANCO = [
   { label: 'Tensión 2 · ¿Encauzar o detener?', text: '¿Se puede desacelerar sin un acuerdo de todos? ¿Es la contención voluntaria de una empresa la forma de encauzar la IA, o la competencia nos lleva de manera inercial? ¿Quién debería decidir qué se libera y qué no?' },
   { label: 'Tensión 3 · ¿Desplazamiento del conocimiento humano?', text: '¿Es esta crisis la primera expresión concreta del desplazamiento de las habilidades y capacidades humanas frente a la superioridad de la máquina? ¿Seguirán ese mismo camino las demás áreas del conocimiento?' },
   { label: 'Ronda 3 · Trabajo y vida humana', text: 'Atocha Aliseda: ¿Qué trabajo humano nunca delegaría a una máquina?\nLuis A. Pineda: ¿Qué trabajo humano definitivamente delegaría a una máquina?\nCarlos Gershenson: ¿Cómo vislumbra la actividad humana en el trabajo?\nRicardo Baeza-Yates: ¿Cómo vislumbra la actividad humana en el entorno social?\nItzul Girón: ¿Cómo vislumbra la actividad humana en la familia?' },
-  { label: 'Termómetro final', text: 'Después de esta conversación, ¿se mantienen en su posición o se movieron?\nY en un minuto: una recomendación para la UNAM frente a lo que viene.' }
+  { label: 'Termómetro final', text: 'Del 0 al 10, donde 0 es la extinción de la humanidad y 10 es el florecimiento absoluto de la especie humana, ¿dónde ves a la humanidad en los próximos 10 años?' },
+  { label: 'Cierre · panelistas', text: 'Después de esta conversación, ¿se mantienen en su posición o se movieron?\nY en un minuto: una recomendación para la UNAM frente a lo que viene.' }
 ];
 
 /* Cortinillas: una por bloque del minuto a minuto. “hora” sólo se muestra en el control. */
 MH.CORTINILLAS = [
   { id: 'apertura', kicker: 'Mesa Horizontes', titulo: 'La humanidad frente a la inteligencia artificial', sub: 'Escenarios posibles', hora: '12:30' },
-  { id: 'termo-ini', kicker: 'Termómetro inicial', titulo: '¿Dónde estaremos dentro de diez años?', sub: 'Del 1, el escenario más grave, al 10, el más esperanzador', hora: '12:35' },
+  { id: 'termo-ini', kicker: 'Termómetro inicial', titulo: '¿Dónde ves a la humanidad en los próximos 10 años?', sub: '0 es la extinción de la humanidad y 10 su florecimiento absoluto. Vota desde tu celular', hora: '12:35' },
   { id: 'r1', kicker: 'Ronda 1', titulo: 'El escenario', sub: 'Una pregunta para cada panelista', hora: '12:38' },
   { id: 'r2', kicker: 'Ronda 2', titulo: 'Los cruces', sub: 'Tres casos; las y los cinco panelistas opinan sobre cada uno', hora: '13:03' },
   { id: 't1', kicker: 'Tensión 1', titulo: '¿Quién responde?', sub: '', hora: '13:03' },
@@ -483,7 +484,7 @@ MH.CORTINILLAS = [
   { id: 't3', kicker: 'Tensión 3', titulo: '¿Desplazamiento del conocimiento humano?', sub: '', hora: '13:17' },
   { id: 'r3', kicker: 'Ronda 3', titulo: 'Trabajo y vida humana', sub: 'Una pregunta distinta para cada panelista', hora: '13:25' },
   { id: 'publico', kicker: 'Preguntas del público', titulo: 'Tu pregunta, a la mesa', sub: 'Envíala desde tu celular', hora: '13:37' },
-  { id: 'termo-fin', kicker: 'Termómetro final', titulo: '¿Se mantienen o se movieron?', sub: 'Y una recomendación para la UNAM frente a lo que viene', hora: '13:50' }
+  { id: 'termo-fin', kicker: 'Termómetro final', titulo: '¿Dónde ves a la humanidad en los próximos 10 años?', sub: 'La misma pregunta del inicio: 0 es la extinción y 10 el florecimiento absoluto. ¿Cambió tu número?', hora: '13:50' }
 ];
 
 MH.CASOS = [
@@ -721,12 +722,12 @@ function fondo() {
 
 /* ---------- termómetro ---------- */
 var BX = 1260;
-function xDe(v) { return (Math.max(1, Math.min(10, v)) - 1) / 9 * BX; }
+function xDe(v) { return Math.max(0, Math.min(10, v)) / 10 * BX; }
 MH.xDe = xDe;
-function num(v) { if (v === '' || v === null || v === undefined) return null; var x = parseFloat(String(v).replace(',', '.')); return isNaN(x) ? null : Math.max(1, Math.min(10, x)); }
+function num(v) { if (v === '' || v === null || v === undefined) return null; var x = parseFloat(String(v).replace(',', '.')); return isNaN(x) ? null : Math.max(0, Math.min(10, x)); }
 function construirTermo() {
   var m = $('marcas'), h = $('hist-pub');
-  for (var n = 1; n <= 10; n++) {
+  for (var n = 0; n <= 10; n++) {
     var sp = document.createElement('span'); sp.style.left = xDe(n) + 'px'; sp.textContent = n; m.appendChild(sp);
     var b = document.createElement('i'); b.style.left = xDe(n) + 'px'; h.appendChild(b);
   }
@@ -739,7 +740,7 @@ function pintarTermo() {
   if (pub) {
     valor = rf.media;
     termo.classList.toggle('sin-votos', valor === null);
-    if (valor === null) valor = 5.5;
+    if (valor === null) valor = 5;
     etq = 'Público · <b>' + rf.n + '</b> ' + (rf.n === 1 ? 'voto' : 'votos');
     if (fase === 'fin' && ri.n) etq += '<br>Al inicio: <b>' + fmt(ri.media) + '</b>';
   } else {
@@ -1035,7 +1036,7 @@ function construirLaminas() {
     '<p class="pregunta-c">¿Es la primera expresión concreta del desplazamiento de las capacidades humanas? ¿Seguirán ese camino las demás áreas del conocimiento?</p>');
   lam('qr', 'lam-qr',
     '<div class="caja"><div class="qr-caja">' + qrHTML() + '</div><div><p class="kicker">Desde tu celular</p><h2>Participa en la Mesa Horizontes</h2><ul>' +
-    '<li><i>1</i>Marca tu termómetro del 1 al 10</li><li><i>2</i>Vota en las encuestas</li><li><i>3</i>Reacciona mientras hablan</li><li><i>4</i>Envía tu pregunta a la mesa</li>' +
+    '<li><i>1</i>Marca tu termómetro del 0 al 10</li><li><i>2</i>Vota en las encuestas</li><li><i>3</i>Reacciona mientras hablan</li><li><i>4</i>Envía tu pregunta a la mesa</li>' +
     '</ul><p class="url">' + esc(MH.URL_VOTA) + '</p></div></div>');
   lam('cierre', 'lam-cierre',
     '<p class="kicker">Cierre</p><h2>El destino no está escrito</h2><ol class="ideas" id="ideas"></ol>' +

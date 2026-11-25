@@ -501,7 +501,7 @@ html,body{margin:0;height:100%;overflow:hidden}
   </header>
 
   <section class="termo" id="termo" aria-label="Termómetro de la mesa">
-    <p class="polo pes">Pesimismo</p>
+    <p class="polo pes">Extinción</p>
     <div class="hist" id="hist-pub" aria-hidden="true"></div>
     <div class="barra" id="barra"></div>
     <div class="rastro" id="rastro"></div>
@@ -510,8 +510,8 @@ html,body{margin:0;height:100%;overflow:hidden}
     <div class="pos-pan" id="pos-pan"></div>
     <p class="pub-etq" id="pub-etq"></p>
     <p class="leyenda-pos"><span>Inicial</span><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="7.5" fill="none" stroke="#D2DC83" stroke-width="2" stroke-dasharray="3 2.5"/></svg><span>Final</span><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="8.5" fill="#D2DC83"/></svg></p>
-    <div class="aguja" id="aguja">5.5</div>
-    <p class="polo opt">Optimismo</p>
+    <div class="aguja" id="aguja">5.0</div>
+    <p class="polo opt">Florecimiento</p>
     <p class="abierta" id="termo-abierta">Vota desde tu celular</p>
   </section>
 
@@ -555,6 +555,7 @@ html,body{margin:0;height:100%;overflow:hidden}
       <button class="b peq" id="r-lamina" type="button">Quitar lámina <kbd>0</kbd></button>
       <button class="b peq" id="r-q" type="button">Pregunta <kbd>H</kbd></button>
       <button class="b peq" id="r-qr" type="button">QR esquina <kbd>R</kbd></button>
+      <button class="b peq" id="r-reac" type="button">Reacciones</button>
       <button class="b peq" id="r-pausa" type="button">Pausar <kbd>Espacio</kbd></button>
     </div>
   </div>
@@ -613,12 +614,12 @@ html,body{margin:0;height:100%;overflow:hidden}
     <div id="manual-ctl">
       <p class="mini">Aguja manual</p>
       <div class="termo-ctl">
-        <button class="b icono" id="b-menos" type="button" aria-label="Hacia el pesimismo">−</button>
-        <span class="val" id="t-val">5.5</span>
-        <button class="b icono" id="b-mas" type="button" aria-label="Hacia el optimismo">+</button>
-        <span class="vacio" style="margin:0">1 pesimismo · 10 optimismo</span>
+        <button class="b icono" id="b-menos" type="button" aria-label="Hacia la extinción">−</button>
+        <span class="val" id="t-val">5.0</span>
+        <button class="b icono" id="b-mas" type="button" aria-label="Hacia el florecimiento">+</button>
+        <span class="vacio" style="margin:0">0 extinción · 10 florecimiento</span>
       </div>
-      <input type="range" id="rango" min="1" max="10" step="0.1" value="5.5" aria-label="Termómetro manual">
+      <input type="range" id="rango" min="0" max="10" step="0.1" value="5" aria-label="Termómetro manual">
       <div class="fila-b">
         <button class="b peq" id="b-t-reset" type="button">Reiniciar al centro</button>
         <button class="b peq" id="b-t-rastro" type="button">Borrar rastro</button>
@@ -644,8 +645,9 @@ html,body{margin:0;height:100%;overflow:hidden}
 
   <details class="bloque" open>
     <summary>Reacciones</summary>
-    <label class="check"><input type="checkbox" id="c-reac"> Recibir reacciones desde los celulares</label>
-    <label class="check"><input type="checkbox" id="c-reac-p"> Mostrarlas en pantalla</label>
+    <label class="check"><input type="checkbox" id="c-reac"> Recibir reacciones desde los celulares (apagado, los botones desaparecen del celular)</label>
+    <label class="check"><input type="checkbox" id="c-reac-p"> Mostrar los stickers en la pantalla</label>
+    <p class="nota">El botón “Reacciones” de arriba prende o apaga las dos cosas a la vez.</p>
   </details>
 
   <details class="bloque" open>
@@ -667,7 +669,7 @@ html,body{margin:0;height:100%;overflow:hidden}
   <details class="bloque">
     <summary>Panelistas</summary>
     <div id="pan-lista"></div>
-    <p class="nota">Para poner una foto, usa “Foto” o arrastra la imagen sobre su tarjeta en la vista previa. Las posiciones inicial y final van del 1 al 10.</p>
+    <p class="nota">Para poner una foto, usa “Foto” o arrastra la imagen sobre su tarjeta en la vista previa. Las posiciones inicial y final van del 0 (extinción) al 10 (florecimiento).</p>
   </details>
 
   <details class="bloque">
@@ -741,7 +743,7 @@ MH.POR_ID = {};
 MH.PANEL.forEach(function (p) { MH.POR_ID[p.id] = p; });
 
 MH.BANCO = [
-  { label: 'Termómetro inicial', text: 'En una escala del uno al diez, donde uno es el escenario más grave y diez el más esperanzador, ¿dónde ubican a la humanidad frente a la inteligencia artificial dentro de diez años?' },
+  { label: 'Termómetro inicial', text: 'Del 0 al 10, donde 0 es la extinción de la humanidad y 10 es el florecimiento absoluto de la especie humana, ¿dónde ves a la humanidad en los próximos 10 años?' },
   { label: 'Premisa', text: '¿Podemos encauzar la inteligencia artificial o detenerla, o vamos al encuentro de nuestro destino de manera inercial, sin posibilidad de alterarlo?' },
   { label: 'Ronda 1 · Luis A. Pineda', text: '¿Sigue pensando lo mismo? ¿Qué les falta a estos sistemas para parecerse a la inteligencia natural?' },
   { label: 'Ronda 1 · Atocha Aliseda', text: '¿Qué pasa cuando el resultado es una demostración que una máquina verifica, pero que ningún ser humano puede comprender? ¿Es eso conocimiento?' },
@@ -752,13 +754,14 @@ MH.BANCO = [
   { label: 'Tensión 2 · ¿Encauzar o detener?', text: '¿Se puede desacelerar sin un acuerdo de todos? ¿Es la contención voluntaria de una empresa la forma de encauzar la IA, o la competencia nos lleva de manera inercial? ¿Quién debería decidir qué se libera y qué no?' },
   { label: 'Tensión 3 · ¿Desplazamiento del conocimiento humano?', text: '¿Es esta crisis la primera expresión concreta del desplazamiento de las habilidades y capacidades humanas frente a la superioridad de la máquina? ¿Seguirán ese mismo camino las demás áreas del conocimiento?' },
   { label: 'Ronda 3 · Trabajo y vida humana', text: 'Atocha Aliseda: ¿Qué trabajo humano nunca delegaría a una máquina?\nLuis A. Pineda: ¿Qué trabajo humano definitivamente delegaría a una máquina?\nCarlos Gershenson: ¿Cómo vislumbra la actividad humana en el trabajo?\nRicardo Baeza-Yates: ¿Cómo vislumbra la actividad humana en el entorno social?\nItzul Girón: ¿Cómo vislumbra la actividad humana en la familia?' },
-  { label: 'Termómetro final', text: 'Después de esta conversación, ¿se mantienen en su posición o se movieron?\nY en un minuto: una recomendación para la UNAM frente a lo que viene.' }
+  { label: 'Termómetro final', text: 'Del 0 al 10, donde 0 es la extinción de la humanidad y 10 es el florecimiento absoluto de la especie humana, ¿dónde ves a la humanidad en los próximos 10 años?' },
+  { label: 'Cierre · panelistas', text: 'Después de esta conversación, ¿se mantienen en su posición o se movieron?\nY en un minuto: una recomendación para la UNAM frente a lo que viene.' }
 ];
 
 /* Cortinillas: una por bloque del minuto a minuto. “hora” sólo se muestra en el control. */
 MH.CORTINILLAS = [
   { id: 'apertura', kicker: 'Mesa Horizontes', titulo: 'La humanidad frente a la inteligencia artificial', sub: 'Escenarios posibles', hora: '12:30' },
-  { id: 'termo-ini', kicker: 'Termómetro inicial', titulo: '¿Dónde estaremos dentro de diez años?', sub: 'Del 1, el escenario más grave, al 10, el más esperanzador', hora: '12:35' },
+  { id: 'termo-ini', kicker: 'Termómetro inicial', titulo: '¿Dónde ves a la humanidad en los próximos 10 años?', sub: '0 es la extinción de la humanidad y 10 su florecimiento absoluto. Vota desde tu celular', hora: '12:35' },
   { id: 'r1', kicker: 'Ronda 1', titulo: 'El escenario', sub: 'Una pregunta para cada panelista', hora: '12:38' },
   { id: 'r2', kicker: 'Ronda 2', titulo: 'Los cruces', sub: 'Tres casos; las y los cinco panelistas opinan sobre cada uno', hora: '13:03' },
   { id: 't1', kicker: 'Tensión 1', titulo: '¿Quién responde?', sub: '', hora: '13:03' },
@@ -766,7 +769,7 @@ MH.CORTINILLAS = [
   { id: 't3', kicker: 'Tensión 3', titulo: '¿Desplazamiento del conocimiento humano?', sub: '', hora: '13:17' },
   { id: 'r3', kicker: 'Ronda 3', titulo: 'Trabajo y vida humana', sub: 'Una pregunta distinta para cada panelista', hora: '13:25' },
   { id: 'publico', kicker: 'Preguntas del público', titulo: 'Tu pregunta, a la mesa', sub: 'Envíala desde tu celular', hora: '13:37' },
-  { id: 'termo-fin', kicker: 'Termómetro final', titulo: '¿Se mantienen o se movieron?', sub: 'Y una recomendación para la UNAM frente a lo que viene', hora: '13:50' }
+  { id: 'termo-fin', kicker: 'Termómetro final', titulo: '¿Dónde ves a la humanidad en los próximos 10 años?', sub: 'La misma pregunta del inicio: 0 es la extinción y 10 el florecimiento absoluto. ¿Cambió tu número?', hora: '13:50' }
 ];
 
 MH.CASOS = [
@@ -1004,12 +1007,12 @@ function fondo() {
 
 /* ---------- termómetro ---------- */
 var BX = 1260;
-function xDe(v) { return (Math.max(1, Math.min(10, v)) - 1) / 9 * BX; }
+function xDe(v) { return Math.max(0, Math.min(10, v)) / 10 * BX; }
 MH.xDe = xDe;
-function num(v) { if (v === '' || v === null || v === undefined) return null; var x = parseFloat(String(v).replace(',', '.')); return isNaN(x) ? null : Math.max(1, Math.min(10, x)); }
+function num(v) { if (v === '' || v === null || v === undefined) return null; var x = parseFloat(String(v).replace(',', '.')); return isNaN(x) ? null : Math.max(0, Math.min(10, x)); }
 function construirTermo() {
   var m = $('marcas'), h = $('hist-pub');
-  for (var n = 1; n <= 10; n++) {
+  for (var n = 0; n <= 10; n++) {
     var sp = document.createElement('span'); sp.style.left = xDe(n) + 'px'; sp.textContent = n; m.appendChild(sp);
     var b = document.createElement('i'); b.style.left = xDe(n) + 'px'; h.appendChild(b);
   }
@@ -1022,7 +1025,7 @@ function pintarTermo() {
   if (pub) {
     valor = rf.media;
     termo.classList.toggle('sin-votos', valor === null);
-    if (valor === null) valor = 5.5;
+    if (valor === null) valor = 5;
     etq = 'Público · <b>' + rf.n + '</b> ' + (rf.n === 1 ? 'voto' : 'votos');
     if (fase === 'fin' && ri.n) etq += '<br>Al inicio: <b>' + fmt(ri.media) + '</b>';
   } else {
@@ -1318,7 +1321,7 @@ function construirLaminas() {
     '<p class="pregunta-c">¿Es la primera expresión concreta del desplazamiento de las capacidades humanas? ¿Seguirán ese camino las demás áreas del conocimiento?</p>');
   lam('qr', 'lam-qr',
     '<div class="caja"><div class="qr-caja">' + qrHTML() + '</div><div><p class="kicker">Desde tu celular</p><h2>Participa en la Mesa Horizontes</h2><ul>' +
-    '<li><i>1</i>Marca tu termómetro del 1 al 10</li><li><i>2</i>Vota en las encuestas</li><li><i>3</i>Reacciona mientras hablan</li><li><i>4</i>Envía tu pregunta a la mesa</li>' +
+    '<li><i>1</i>Marca tu termómetro del 0 al 10</li><li><i>2</i>Vota en las encuestas</li><li><i>3</i>Reacciona mientras hablan</li><li><i>4</i>Envía tu pregunta a la mesa</li>' +
     '</ul><p class="url">' + esc(MH.URL_VOTA) + '</p></div></div>');
   lam('cierre', 'lam-cierre',
     '<p class="kicker">Cierre</p><h2>El destino no está escrito</h2><ol class="ideas" id="ideas"></ol>' +
@@ -1542,7 +1545,7 @@ function leerFoto(id, f) {
 // arrastrar sobre la barra del termómetro (sólo con la aguja manual)
 (function () {
   var barra = $('barra'), termo = $('termo'), activo = false, ultimo = 0, pend = null;
-  function valor(ev) { var r = barra.getBoundingClientRect(); var t = (ev.clientX - r.left) / r.width; return Math.round((1 + Math.max(0, Math.min(1, t)) * 9) * 10) / 10; }
+  function valor(ev) { var r = barra.getBoundingClientRect(); var t = (ev.clientX - r.left) / r.width; return Math.round(Math.max(0, Math.min(1, t)) * 100) / 10; }
   function mandar(v, anotar) {
     E.temp = v; MH.pintar(E, R); pintarManual();
     var ahora = Date.now();
@@ -1589,6 +1592,10 @@ function pintarLaminas() {
   $('lam-estado').textContent = id ? 'En pantalla: ' + nombreLamina(id) : 'Ninguna';
   $('r-lamina').disabled = !id;
   $('r-qr').classList.toggle('sel', !!E.qr);
+  var reacOn = !!(E.reac.activas && E.reac.enPantalla);
+  $('r-reac').classList.toggle('sel', reacOn);
+  $('r-reac').textContent = reacOn ? 'Reacciones: sí' : 'Reacciones: no';
+  $('r-reac').title = reacOn ? 'Apagar las reacciones: desaparecen del celular y de la pantalla' : 'Encender las reacciones en el celular y en la pantalla';
   ['idea-0', 'idea-1', 'idea-2'].forEach(function (k, i) { var el = $(k); if (document.activeElement !== el) el.value = (E.cierre.ideas || [])[i] || ''; });
 }
 function nombreLamina(id) {
@@ -1603,6 +1610,10 @@ var ideasT = null;
 });
 $('r-lamina').addEventListener('click', function () { hacer('lamina', { id: null }); });
 $('r-qr').addEventListener('click', function () { hacer('qr', { v: !E.qr }); });
+$('r-reac').addEventListener('click', function () {
+  var on = !!(E.reac.activas && E.reac.enPantalla);
+  hacer('reac', on ? { activas: false } : { activas: true, enPantalla: true });
+});
 $('r-q').addEventListener('click', function () { hacer('q.alternar'); });
 $('r-pausa').addEventListener('click', function () { hacer('turno.pausar'); });
 
@@ -1851,7 +1862,7 @@ function pintarPanelistasCtl() {
     var d = document.createElement('div'); d.className = 'pan';
     d.innerHTML = '<div class="mini-av">' + MH.avatarHTML(id) + '</div><div class="nm"></div><div class="mov"><button class="b icono peq" type="button" data-a="izq" aria-label="Mover a la izquierda">‹</button><button class="b icono peq" type="button" data-a="der" aria-label="Mover a la derecha">›</button></div>' +
       '<div class="extra"><button class="b peq" type="button" data-a="foto">Foto</button>' + (E.fotos[id] ? '<button class="b peq" type="button" data-a="quitar">Quitar foto</button>' : '') +
-      '<label>Inicial <input type="number" min="1" max="10" step="0.5" data-m="a"></label><label>Final <input type="number" min="1" max="10" step="0.5" data-m="b"></label></div>';
+      '<label>Inicial <input type="number" min="0" max="10" step="0.5" data-m="a"></label><label>Final <input type="number" min="0" max="10" step="0.5" data-m="b"></label></div>';
     d.querySelector('.nm').textContent = (i + 1) + '. ' + p.nombre;
     Array.prototype.forEach.call(d.querySelectorAll('[data-m]'), function (inp) {
       inp.dataset.id = id;
