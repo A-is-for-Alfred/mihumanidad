@@ -556,6 +556,8 @@ html,body{margin:0;height:100%;overflow:hidden}
       <button class="b peq" id="r-q" type="button">Pregunta <kbd>H</kbd></button>
       <button class="b peq" id="r-qr" type="button">QR esquina <kbd>R</kbd></button>
       <button class="b peq" id="r-reac" type="button">Reacciones</button>
+      <button class="b peq" id="r-mod" type="button">Habla el moderador <kbd>M</kbd></button>
+      <button class="b peq peligro" id="r-reini" type="button">Reiniciar pruebas</button>
       <button class="b peq" id="r-pausa" type="button">Pausar <kbd>Espacio</kbd></button>
     </div>
   </div>
@@ -661,7 +663,7 @@ html,body{margin:0;height:100%;overflow:hidden}
     <div class="fila-b">
       <button class="b" id="b-pausa" type="button">Pausar</button>
       <button class="b" id="b-mas30" type="button">+30 s</button>
-      <button class="b" id="b-fin" type="button">Terminar turno</button>
+      <button class="b" id="b-fin" type="button">Terminar turno (habla el moderador)</button>
     </div>
     <label class="check"><input type="checkbox" id="c-sonido"> Sonido suave al terminar (suena en la pantalla)</label>
   </details>
@@ -681,7 +683,7 @@ html,body{margin:0;height:100%;overflow:hidden}
     <ul class="atajos">
       <li><kbd>1</kbd> a <kbd>5</kbd></li><li>Encender a cada panelista (otra vez: pausa)</li>
       <li><kbd>Espacio</kbd></li><li>Pausar o reanudar el turno</li>
-      <li><kbd>Esc</kbd></li><li>Terminar el turno</li>
+      <li><kbd>M</kbd> o <kbd>Esc</kbd></li><li>Habla el moderador: ningún panelista seleccionado</li>
       <li><kbd>←</kbd> <kbd>→</kbd></li><li>Aguja manual 0.5 (con Mayús, 0.1)</li>
       <li><kbd>Q</kbd></li><li>Escribir una pregunta</li>
       <li><kbd>H</kbd></li><li>Mostrar u ocultar la pregunta</li>
@@ -689,7 +691,7 @@ html,body{margin:0;height:100%;overflow:hidden}
       <li><kbd>R</kbd></li><li>QR en la esquina</li>
     </ul>
     <p class="mini">Después del ensayo</p>
-    <p class="nota">Borra votos, encuestas contestadas, preguntas del público, posiciones y turnos. Conserva fotos, orden y duración.</p>
+    <p class="nota">Lo mismo que “Reiniciar pruebas” de arriba: borra votos, encuestas contestadas, preguntas del público, posiciones y turnos, y deja la aguja en 5. Conserva fotos, orden y duración.</p>
     <div class="fila-b"><button class="b peligro" id="b-limpiar" type="button">Limpiar todo lo del ensayo</button><button class="b" id="b-salir" type="button">Salir de este equipo</button></div>
   </details>
 </aside>
@@ -1592,6 +1594,8 @@ function pintarLaminas() {
   $('lam-estado').textContent = id ? 'En pantalla: ' + nombreLamina(id) : 'Ninguna';
   $('r-lamina').disabled = !id;
   $('r-qr').classList.toggle('sel', !!E.qr);
+  $('r-mod').classList.toggle('sel', !E.turno);
+  $('r-mod').title = E.turno ? 'Quitar la selección del panelista: habla el moderador' : 'Ningún panelista seleccionado';
   var reacOn = !!(E.reac.activas && E.reac.enPantalla);
   $('r-reac').classList.toggle('sel', reacOn);
   $('r-reac').textContent = reacOn ? 'Reacciones: sí' : 'Reacciones: no';
@@ -1895,9 +1899,13 @@ Array.prototype.forEach.call(document.querySelectorAll('[data-copiar]'), functio
     (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { b.textContent = 'Copiado'; setTimeout(function () { b.textContent = 'Copiar'; }, 1500); }, function () { aviso(t); });
   });
 });
-$('b-limpiar').addEventListener('click', function () {
-  if (confirm('¿Limpiar todo lo del ensayo? Se borran los votos, las preguntas del público, las posiciones y los turnos. No se puede deshacer.')) hacer('ensayo.limpiar');
-});
+function reiniciarPruebas() {
+  if (!confirm('¿Reiniciar todo para empezar de cero?\n\nSe borran los votos del termómetro (inicial y final), las respuestas de las encuestas, las preguntas del público, las posiciones de los panelistas, la pregunta en pantalla, los turnos y la lámina. La aguja vuelve a 5 y la votación y las reacciones quedan cerradas. Los celulares olvidan lo que votaron.\n\nSe conservan las fotos, el orden y la duración de los turnos. No se puede deshacer.')) return;
+  hacer('ensayo.limpiar').then(function (j) { if (j && j.ok) aviso('Listo: todo quedó en cero.'); });
+}
+$('b-limpiar').addEventListener('click', reiniciarPruebas);
+$('r-reini').addEventListener('click', reiniciarPruebas);
+$('r-mod').addEventListener('click', function () { hacer('turno.terminar'); });
 
 /* ---------- teclado ---------- */
 window.addEventListener('keydown', function (e) {
@@ -1909,6 +1917,7 @@ window.addEventListener('keydown', function (e) {
   if (k === '0') { e.preventDefault(); hacer('lamina', { id: null }); return; }
   if (k === ' ') { e.preventDefault(); hacer('turno.pausar'); return; }
   if (k === 'Escape') { hacer('turno.terminar'); return; }
+  if (k.toLowerCase() === 'm') { hacer('turno.terminar'); return; }
   if (k === 'ArrowLeft' && E.aguja === 'manual') { e.preventDefault(); hacer('temp', { v: E.temp - (e.shiftKey ? 0.1 : 0.5), anotar: true }); return; }
   if (k === 'ArrowRight' && E.aguja === 'manual') { e.preventDefault(); hacer('temp', { v: E.temp + (e.shiftKey ? 0.1 : 0.5), anotar: true }); return; }
   var l = k.toLowerCase();
